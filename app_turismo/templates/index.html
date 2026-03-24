@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turismo Caquetá</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #1b5e20; --secondary: #0d47a1; --bg: #f5f7fa; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); overflow-x: hidden; }
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 20px; text-align: center; }
+        .search-container { max-width: 500px; margin: -20px auto 30px; background: white; padding: 10px 20px; border-radius: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; }
+        .search-container input { flex: 1; border: none; padding: 10px; font-size: 1.1rem; outline: none; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s; position: relative; }
+        .card:hover { transform: translateY(-5px); }
+        .card-img { height: 160px; background: #333; position: relative; background-size: cover; background-position: center; }
+        .card-img i { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.2); font-size: 2.5rem; }
+        .card-body { padding: 15px; }
+        .card-title { font-size: 1rem; font-weight: bold; margin: 0; color: #333; text-transform: capitalize; }
+        .card-cat { color: var(--primary); font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .card-mun { color: #888; font-size: 0.8rem; margin-top: 5px; }
+        .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; }
+        #loader { text-align: center; display: none; padding: 20px; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>TURISMO CAQUETÁ</h1>
+</header>
+
+<div class="search-container">
+    <i class="fas fa-search" style="color: #999;"></i>
+    <input type="text" id="searchInput" placeholder="Escribe para buscar..." oninput="debounceSearch()">
+</div>
+
+<div id="loader"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+<div class="gallery" id="galeria"></div>
+
+<script>
+    let searchTimer;
+    let abortController = null;
+
+    const IMAGENES = {
+        'Cascada': 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=300&q=80',
+        'Caminata': 'https://images.unsplash.com/photo-1551632432-c7d419d0a4fb?w=300&q=80',
+        'Default': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300&q=80'
+    };
+
+    function debounceSearch() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(cargarDatos, 300);
+    }
+
+    async function cargarDatos() {
+        const val = document.getElementById('searchInput').value;
+        const galeria = document.getElementById('galeria');
+        const loader = document.getElementById('loader');
+
+        // Cancelar búsqueda anterior si todavía está en proceso
+        if (abortController) abortController.abort();
+        abortController = new AbortController();
+
+        loader.style.display = 'block';
+        
+        try {
+            const res = await fetch(`/actividades?municipio=${encodeURIComponent(val)}`, { signal: abortController.signal });
+            const data = await res.json();
+            
+            loader.style.display = 'none';
+            let htmlBuffer = ""; // Usamos un buffer para no congelar el navegador
+
+            data.forEach(item => {
+                let imgUrl = IMAGENES.Default;
+                if(item.categoria.includes('Cascada')) imgUrl = IMAGENES.Cascada;
+                else if(item.categoria.includes('Caminata')) imgUrl = IMAGENES.Caminata;
+
+                let icono = 'fa-mountain';
+                if(item.categoria.includes('Cascada')) icono = 'fa-water';
+                else if(item.categoria.includes('Caminata')) icono = 'fa-hiking';
+
+                htmlBuffer += `
+                    <div class="card">
+                        <span class="badge">${item.dificultad}</span>
+                        <div class="card-img" style="background-image: url('${imgUrl}')">
+                            <i class="fas ${icono}"></i>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-cat">${item.categoria}</span>
+                            <div class="card-title">${item.id.replace(/_/g, ' ')}</div>
+                            <div class="card-mun"><i class="fas fa-map-marker-alt"></i> ${item.municipio}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            galeria.innerHTML = htmlBuffer || '<div style="grid-column: 1/-1; text-align: center;">No se encontraron resultados</div>';
+        } catch (e) {
+            if (e.name !== 'AbortError') {
+                loader.style.display = 'none';
+                console.error("Error cargando datos:", e);
+            }
+        }
+    }
+
+    cargarDatos();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1001 @@
+id_actividad,nombre,tipo,nivel_dificultad,duracion,ubicacion
+1,Bitchip,TurismoExtremo,Bajo,2,Florencia
+2,Bytecard,CaminataEcologica,Medio,4,El Doncello
+3,Alpha,TurismoExtremo,Alto,2,El Doncello
+4,Tresom,TurismoExtremo,Bajo,4,Florencia
+5,Lotlux,TurismoExtremo,Bajo,2,Florencia
+6,Biodex,TurismoExtremo,Bajo,5,Morelia
+7,Solarbreeze,CaminataEcologica,Alto,3,Florencia
+8,Zamit,CaminataEcologica,Bajo,3,Belén de los Andaquíes
+9,Stronghold,CaminataEcologica,Bajo,4,Belén de los Andaquíes
+10,Flexidy,CaminataEcologica,Medio,8,Belén de los Andaquíes
+11,Alphazap,CaminataEcologica,Medio,8,El Doncello
+12,Holdlamis,Cascada,Alto,8,Florencia
+13,Cardguard,CaminataEcologica,Medio,5,Belén de los Andaquíes
+14,Zaam-Dox,CaminataEcologica,Alto,8,Florencia
+15,Matsoft,TurismoExtremo,Bajo,5,Morelia
+16,Bitwolf,TurismoExtremo,Alto,2,Morelia
+17,Aerified,Cascada,Bajo,3,El Doncello
+18,Voltsillam,CaminataEcologica,Alto,5,Florencia
+19,Namfix,CaminataEcologica,Alto,6,El Doncello
+20,Alpha,CaminataEcologica,Alto,7,Belén de los Andaquíes
+21,Voltsillam,TurismoExtremo,Alto,7,Florencia
+22,Bitchip,CaminataEcologica,Alto,7,Florencia
+23,Rank,TurismoExtremo,Alto,5,El Doncello
+24,Zaam-Dox,TurismoExtremo,Medio,2,Belén de los Andaquíes
+25,Subin,CaminataEcologica,Alto,4,El Doncello
+26,Voyatouch,CaminataEcologica,Alto,5,Belén de los Andaquíes
+27,Zamit,Cascada,Alto,8,Belén de los Andaquíes
+28,Matsoft,TurismoExtremo,Medio,3,Morelia
+29,Tempsoft,Cascada,Alto,1,Belén de los Andaquíes
+30,Y-find,CaminataEcologica,Bajo,3,Florencia
+31,Tresom,TurismoExtremo,Medio,1,Florencia
+32,Tin,Cascada,Bajo,3,Morelia
+33,Wrapsafe,TurismoExtremo,Bajo,1,El Doncello
+34,Voyatouch,CaminataEcologica,Alto,3,Florencia
+35,Bitwolf,TurismoExtremo,Medio,5,Morelia
+36,Cookley,Cascada,Medio,2,Florencia
+37,Sonair,CaminataEcologica,Bajo,2,Morelia
+38,Zathin,CaminataEcologica,Medio,5,El Doncello
+39,Trippledex,TurismoExtremo,Bajo,4,Belén de los Andaquíes
+40,Matsoft,Cascada,Alto,5,Belén de los Andaquíes
+41,Toughjoyfax,TurismoExtremo,Medio,1,Morelia
+42,Lotstring,TurismoExtremo,Bajo,1,Florencia
+43,Temp,TurismoExtremo,Bajo,5,Florencia
+44,Tres-Zap,Cascada,Bajo,8,Morelia
+45,Stringtough,CaminataEcologica,Bajo,2,Belén de los Andaquíes
+46,Matsoft,TurismoExtremo,Alto,6,El Doncello
+47,Ronstring,Cascada,Alto,1,Florencia
+48,Y-find,Cascada,Medio,5,Florencia
+49,Veribet,TurismoExtremo,Alto,5,Morelia
+50,Fintone,Cascada,Bajo,1,El Doncello
+51,Veribet,CaminataEcologica,Medio,4,Florencia
+52,Mat Lam Tam,Cascada,Medio,4,Belén de los Andaquíes
+53,Subin,CaminataEcologica,Bajo,2,Morelia
+54,Quo Lux,CaminataEcologica,Medio,2,El Doncello
+55,Fixflex,CaminataEcologica,Bajo,1,Florencia
+56,Sonsing,CaminataEcologica,Alto,6,El Doncello
+57,Ventosanzap,Cascada,Medio,7,Belén de los Andaquíes
+58,Kanlam,Cascada,Bajo,7,Morelia
+59,Redhold,Cascada,Bajo,2,Morelia
+60,Namfix,Cascada,Bajo,5,Morelia
+61,Job,Cascada,Bajo,3,Belén de los Andaquíes
+62,Otcom,CaminataEcologica,Alto,1,Morelia
+63,Bitchip,Cascada,Alto,2,Morelia
+64,Flexidy,CaminataEcologica,Medio,6,Morelia
+65,Daltfresh,TurismoExtremo,Alto,4,Morelia
+66,Zathin,CaminataEcologica,Medio,5,Morelia
+67,Stringtough,CaminataEcologica,Alto,7,Morelia
+68,Opela,Cascada,Medio,3,Belén de los Andaquíes
+69,Greenlam,TurismoExtremo,Bajo,5,Morelia
+70,Bytecard,Cascada,Medio,4,Florencia
+71,It,Cascada,Medio,7,Belén de los Andaquíes
+72,Lotlux,Cascada,Medio,2,Belén de los Andaquíes
+73,Voyatouch,Cascada,Bajo,7,Belén de los Andaquíes
+74,Veribet,TurismoExtremo,Bajo,8,El Doncello
+75,Aerified,CaminataEcologica,Alto,2,Morelia
+76,Konklux,CaminataEcologica,Alto,5,El Doncello
+77,Solarbreeze,TurismoExtremo,Alto,7,Morelia
+78,Ventosanzap,TurismoExtremo,Medio,8,Morelia
+79,Flexidy,Cascada,Bajo,1,Belén de los Andaquíes
+80,Ventosanzap,TurismoExtremo,Medio,1,Belén de los Andaquíes
+81,Fix San,Cascada,Bajo,3,Belén de los Andaquíes
+82,Alpha,TurismoExtremo,Bajo,2,El Doncello
+83,Prodder,Cascada,Medio,5,Morelia
+84,Konklux,CaminataEcologica,Bajo,4,Morelia
+85,Zamit,TurismoExtremo,Medio,7,Morelia
+86,Duobam,TurismoExtremo,Medio,3,El Doncello
+87,Toughjoyfax,CaminataEcologica,Bajo,7,Florencia
+88,Quo Lux,CaminataEcologica,Alto,7,El Doncello
+89,Span,Cascada,Medio,7,El Doncello
+90,Viva,Cascada,Medio,7,El Doncello
+91,Tampflex,CaminataEcologica,Medio,3,Florencia
+92,Vagram,CaminataEcologica,Medio,4,El Doncello
+93,Hatity,TurismoExtremo,Bajo,8,Florencia
+94,Bigtax,TurismoExtremo,Alto,2,El Doncello
+95,Tres-Zap,TurismoExtremo,Bajo,2,Belén de los Andaquíes
+96,Viva,CaminataEcologica,Medio,7,Florencia
+97,Overhold,Cascada,Bajo,6,Belén de los Andaquíes
+98,Ventosanzap,Cascada,Medio,4,El Doncello
+99,Bytecard,CaminataEcologica,Medio,1,Belén de los Andaquíes
+100,Zathin,TurismoExtremo,Medio,6,Florencia
+101,Job,Cascada,Medio,6,Belén de los Andaquíes
+102,Keylex,TurismoExtremo,Alto,5,Morelia
+103,Bamity,TurismoExtremo,Alto,2,Florencia
+104,Fintone,TurismoExtremo,Medio,8,El Doncello
+105,Zathin,TurismoExtremo,Alto,2,El Doncello
+106,Hatity,CaminataEcologica,Bajo,5,El Doncello
+107,Biodex,CaminataEcologica,Bajo,2,El Doncello
+108,Home Ing,CaminataEcologica,Alto,5,Florencia
+109,Stringtough,CaminataEcologica,Alto,3,Morelia
+110,Namfix,Cascada,Bajo,3,El Doncello
+111,Sonair,CaminataEcologica,Bajo,3,Belén de los Andaquíes
+112,Mat Lam Tam,Cascada,Alto,6,Belén de los Andaquíes
+113,Pannier,Cascada,Alto,4,El Doncello
+114,Voltsillam,CaminataEcologica,Medio,7,Florencia
+115,Alpha,CaminataEcologica,Alto,3,Florencia
+116,Otcom,Cascada,Alto,7,Florencia
+117,Vagram,CaminataEcologica,Bajo,7,Florencia
+118,Y-find,TurismoExtremo,Bajo,7,El Doncello
+119,It,TurismoExtremo,Medio,6,Belén de los Andaquíes
+120,Konklab,CaminataEcologica,Alto,3,Morelia
+121,Prodder,CaminataEcologica,Bajo,2,El Doncello
+122,Span,Cascada,Medio,4,Florencia
+123,Alphazap,CaminataEcologica,Bajo,3,El Doncello
+124,Stringtough,TurismoExtremo,Medio,8,El Doncello
+125,Cardify,TurismoExtremo,Medio,5,Belén de los Andaquíes
+126,Tempsoft,Cascada,Medio,3,El Doncello
+127,Y-find,Cascada,Alto,1,Belén de los Andaquíes
+128,Transcof,CaminataEcologica,Medio,4,Florencia
+129,Temp,TurismoExtremo,Bajo,5,Belén de los Andaquíes
+130,Subin,Cascada,Alto,6,Florencia
+131,Zathin,Cascada,Medio,4,El Doncello
+132,Voltsillam,Cascada,Bajo,6,Belén de los Andaquíes
+133,Lotstring,CaminataEcologica,Medio,3,Florencia
+134,Ronstring,TurismoExtremo,Alto,7,Belén de los Andaquíes
+135,Tresom,CaminataEcologica,Bajo,3,Florencia
+136,Holdlamis,CaminataEcologica,Alto,4,Belén de los Andaquíes
+137,Flowdesk,TurismoExtremo,Alto,4,Belén de los Andaquíes
+138,Lotlux,CaminataEcologica,Alto,3,El Doncello
+139,Duobam,TurismoExtremo,Medio,8,Morelia
+140,Temp,TurismoExtremo,Bajo,1,El Doncello
+141,Mat Lam Tam,Cascada,Alto,3,Morelia
+142,Keylex,TurismoExtremo,Alto,3,Florencia
+143,It,TurismoExtremo,Alto,6,El Doncello
+144,Vagram,CaminataEcologica,Medio,7,Morelia
+145,Prodder,TurismoExtremo,Bajo,3,El Doncello
+146,Latlux,Cascada,Medio,6,El Doncello
+147,Flowdesk,TurismoExtremo,Medio,8,El Doncello
+148,Zathin,Cascada,Bajo,4,Belén de los Andaquíes
+149,Keylex,CaminataEcologica,Medio,1,Belén de los Andaquíes
+150,Opela,TurismoExtremo,Bajo,3,Belén de los Andaquíes
+151,Cardguard,TurismoExtremo,Alto,5,Morelia
+152,Flowdesk,Cascada,Alto,2,El Doncello
+153,Konklab,Cascada,Medio,3,El Doncello
+154,Veribet,CaminataEcologica,Medio,4,El Doncello
+155,Zaam-Dox,CaminataEcologica,Alto,1,El Doncello
+156,Bamity,CaminataEcologica,Medio,2,Florencia
+157,Aerified,TurismoExtremo,Alto,6,Florencia
+158,Toughjoyfax,CaminataEcologica,Bajo,5,Belén de los Andaquíes
+159,Ventosanzap,CaminataEcologica,Alto,4,El Doncello
+160,Cookley,TurismoExtremo,Medio,1,Florencia
+161,Biodex,TurismoExtremo,Alto,8,El Doncello
+162,Stronghold,CaminataEcologica,Alto,2,Morelia
+163,Asoka,Cascada,Alto,5,Morelia
+164,Ronstring,CaminataEcologica,Medio,8,El Doncello
+165,Veribet,CaminataEcologica,Medio,5,Morelia
+166,Regrant,CaminataEcologica,Alto,1,El Doncello
+167,Tempsoft,TurismoExtremo,Bajo,4,Belén de los Andaquíes
+168,Regrant,TurismoExtremo,Medio,2,Florencia
+169,Overhold,TurismoExtremo,Alto,8,Belén de los Andaquíes
+170,Sub-Ex,Cascada,Alto,2,Florencia
+171,Namfix,TurismoExtremo,Bajo,8,El Doncello
+172,Zathin,TurismoExtremo,Bajo,6,El Doncello
+173,Sonair,Cascada,Alto,1,Belén de los Andaquíes
+174,Fintone,Cascada,Medio,6,Morelia
+175,Y-find,Cascada,Medio,4,Florencia
+176,Bigtax,Cascada,Bajo,4,Morelia
+177,Tin,TurismoExtremo,Alto,4,Morelia
+178,Bitwolf,TurismoExtremo,Medio,5,Morelia
+179,Flexidy,CaminataEcologica,Bajo,1,Belén de los Andaquíes
+180,Regrant,Cascada,Medio,1,Belén de los Andaquíes
+181,Andalax,TurismoExtremo,Bajo,1,Morelia
+182,Ventosanzap,CaminataEcologica,Alto,4,Morelia
+183,Tempsoft,CaminataEcologica,Alto,8,Belén de los Andaquíes
+184,Konklab,TurismoExtremo,Alto,7,Belén de los Andaquíes
+185,Bytecard,Cascada,Medio,5,Florencia
+186,Wrapsafe,CaminataEcologica,Alto,7,Florencia
+187,Stringtough,Cascada,Medio,6,Morelia
+188,Tres-Zap,TurismoExtremo,Medio,3,Morelia
+189,Flowdesk,CaminataEcologica,Bajo,1,El Doncello
+190,Asoka,CaminataEcologica,Medio,8,Florencia
+191,Stim,TurismoExtremo,Medio,5,Morelia
+192,Duobam,TurismoExtremo,Medio,2,El Doncello
+193,Wrapsafe,TurismoExtremo,Bajo,4,Belén de los Andaquíes
+194,Overhold,CaminataEcologica,Medio,3,Belén de los Andaquíes
+195,Fixflex,TurismoExtremo,Alto,3,Morelia
+196,Cardguard,CaminataEcologica,Medio,4,Florencia
+197,Mat Lam Tam,TurismoExtremo,Medio,5,El Doncello
+198,Stronghold,Cascada,Bajo,3,Florencia
+199,Regrant,TurismoExtremo,Medio,2,Morelia
+200,Tampflex,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+201,Fix San,CaminataEcologica,Alto,3,Florencia
+202,Lotlux,CaminataEcologica,Medio,4,Florencia
+203,It,CaminataEcologica,Bajo,2,Morelia
+204,It,TurismoExtremo,Bajo,2,Morelia
+205,Namfix,CaminataEcologica,Alto,2,Florencia
+206,Tresom,TurismoExtremo,Alto,2,El Doncello
+207,Cardguard,CaminataEcologica,Bajo,5,Belén de los Andaquíes
+208,Span,CaminataEcologica,Alto,3,El Doncello
+209,Gembucket,CaminataEcologica,Alto,5,El Doncello
+210,Duobam,CaminataEcologica,Alto,4,Belén de los Andaquíes
+211,Zathin,TurismoExtremo,Bajo,6,El Doncello
+212,Cardguard,CaminataEcologica,Medio,3,Morelia
+213,Temp,TurismoExtremo,Bajo,2,Florencia
+214,Bigtax,CaminataEcologica,Medio,1,Belén de los Andaquíes
+215,Fix San,CaminataEcologica,Alto,7,Florencia
+216,Flexidy,Cascada,Bajo,6,Morelia
+217,Transcof,Cascada,Alto,6,Morelia
+218,Fixflex,TurismoExtremo,Alto,2,Florencia
+219,Zontrax,TurismoExtremo,Bajo,7,Morelia
+220,Mat Lam Tam,TurismoExtremo,Bajo,8,Morelia
+221,Andalax,Cascada,Alto,6,Belén de los Andaquíes
+222,Namfix,TurismoExtremo,Medio,8,Belén de los Andaquíes
+223,Viva,TurismoExtremo,Medio,4,Florencia
+224,Overhold,TurismoExtremo,Medio,1,Florencia
+225,Tresom,CaminataEcologica,Medio,1,Morelia
+226,Namfix,TurismoExtremo,Medio,7,Morelia
+227,Quo Lux,CaminataEcologica,Alto,5,Florencia
+228,Matsoft,TurismoExtremo,Medio,3,Morelia
+229,Toughjoyfax,CaminataEcologica,Alto,2,El Doncello
+230,Zathin,Cascada,Bajo,2,El Doncello
+231,Viva,Cascada,Medio,8,El Doncello
+232,Konklab,CaminataEcologica,Bajo,4,Belén de los Andaquíes
+233,Opela,TurismoExtremo,Medio,8,Morelia
+234,Asoka,Cascada,Medio,2,El Doncello
+235,Duobam,Cascada,Alto,8,Florencia
+236,Prodder,TurismoExtremo,Bajo,4,Florencia
+237,Stringtough,TurismoExtremo,Medio,4,Belén de los Andaquíes
+238,Treeflex,CaminataEcologica,Alto,6,Belén de los Andaquíes
+239,Sub-Ex,CaminataEcologica,Bajo,1,Belén de los Andaquíes
+240,Trippledex,TurismoExtremo,Bajo,4,Belén de los Andaquíes
+241,Tampflex,TurismoExtremo,Bajo,4,El Doncello
+242,It,Cascada,Alto,4,Morelia
+243,Duobam,CaminataEcologica,Bajo,4,Morelia
+244,Fixflex,Cascada,Alto,7,Morelia
+245,Bigtax,CaminataEcologica,Medio,4,El Doncello
+246,Gembucket,TurismoExtremo,Medio,5,El Doncello
+247,Voltsillam,TurismoExtremo,Bajo,8,Belén de los Andaquíes
+248,It,TurismoExtremo,Alto,2,El Doncello
+249,Flowdesk,Cascada,Alto,1,El Doncello
+250,Y-find,TurismoExtremo,Bajo,4,Morelia
+251,Lotlux,Cascada,Alto,4,El Doncello
+252,Solarbreeze,CaminataEcologica,Medio,5,El Doncello
+253,Y-find,Cascada,Bajo,3,El Doncello
+254,Alphazap,CaminataEcologica,Alto,5,Morelia
+255,Flexidy,Cascada,Alto,3,Florencia
+256,Zaam-Dox,Cascada,Alto,8,Florencia
+257,Keylex,Cascada,Alto,3,El Doncello
+258,Tresom,CaminataEcologica,Medio,5,El Doncello
+259,Job,CaminataEcologica,Alto,6,Belén de los Andaquíes
+260,Y-find,Cascada,Bajo,3,Morelia
+261,Aerified,CaminataEcologica,Medio,5,Belén de los Andaquíes
+262,Opela,CaminataEcologica,Medio,2,Florencia
+263,Span,Cascada,Bajo,8,Florencia
+264,Sub-Ex,Cascada,Bajo,5,El Doncello
+265,Voltsillam,CaminataEcologica,Alto,6,El Doncello
+266,Sub-Ex,Cascada,Bajo,1,Belén de los Andaquíes
+267,Span,Cascada,Medio,6,Florencia
+268,Subin,Cascada,Bajo,7,Belén de los Andaquíes
+269,Tin,CaminataEcologica,Medio,1,Morelia
+270,Daltfresh,TurismoExtremo,Medio,6,El Doncello
+271,Cardify,CaminataEcologica,Medio,6,El Doncello
+272,Trippledex,TurismoExtremo,Bajo,5,Florencia
+273,Home Ing,TurismoExtremo,Alto,8,El Doncello
+274,Voltsillam,TurismoExtremo,Medio,5,Belén de los Andaquíes
+275,Asoka,TurismoExtremo,Alto,4,Morelia
+276,Span,TurismoExtremo,Alto,7,El Doncello
+277,Pannier,TurismoExtremo,Medio,7,Florencia
+278,Zaam-Dox,Cascada,Bajo,7,Belén de los Andaquíes
+279,Bytecard,TurismoExtremo,Medio,5,El Doncello
+280,Voyatouch,Cascada,Medio,2,Morelia
+281,Otcom,TurismoExtremo,Bajo,2,El Doncello
+282,Zaam-Dox,CaminataEcologica,Bajo,4,El Doncello
+283,Subin,CaminataEcologica,Alto,5,Belén de los Andaquíes
+284,Lotstring,TurismoExtremo,Bajo,4,Belén de los Andaquíes
+285,Kanlam,TurismoExtremo,Alto,7,Belén de los Andaquíes
+286,Lotstring,TurismoExtremo,Medio,3,Morelia
+287,Solarbreeze,CaminataEcologica,Alto,4,Belén de los Andaquíes
+288,Tresom,CaminataEcologica,Medio,8,El Doncello
+289,Holdlamis,TurismoExtremo,Medio,2,Florencia
+290,Y-Solowarm,CaminataEcologica,Bajo,4,Florencia
+291,Duobam,Cascada,Medio,6,El Doncello
+292,Bigtax,TurismoExtremo,Alto,7,Belén de los Andaquíes
+293,Ronstring,CaminataEcologica,Alto,3,Morelia
+294,Zamit,TurismoExtremo,Bajo,6,Morelia
+295,Domainer,Cascada,Alto,2,Belén de los Andaquíes
+296,Zoolab,TurismoExtremo,Medio,1,Morelia
+297,Fixflex,CaminataEcologica,Bajo,7,Morelia
+298,Tin,TurismoExtremo,Medio,4,Belén de los Andaquíes
+299,Sub-Ex,TurismoExtremo,Medio,3,Florencia
+300,Sonair,CaminataEcologica,Bajo,4,Morelia
+301,Subin,TurismoExtremo,Bajo,2,Morelia
+302,Stronghold,CaminataEcologica,Bajo,4,Morelia
+303,Asoka,TurismoExtremo,Bajo,3,Florencia
+304,Regrant,CaminataEcologica,Alto,3,Morelia
+305,Stringtough,CaminataEcologica,Alto,1,Belén de los Andaquíes
+306,Tresom,CaminataEcologica,Bajo,2,Morelia
+307,Span,CaminataEcologica,Alto,6,Morelia
+308,Bytecard,CaminataEcologica,Medio,4,Belén de los Andaquíes
+309,Subin,TurismoExtremo,Medio,3,Belén de los Andaquíes
+310,Sub-Ex,TurismoExtremo,Bajo,7,Morelia
+311,Vagram,TurismoExtremo,Bajo,8,Morelia
+312,Transcof,TurismoExtremo,Bajo,8,El Doncello
+313,Wrapsafe,CaminataEcologica,Alto,2,Belén de los Andaquíes
+314,Rank,Cascada,Medio,6,Belén de los Andaquíes
+315,Ventosanzap,CaminataEcologica,Bajo,1,El Doncello
+316,Otcom,TurismoExtremo,Bajo,4,Morelia
+317,Andalax,TurismoExtremo,Medio,7,Belén de los Andaquíes
+318,Solarbreeze,CaminataEcologica,Alto,1,Morelia
+319,Duobam,Cascada,Bajo,5,El Doncello
+320,Prodder,Cascada,Medio,2,Morelia
+321,Matsoft,CaminataEcologica,Bajo,6,Morelia
+322,Viva,TurismoExtremo,Medio,7,El Doncello
+323,Kanlam,CaminataEcologica,Alto,1,Morelia
+324,Mat Lam Tam,CaminataEcologica,Medio,4,Belén de los Andaquíes
+325,Wrapsafe,CaminataEcologica,Bajo,1,Florencia
+326,Latlux,CaminataEcologica,Alto,2,El Doncello
+327,Redhold,Cascada,Alto,4,Belén de los Andaquíes
+328,Lotlux,Cascada,Bajo,2,Belén de los Andaquíes
+329,Hatity,CaminataEcologica,Medio,5,Florencia
+330,Pannier,TurismoExtremo,Alto,1,Florencia
+331,Temp,CaminataEcologica,Alto,7,Belén de los Andaquíes
+332,Fix San,Cascada,Alto,3,El Doncello
+333,Zamit,CaminataEcologica,Bajo,5,Belén de los Andaquíes
+334,Tampflex,TurismoExtremo,Alto,4,Morelia
+335,Y-find,CaminataEcologica,Alto,5,Morelia
+336,Bitchip,TurismoExtremo,Bajo,8,Belén de los Andaquíes
+337,Temp,CaminataEcologica,Bajo,4,Belén de los Andaquíes
+338,Viva,TurismoExtremo,Medio,2,Morelia
+339,Sub-Ex,Cascada,Medio,7,Belén de los Andaquíes
+340,Pannier,TurismoExtremo,Alto,7,Morelia
+341,Solarbreeze,Cascada,Alto,6,El Doncello
+342,Andalax,TurismoExtremo,Alto,7,El Doncello
+343,Cardify,Cascada,Bajo,1,El Doncello
+344,Temp,TurismoExtremo,Bajo,8,Florencia
+345,Subin,CaminataEcologica,Medio,8,Belén de los Andaquíes
+346,Zathin,TurismoExtremo,Alto,3,El Doncello
+347,Rank,Cascada,Bajo,4,Morelia
+348,Sub-Ex,Cascada,Alto,6,El Doncello
+349,Zaam-Dox,CaminataEcologica,Bajo,7,Belén de los Andaquíes
+350,Stim,TurismoExtremo,Medio,3,El Doncello
+351,Viva,CaminataEcologica,Medio,1,Florencia
+352,Veribet,TurismoExtremo,Medio,6,Morelia
+353,Trippledex,CaminataEcologica,Alto,5,Belén de los Andaquíes
+354,Sonsing,CaminataEcologica,Bajo,8,Morelia
+355,Tempsoft,TurismoExtremo,Bajo,1,Florencia
+356,Sonair,Cascada,Alto,5,Morelia
+357,Zontrax,Cascada,Medio,4,Morelia
+358,Lotstring,Cascada,Medio,1,Belén de los Andaquíes
+359,Temp,Cascada,Bajo,3,Belén de los Andaquíes
+360,Treeflex,TurismoExtremo,Medio,4,Belén de los Andaquíes
+361,Ventosanzap,TurismoExtremo,Bajo,5,Belén de los Andaquíes
+362,Voyatouch,Cascada,Bajo,7,El Doncello
+363,Mat Lam Tam,Cascada,Medio,3,Belén de los Andaquíes
+364,Home Ing,CaminataEcologica,Alto,1,Belén de los Andaquíes
+365,Sub-Ex,Cascada,Alto,1,El Doncello
+366,Kanlam,CaminataEcologica,Bajo,6,Belén de los Andaquíes
+367,Fintone,CaminataEcologica,Medio,5,Belén de los Andaquíes
+368,Alphazap,Cascada,Bajo,7,Florencia
+369,Hatity,CaminataEcologica,Bajo,6,Florencia
+370,Zamit,CaminataEcologica,Medio,6,Florencia
+371,Sub-Ex,CaminataEcologica,Medio,1,Florencia
+372,Solarbreeze,Cascada,Medio,2,Florencia
+373,Tresom,CaminataEcologica,Medio,8,Morelia
+374,Biodex,CaminataEcologica,Bajo,4,Belén de los Andaquíes
+375,Lotlux,Cascada,Bajo,4,Florencia
+376,Vagram,CaminataEcologica,Medio,1,Florencia
+377,Mat Lam Tam,Cascada,Bajo,6,El Doncello
+378,Temp,CaminataEcologica,Alto,6,Morelia
+379,Bigtax,Cascada,Alto,8,Florencia
+380,Prodder,Cascada,Bajo,2,El Doncello
+381,Tresom,Cascada,Alto,3,El Doncello
+382,Aerified,Cascada,Medio,6,El Doncello
+383,Toughjoyfax,Cascada,Medio,4,Morelia
+384,Overhold,Cascada,Medio,7,Belén de los Andaquíes
+385,Otcom,Cascada,Alto,6,El Doncello
+386,Alphazap,TurismoExtremo,Medio,4,Florencia
+387,Wrapsafe,CaminataEcologica,Medio,5,El Doncello
+388,Fix San,CaminataEcologica,Medio,3,El Doncello
+389,Regrant,TurismoExtremo,Bajo,3,Morelia
+390,Voltsillam,TurismoExtremo,Bajo,3,El Doncello
+391,Tin,Cascada,Bajo,8,Morelia
+392,Ventosanzap,CaminataEcologica,Alto,2,Florencia
+393,Home Ing,Cascada,Bajo,5,El Doncello
+394,Kanlam,TurismoExtremo,Alto,4,Florencia
+395,Konklux,CaminataEcologica,Bajo,3,Morelia
+396,Cardify,TurismoExtremo,Alto,6,El Doncello
+397,Bamity,Cascada,Medio,6,Morelia
+398,Zontrax,TurismoExtremo,Medio,8,Belén de los Andaquíes
+399,Lotlux,TurismoExtremo,Medio,6,Morelia
+400,Alpha,CaminataEcologica,Alto,3,Belén de los Andaquíes
+401,Voltsillam,Cascada,Medio,2,El Doncello
+402,Zathin,Cascada,Bajo,6,Florencia
+403,Fix San,Cascada,Alto,5,Florencia
+404,Flexidy,CaminataEcologica,Bajo,2,Morelia
+405,Sonsing,TurismoExtremo,Alto,4,Florencia
+406,Flowdesk,TurismoExtremo,Bajo,4,Morelia
+407,Vagram,TurismoExtremo,Medio,3,El Doncello
+408,Tres-Zap,CaminataEcologica,Bajo,7,Belén de los Andaquíes
+409,Zaam-Dox,Cascada,Medio,3,Florencia
+410,Ronstring,TurismoExtremo,Bajo,4,El Doncello
+411,Andalax,TurismoExtremo,Medio,3,Belén de los Andaquíes
+412,Pannier,CaminataEcologica,Bajo,2,Morelia
+413,Ventosanzap,TurismoExtremo,Medio,4,El Doncello
+414,Flowdesk,CaminataEcologica,Medio,1,El Doncello
+415,Zontrax,Cascada,Bajo,3,Morelia
+416,Zathin,CaminataEcologica,Medio,2,Florencia
+417,Zontrax,CaminataEcologica,Bajo,8,Florencia
+418,Cardguard,Cascada,Alto,2,Belén de los Andaquíes
+419,Greenlam,CaminataEcologica,Bajo,3,Belén de los Andaquíes
+420,Redhold,Cascada,Alto,7,Morelia
+421,Voyatouch,Cascada,Alto,3,Florencia
+422,Trippledex,TurismoExtremo,Alto,2,Florencia
+423,Konklab,TurismoExtremo,Medio,7,Belén de los Andaquíes
+424,Fix San,CaminataEcologica,Bajo,7,Morelia
+425,Kanlam,TurismoExtremo,Alto,7,Florencia
+426,Tampflex,CaminataEcologica,Medio,6,Morelia
+427,Ronstring,TurismoExtremo,Alto,7,El Doncello
+428,Namfix,Cascada,Alto,8,Florencia
+429,Pannier,TurismoExtremo,Medio,4,Florencia
+430,Fix San,Cascada,Alto,2,El Doncello
+431,Viva,Cascada,Alto,1,Morelia
+432,Toughjoyfax,TurismoExtremo,Bajo,3,Florencia
+433,Fixflex,CaminataEcologica,Alto,4,El Doncello
+434,Regrant,Cascada,Bajo,8,Belén de los Andaquíes
+435,Wrapsafe,CaminataEcologica,Alto,3,Belén de los Andaquíes
+436,Voyatouch,Cascada,Medio,7,Belén de los Andaquíes
+437,Stringtough,TurismoExtremo,Alto,8,El Doncello
+438,Lotlux,TurismoExtremo,Alto,8,El Doncello
+439,Domainer,CaminataEcologica,Bajo,3,Belén de los Andaquíes
+440,Zaam-Dox,TurismoExtremo,Alto,4,Florencia
+441,Gembucket,CaminataEcologica,Medio,6,Morelia
+442,Fintone,CaminataEcologica,Alto,3,El Doncello
+443,Y-Solowarm,CaminataEcologica,Medio,1,Florencia
+444,Fintone,CaminataEcologica,Medio,6,Morelia
+445,Biodex,Cascada,Alto,7,Belén de los Andaquíes
+446,Voyatouch,Cascada,Bajo,2,Belén de los Andaquíes
+447,Matsoft,TurismoExtremo,Medio,7,Florencia
+448,Ventosanzap,TurismoExtremo,Medio,6,El Doncello
+449,Aerified,Cascada,Alto,3,Belén de los Andaquíes
+450,Daltfresh,TurismoExtremo,Alto,3,Florencia
+451,Ronstring,TurismoExtremo,Bajo,4,Florencia
+452,Wrapsafe,CaminataEcologica,Bajo,3,Florencia
+453,Voltsillam,Cascada,Bajo,8,Morelia
+454,Viva,Cascada,Bajo,6,Belén de los Andaquíes
+455,Otcom,CaminataEcologica,Bajo,1,Morelia
+456,Home Ing,TurismoExtremo,Alto,7,Florencia
+457,Viva,CaminataEcologica,Bajo,4,Belén de los Andaquíes
+458,Tres-Zap,CaminataEcologica,Medio,5,El Doncello
+459,Transcof,CaminataEcologica,Alto,7,Belén de los Andaquíes
+460,Biodex,Cascada,Bajo,5,El Doncello
+461,Zamit,CaminataEcologica,Medio,5,Morelia
+462,Vagram,TurismoExtremo,Bajo,4,Florencia
+463,Zoolab,TurismoExtremo,Alto,7,Belén de los Andaquíes
+464,Aerified,Cascada,Alto,1,El Doncello
+465,Bitwolf,TurismoExtremo,Medio,1,El Doncello
+466,Opela,TurismoExtremo,Alto,6,Morelia
+467,Wrapsafe,Cascada,Medio,1,Belén de los Andaquíes
+468,Zathin,TurismoExtremo,Medio,2,El Doncello
+469,Sonsing,CaminataEcologica,Alto,8,El Doncello
+470,Bitwolf,CaminataEcologica,Bajo,7,El Doncello
+471,Biodex,CaminataEcologica,Alto,1,Morelia
+472,Home Ing,CaminataEcologica,Bajo,3,Belén de los Andaquíes
+473,Keylex,CaminataEcologica,Medio,6,Florencia
+474,Bigtax,TurismoExtremo,Bajo,4,Belén de los Andaquíes
+475,Stronghold,CaminataEcologica,Bajo,1,Florencia
+476,Transcof,TurismoExtremo,Bajo,5,El Doncello
+477,Matsoft,Cascada,Medio,8,Florencia
+478,Cookley,TurismoExtremo,Bajo,7,Florencia
+479,Otcom,Cascada,Bajo,2,El Doncello
+480,Tres-Zap,Cascada,Medio,2,Belén de los Andaquíes
+481,Bitwolf,TurismoExtremo,Medio,4,El Doncello
+482,Voltsillam,TurismoExtremo,Bajo,3,Morelia
+483,Span,TurismoExtremo,Alto,1,Florencia
+484,Zoolab,CaminataEcologica,Alto,2,Morelia
+485,Domainer,Cascada,Alto,2,Morelia
+486,Tempsoft,CaminataEcologica,Alto,5,Belén de los Andaquíes
+487,Lotstring,Cascada,Medio,1,El Doncello
+488,Alpha,Cascada,Alto,7,Morelia
+489,Flexidy,CaminataEcologica,Alto,1,Morelia
+490,Bytecard,CaminataEcologica,Medio,6,El Doncello
+491,Konklux,CaminataEcologica,Alto,6,Florencia
+492,Job,TurismoExtremo,Medio,4,Florencia
+493,Ronstring,TurismoExtremo,Alto,2,Belén de los Andaquíes
+494,Keylex,CaminataEcologica,Medio,6,Morelia
+495,Bamity,TurismoExtremo,Alto,7,Morelia
+496,Flexidy,CaminataEcologica,Alto,2,Belén de los Andaquíes
+497,Stronghold,TurismoExtremo,Alto,1,Belén de los Andaquíes
+498,Fixflex,CaminataEcologica,Medio,2,Belén de los Andaquíes
+499,Vagram,Cascada,Medio,1,Morelia
+500,Daltfresh,TurismoExtremo,Medio,8,Belén de los Andaquíes
+501,Regrant,TurismoExtremo,Alto,7,Morelia
+502,Domainer,CaminataEcologica,Medio,7,Morelia
+503,Subin,TurismoExtremo,Bajo,2,Florencia
+504,Tampflex,TurismoExtremo,Medio,2,Belén de los Andaquíes
+505,Viva,TurismoExtremo,Alto,6,El Doncello
+506,Temp,TurismoExtremo,Medio,5,Florencia
+507,Solarbreeze,TurismoExtremo,Alto,8,Florencia
+508,Asoka,CaminataEcologica,Bajo,4,Morelia
+509,Bitchip,TurismoExtremo,Alto,1,Florencia
+510,Bitwolf,Cascada,Bajo,5,Morelia
+511,Rank,TurismoExtremo,Alto,1,Florencia
+512,Pannier,CaminataEcologica,Medio,6,Florencia
+513,Solarbreeze,Cascada,Alto,4,Morelia
+514,Zoolab,Cascada,Medio,4,Belén de los Andaquíes
+515,Cookley,Cascada,Medio,2,Belén de los Andaquíes
+516,Alphazap,Cascada,Alto,5,Belén de los Andaquíes
+517,Bigtax,TurismoExtremo,Alto,2,Morelia
+518,Aerified,Cascada,Medio,1,Florencia
+519,Wrapsafe,CaminataEcologica,Alto,2,Belén de los Andaquíes
+520,Andalax,CaminataEcologica,Alto,8,Belén de los Andaquíes
+521,Bitchip,CaminataEcologica,Alto,7,Belén de los Andaquíes
+522,Alpha,Cascada,Bajo,7,Morelia
+523,Viva,CaminataEcologica,Bajo,3,Morelia
+524,Bamity,Cascada,Medio,2,El Doncello
+525,Tresom,TurismoExtremo,Bajo,6,Florencia
+526,Zathin,TurismoExtremo,Bajo,2,Belén de los Andaquíes
+527,Otcom,CaminataEcologica,Medio,1,Florencia
+528,Zamit,CaminataEcologica,Bajo,7,El Doncello
+529,Konklab,CaminataEcologica,Alto,8,Belén de los Andaquíes
+530,Holdlamis,TurismoExtremo,Alto,8,El Doncello
+531,Tampflex,TurismoExtremo,Alto,4,Morelia
+532,Zontrax,Cascada,Alto,2,Belén de los Andaquíes
+533,Asoka,CaminataEcologica,Bajo,4,Florencia
+534,Sub-Ex,CaminataEcologica,Medio,8,Morelia
+535,Otcom,Cascada,Alto,2,Belén de los Andaquíes
+536,Veribet,Cascada,Alto,4,Florencia
+537,Asoka,TurismoExtremo,Bajo,1,Morelia
+538,Fixflex,Cascada,Bajo,8,Morelia
+539,Sonair,TurismoExtremo,Alto,3,El Doncello
+540,Tampflex,CaminataEcologica,Medio,3,El Doncello
+541,Prodder,CaminataEcologica,Bajo,5,Florencia
+542,Zamit,Cascada,Bajo,7,Florencia
+543,Zamit,Cascada,Medio,3,El Doncello
+544,Bamity,TurismoExtremo,Bajo,2,El Doncello
+545,Alpha,CaminataEcologica,Bajo,6,Belén de los Andaquíes
+546,Bitchip,CaminataEcologica,Alto,5,Florencia
+547,Prodder,Cascada,Alto,4,El Doncello
+548,Alphazap,CaminataEcologica,Alto,8,Florencia
+549,Sub-Ex,TurismoExtremo,Bajo,5,Florencia
+550,Stringtough,CaminataEcologica,Alto,2,Morelia
+551,Mat Lam Tam,CaminataEcologica,Medio,1,Morelia
+552,Redhold,CaminataEcologica,Medio,1,Morelia
+553,Lotstring,CaminataEcologica,Bajo,4,Florencia
+554,Voltsillam,TurismoExtremo,Alto,6,Belén de los Andaquíes
+555,Namfix,Cascada,Bajo,3,El Doncello
+556,Voltsillam,Cascada,Medio,7,El Doncello
+557,Matsoft,CaminataEcologica,Bajo,2,Belén de los Andaquíes
+558,Bigtax,CaminataEcologica,Medio,8,El Doncello
+559,Lotstring,CaminataEcologica,Bajo,7,Florencia
+560,Wrapsafe,TurismoExtremo,Medio,2,El Doncello
+561,Holdlamis,TurismoExtremo,Bajo,7,Morelia
+562,Holdlamis,CaminataEcologica,Medio,8,Belén de los Andaquíes
+563,Ventosanzap,Cascada,Medio,7,Florencia
+564,Zaam-Dox,Cascada,Alto,4,Belén de los Andaquíes
+565,Gembucket,Cascada,Bajo,4,Belén de los Andaquíes
+566,Stim,TurismoExtremo,Bajo,2,Morelia
+567,Toughjoyfax,TurismoExtremo,Medio,4,Belén de los Andaquíes
+568,Prodder,Cascada,Bajo,6,El Doncello
+569,Sonair,CaminataEcologica,Alto,5,Florencia
+570,Stringtough,CaminataEcologica,Alto,7,Morelia
+571,It,Cascada,Bajo,6,El Doncello
+572,Voltsillam,CaminataEcologica,Medio,7,Belén de los Andaquíes
+573,Flexidy,TurismoExtremo,Alto,7,Belén de los Andaquíes
+574,Stringtough,Cascada,Bajo,7,El Doncello
+575,Fixflex,TurismoExtremo,Medio,3,Morelia
+576,Tres-Zap,TurismoExtremo,Alto,2,Florencia
+577,Bytecard,TurismoExtremo,Medio,1,Belén de los Andaquíes
+578,Bitwolf,Cascada,Medio,2,Morelia
+579,Treeflex,CaminataEcologica,Bajo,2,Florencia
+580,Bamity,CaminataEcologica,Medio,8,Morelia
+581,Cardify,CaminataEcologica,Medio,4,Belén de los Andaquíes
+582,Tampflex,CaminataEcologica,Alto,1,El Doncello
+583,Lotstring,TurismoExtremo,Alto,5,Morelia
+584,Sonair,CaminataEcologica,Medio,6,El Doncello
+585,Alpha,CaminataEcologica,Bajo,5,El Doncello
+586,Flexidy,CaminataEcologica,Medio,6,Morelia
+587,Pannier,CaminataEcologica,Alto,4,Belén de los Andaquíes
+588,Veribet,Cascada,Medio,3,Florencia
+589,Aerified,CaminataEcologica,Medio,4,Morelia
+590,Vagram,CaminataEcologica,Medio,7,El Doncello
+591,Rank,Cascada,Bajo,1,Belén de los Andaquíes
+592,Bamity,TurismoExtremo,Bajo,5,Morelia
+593,Tin,Cascada,Bajo,8,Florencia
+594,Mat Lam Tam,TurismoExtremo,Medio,2,Morelia
+595,Bytecard,Cascada,Bajo,7,Florencia
+596,Sub-Ex,TurismoExtremo,Bajo,5,Belén de los Andaquíes
+597,Rank,TurismoExtremo,Medio,7,Morelia
+598,Cardify,CaminataEcologica,Bajo,6,Florencia
+599,Mat Lam Tam,TurismoExtremo,Bajo,3,Florencia
+600,Otcom,CaminataEcologica,Medio,6,Morelia
+601,Vagram,CaminataEcologica,Medio,8,Florencia
+602,Treeflex,TurismoExtremo,Medio,3,Belén de los Andaquíes
+603,Tempsoft,CaminataEcologica,Medio,7,El Doncello
+604,Zontrax,CaminataEcologica,Medio,8,El Doncello
+605,Lotstring,CaminataEcologica,Bajo,1,Florencia
+606,Keylex,CaminataEcologica,Alto,7,El Doncello
+607,Konklux,CaminataEcologica,Alto,6,Belén de los Andaquíes
+608,Voyatouch,Cascada,Bajo,4,Florencia
+609,Tempsoft,CaminataEcologica,Alto,4,Morelia
+610,Vagram,CaminataEcologica,Alto,3,Belén de los Andaquíes
+611,Treeflex,TurismoExtremo,Medio,7,El Doncello
+612,Duobam,CaminataEcologica,Alto,2,El Doncello
+613,Prodder,TurismoExtremo,Alto,5,Belén de los Andaquíes
+614,Cardguard,TurismoExtremo,Medio,2,El Doncello
+615,Andalax,TurismoExtremo,Bajo,3,Morelia
+616,Otcom,Cascada,Bajo,5,Florencia
+617,Matsoft,Cascada,Medio,7,Florencia
+618,Hatity,Cascada,Medio,6,El Doncello
+619,Subin,CaminataEcologica,Medio,7,Morelia
+620,Duobam,CaminataEcologica,Medio,1,Morelia
+621,Y-Solowarm,TurismoExtremo,Bajo,8,Morelia
+622,Span,CaminataEcologica,Medio,5,El Doncello
+623,Duobam,CaminataEcologica,Medio,7,Morelia
+624,Zathin,TurismoExtremo,Medio,3,Morelia
+625,Biodex,TurismoExtremo,Medio,8,Morelia
+626,Cardify,Cascada,Alto,5,Morelia
+627,Bamity,TurismoExtremo,Medio,6,Morelia
+628,Flexidy,TurismoExtremo,Bajo,3,Florencia
+629,Ventosanzap,CaminataEcologica,Medio,2,Florencia
+630,Y-Solowarm,Cascada,Medio,7,Florencia
+631,Aerified,Cascada,Alto,5,Florencia
+632,Opela,CaminataEcologica,Medio,3,Florencia
+633,Bitchip,Cascada,Medio,2,Morelia
+634,Prodder,Cascada,Alto,6,El Doncello
+635,Cardify,Cascada,Alto,4,El Doncello
+636,Lotlux,TurismoExtremo,Bajo,7,Morelia
+637,Pannier,Cascada,Medio,7,Morelia
+638,Home Ing,TurismoExtremo,Alto,3,El Doncello
+639,Zathin,CaminataEcologica,Alto,2,Florencia
+640,Daltfresh,CaminataEcologica,Bajo,6,Florencia
+641,It,Cascada,Medio,8,Morelia
+642,Flowdesk,TurismoExtremo,Alto,8,El Doncello
+643,Konklab,CaminataEcologica,Alto,8,Morelia
+644,Voltsillam,TurismoExtremo,Bajo,1,El Doncello
+645,Voltsillam,CaminataEcologica,Medio,7,Morelia
+646,Zathin,CaminataEcologica,Medio,3,Belén de los Andaquíes
+647,Home Ing,Cascada,Medio,3,El Doncello
+648,Fix San,Cascada,Alto,7,El Doncello
+649,Greenlam,CaminataEcologica,Alto,3,El Doncello
+650,Fintone,CaminataEcologica,Alto,2,Florencia
+651,Zaam-Dox,TurismoExtremo,Medio,8,Morelia
+652,Zathin,TurismoExtremo,Bajo,5,Florencia
+653,Redhold,CaminataEcologica,Bajo,4,El Doncello
+654,Duobam,TurismoExtremo,Alto,1,Belén de los Andaquíes
+655,Duobam,TurismoExtremo,Alto,8,Morelia
+656,Viva,Cascada,Medio,1,Belén de los Andaquíes
+657,Prodder,TurismoExtremo,Alto,5,Morelia
+658,Subin,TurismoExtremo,Alto,3,Belén de los Andaquíes
+659,Kanlam,Cascada,Bajo,3,Florencia
+660,Domainer,CaminataEcologica,Medio,4,Florencia
+661,Veribet,Cascada,Bajo,3,Florencia
+662,Ventosanzap,Cascada,Bajo,6,El Doncello
+663,Daltfresh,TurismoExtremo,Medio,4,El Doncello
+664,Cardify,CaminataEcologica,Alto,4,Morelia
+665,Rank,TurismoExtremo,Alto,8,El Doncello
+666,Sub-Ex,TurismoExtremo,Alto,8,Florencia
+667,Cardify,TurismoExtremo,Medio,1,Belén de los Andaquíes
+668,Ronstring,Cascada,Bajo,7,El Doncello
+669,Subin,CaminataEcologica,Alto,3,Florencia
+670,Mat Lam Tam,TurismoExtremo,Medio,7,Belén de los Andaquíes
+671,Fix San,TurismoExtremo,Medio,6,El Doncello
+672,Trippledex,Cascada,Bajo,5,Florencia
+673,Job,TurismoExtremo,Bajo,8,Belén de los Andaquíes
+674,Hatity,CaminataEcologica,Medio,7,Morelia
+675,Cardify,TurismoExtremo,Medio,7,El Doncello
+676,Tampflex,CaminataEcologica,Bajo,2,El Doncello
+677,Stringtough,TurismoExtremo,Medio,1,Morelia
+678,Cookley,Cascada,Medio,7,El Doncello
+679,Ventosanzap,CaminataEcologica,Alto,1,El Doncello
+680,Stronghold,TurismoExtremo,Alto,3,Morelia
+681,Solarbreeze,Cascada,Bajo,5,Morelia
+682,Sonsing,TurismoExtremo,Alto,5,Morelia
+683,Stim,TurismoExtremo,Medio,6,Morelia
+684,Greenlam,TurismoExtremo,Medio,8,Belén de los Andaquíes
+685,Rank,CaminataEcologica,Medio,2,Morelia
+686,Biodex,Cascada,Alto,5,Florencia
+687,Regrant,CaminataEcologica,Bajo,2,El Doncello
+688,Zaam-Dox,CaminataEcologica,Alto,8,Belén de los Andaquíes
+689,Alphazap,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+690,Flexidy,TurismoExtremo,Medio,7,Morelia
+691,Konklux,Cascada,Alto,6,Belén de los Andaquíes
+692,Fix San,TurismoExtremo,Medio,1,Belén de los Andaquíes
+693,Ventosanzap,CaminataEcologica,Medio,8,Belén de los Andaquíes
+694,Hatity,Cascada,Alto,4,Florencia
+695,Alpha,TurismoExtremo,Alto,1,Morelia
+696,Otcom,TurismoExtremo,Medio,2,Florencia
+697,Fixflex,Cascada,Medio,2,El Doncello
+698,Wrapsafe,TurismoExtremo,Medio,7,Morelia
+699,Viva,CaminataEcologica,Medio,4,El Doncello
+700,Sonsing,CaminataEcologica,Alto,5,Florencia
+701,Quo Lux,Cascada,Alto,7,Florencia
+702,Aerified,Cascada,Alto,5,Florencia
+703,Hatity,Cascada,Medio,3,Morelia
+704,Solarbreeze,TurismoExtremo,Medio,1,Florencia
+705,Rank,Cascada,Medio,1,El Doncello
+706,Asoka,CaminataEcologica,Medio,6,Florencia
+707,Alpha,CaminataEcologica,Alto,4,Belén de los Andaquíes
+708,Asoka,TurismoExtremo,Alto,4,Belén de los Andaquíes
+709,Latlux,Cascada,Medio,1,Florencia
+710,Bamity,Cascada,Alto,3,Morelia
+711,Alpha,TurismoExtremo,Alto,2,Morelia
+712,Alpha,TurismoExtremo,Alto,6,Belén de los Andaquíes
+713,Fintone,Cascada,Bajo,2,Florencia
+714,Duobam,Cascada,Bajo,4,Morelia
+715,Voyatouch,Cascada,Medio,4,Belén de los Andaquíes
+716,Y-Solowarm,CaminataEcologica,Bajo,3,Belén de los Andaquíes
+717,Bamity,CaminataEcologica,Medio,6,Morelia
+718,Tampflex,TurismoExtremo,Alto,1,Florencia
+719,Y-Solowarm,Cascada,Bajo,2,Florencia
+720,Voltsillam,Cascada,Medio,6,El Doncello
+721,Temp,CaminataEcologica,Medio,7,Morelia
+722,Sub-Ex,Cascada,Medio,3,El Doncello
+723,Tin,TurismoExtremo,Medio,4,Morelia
+724,Job,TurismoExtremo,Bajo,2,Florencia
+725,Quo Lux,Cascada,Medio,3,Morelia
+726,Vagram,Cascada,Medio,8,El Doncello
+727,Ronstring,TurismoExtremo,Bajo,7,El Doncello
+728,Ventosanzap,CaminataEcologica,Alto,6,Florencia
+729,Hatity,CaminataEcologica,Bajo,4,Morelia
+730,Y-find,CaminataEcologica,Bajo,4,Morelia
+731,Tres-Zap,CaminataEcologica,Bajo,7,Morelia
+732,Domainer,TurismoExtremo,Bajo,4,El Doncello
+733,Trippledex,Cascada,Medio,3,El Doncello
+734,Zaam-Dox,TurismoExtremo,Bajo,3,Morelia
+735,Mat Lam Tam,TurismoExtremo,Medio,1,Florencia
+736,Daltfresh,TurismoExtremo,Bajo,6,El Doncello
+737,Bigtax,TurismoExtremo,Alto,1,El Doncello
+738,Voltsillam,TurismoExtremo,Medio,2,El Doncello
+739,Mat Lam Tam,CaminataEcologica,Bajo,1,Florencia
+740,Cardify,TurismoExtremo,Medio,5,Florencia
+741,Bitwolf,CaminataEcologica,Bajo,5,El Doncello
+742,Biodex,TurismoExtremo,Medio,6,El Doncello
+743,Pannier,Cascada,Medio,5,Morelia
+744,Quo Lux,CaminataEcologica,Alto,5,Belén de los Andaquíes
+745,Ventosanzap,TurismoExtremo,Bajo,6,Belén de los Andaquíes
+746,Overhold,Cascada,Alto,2,Florencia
+747,Opela,TurismoExtremo,Bajo,8,Florencia
+748,Vagram,CaminataEcologica,Medio,7,Belén de los Andaquíes
+749,Alpha,TurismoExtremo,Alto,8,Morelia
+750,Gembucket,CaminataEcologica,Medio,5,Belén de los Andaquíes
+751,Asoka,TurismoExtremo,Alto,5,Belén de los Andaquíes
+752,Y-Solowarm,Cascada,Medio,3,Morelia
+753,Y-Solowarm,TurismoExtremo,Medio,6,El Doncello
+754,Y-find,TurismoExtremo,Medio,8,El Doncello
+755,Quo Lux,CaminataEcologica,Bajo,7,Belén de los Andaquíes
+756,Vagram,Cascada,Bajo,3,El Doncello
+757,Ventosanzap,CaminataEcologica,Alto,2,Florencia
+758,Aerified,TurismoExtremo,Medio,3,Morelia
+759,Flowdesk,Cascada,Alto,8,Morelia
+760,Kanlam,CaminataEcologica,Medio,1,Florencia
+761,Cardguard,Cascada,Medio,1,Florencia
+762,Cookley,Cascada,Bajo,2,Florencia
+763,Cardify,CaminataEcologica,Bajo,5,El Doncello
+764,Gembucket,CaminataEcologica,Medio,6,Morelia
+765,Andalax,TurismoExtremo,Bajo,6,Belén de los Andaquíes
+766,Mat Lam Tam,Cascada,Alto,2,Belén de los Andaquíes
+767,Trippledex,Cascada,Alto,3,Morelia
+768,Wrapsafe,CaminataEcologica,Medio,8,Morelia
+769,Holdlamis,TurismoExtremo,Alto,7,Florencia
+770,Job,Cascada,Alto,7,Belén de los Andaquíes
+771,Lotlux,Cascada,Medio,1,El Doncello
+772,Bytecard,TurismoExtremo,Bajo,5,Florencia
+773,Zontrax,TurismoExtremo,Bajo,7,Florencia
+774,Domainer,TurismoExtremo,Bajo,5,Belén de los Andaquíes
+775,Sub-Ex,TurismoExtremo,Alto,5,Belén de los Andaquíes
+776,Namfix,TurismoExtremo,Alto,1,El Doncello
+777,Cookley,Cascada,Medio,6,Morelia
+778,Lotstring,TurismoExtremo,Medio,6,Florencia
+779,Domainer,Cascada,Alto,1,Florencia
+780,Pannier,Cascada,Bajo,5,Florencia
+781,Lotstring,TurismoExtremo,Alto,2,Morelia
+782,Pannier,TurismoExtremo,Alto,7,Belén de los Andaquíes
+783,Mat Lam Tam,CaminataEcologica,Alto,3,Florencia
+784,Stim,Cascada,Bajo,4,Florencia
+785,Job,CaminataEcologica,Medio,6,El Doncello
+786,Tempsoft,Cascada,Bajo,6,Florencia
+787,Quo Lux,CaminataEcologica,Alto,1,Morelia
+788,Bamity,TurismoExtremo,Bajo,1,El Doncello
+789,Toughjoyfax,Cascada,Medio,4,Morelia
+790,Ventosanzap,CaminataEcologica,Bajo,7,Florencia
+791,Voltsillam,CaminataEcologica,Medio,4,El Doncello
+792,Greenlam,Cascada,Bajo,6,Morelia
+793,Tempsoft,CaminataEcologica,Alto,6,Belén de los Andaquíes
+794,Temp,TurismoExtremo,Bajo,8,Belén de los Andaquíes
+795,Lotlux,TurismoExtremo,Alto,5,El Doncello
+796,Zaam-Dox,Cascada,Bajo,1,El Doncello
+797,Asoka,TurismoExtremo,Medio,7,Morelia
+798,Kanlam,TurismoExtremo,Bajo,5,El Doncello
+799,Wrapsafe,CaminataEcologica,Medio,4,El Doncello
+800,Mat Lam Tam,CaminataEcologica,Alto,1,Florencia
+801,Vagram,CaminataEcologica,Bajo,3,Morelia
+802,Y-find,CaminataEcologica,Alto,8,Florencia
+803,Alpha,Cascada,Medio,6,El Doncello
+804,Alpha,TurismoExtremo,Medio,3,El Doncello
+805,Otcom,Cascada,Alto,3,Belén de los Andaquíes
+806,Tempsoft,CaminataEcologica,Medio,7,Florencia
+807,Konklux,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+808,Domainer,Cascada,Bajo,1,Morelia
+809,Y-Solowarm,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+810,Home Ing,TurismoExtremo,Bajo,6,Morelia
+811,Fixflex,CaminataEcologica,Bajo,4,El Doncello
+812,Span,Cascada,Alto,6,Belén de los Andaquíes
+813,Stim,TurismoExtremo,Medio,6,Florencia
+814,Treeflex,CaminataEcologica,Alto,4,Belén de los Andaquíes
+815,Cardguard,CaminataEcologica,Alto,5,Belén de los Andaquíes
+816,Fix San,Cascada,Bajo,8,Morelia
+817,Ventosanzap,CaminataEcologica,Alto,1,Florencia
+818,Aerified,TurismoExtremo,Medio,1,Morelia
+819,Alpha,Cascada,Alto,2,El Doncello
+820,Redhold,CaminataEcologica,Medio,7,Morelia
+821,Bamity,CaminataEcologica,Medio,3,Belén de los Andaquíes
+822,Y-Solowarm,Cascada,Alto,4,El Doncello
+823,Redhold,Cascada,Bajo,3,Morelia
+824,Transcof,Cascada,Medio,5,Florencia
+825,Stringtough,TurismoExtremo,Medio,8,Morelia
+826,Veribet,CaminataEcologica,Alto,2,Belén de los Andaquíes
+827,Matsoft,CaminataEcologica,Alto,2,Belén de los Andaquíes
+828,Otcom,Cascada,Medio,5,Belén de los Andaquíes
+829,Pannier,TurismoExtremo,Medio,1,El Doncello
+830,Veribet,Cascada,Alto,8,Florencia
+831,Latlux,TurismoExtremo,Alto,6,Florencia
+832,Kanlam,Cascada,Alto,7,El Doncello
+833,Zathin,Cascada,Bajo,8,Morelia
+834,Tresom,Cascada,Alto,2,Morelia
+835,Asoka,TurismoExtremo,Alto,2,Florencia
+836,Transcof,TurismoExtremo,Alto,7,Belén de los Andaquíes
+837,Otcom,Cascada,Medio,4,El Doncello
+838,Vagram,CaminataEcologica,Bajo,1,Belén de los Andaquíes
+839,Redhold,TurismoExtremo,Medio,3,Morelia
+840,Subin,CaminataEcologica,Medio,3,Morelia
+841,Pannier,TurismoExtremo,Medio,1,Florencia
+842,Home Ing,Cascada,Medio,3,Morelia
+843,Zontrax,TurismoExtremo,Medio,5,Belén de los Andaquíes
+844,Job,Cascada,Alto,1,Florencia
+845,Tin,TurismoExtremo,Medio,2,Morelia
+846,Wrapsafe,TurismoExtremo,Alto,5,Morelia
+847,Y-find,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+848,Gembucket,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+849,Cardify,Cascada,Alto,2,Florencia
+850,Span,Cascada,Bajo,5,Belén de los Andaquíes
+851,Flowdesk,CaminataEcologica,Bajo,6,Florencia
+852,Quo Lux,CaminataEcologica,Alto,1,Belén de los Andaquíes
+853,Treeflex,Cascada,Alto,2,Morelia
+854,Veribet,TurismoExtremo,Alto,6,El Doncello
+855,Daltfresh,TurismoExtremo,Alto,7,Morelia
+856,Wrapsafe,CaminataEcologica,Alto,6,Belén de los Andaquíes
+857,Ventosanzap,Cascada,Medio,8,Florencia
+858,Alphazap,CaminataEcologica,Bajo,3,Morelia
+859,Bitwolf,Cascada,Bajo,2,El Doncello
+860,Transcof,Cascada,Alto,6,Morelia
+861,Voltsillam,Cascada,Alto,5,Florencia
+862,Treeflex,CaminataEcologica,Bajo,6,Florencia
+863,Home Ing,TurismoExtremo,Alto,5,Morelia
+864,Subin,CaminataEcologica,Medio,5,El Doncello
+865,Flowdesk,TurismoExtremo,Medio,8,Morelia
+866,Biodex,TurismoExtremo,Alto,4,Florencia
+867,Otcom,Cascada,Alto,1,El Doncello
+868,Toughjoyfax,CaminataEcologica,Alto,4,Belén de los Andaquíes
+869,Sonsing,CaminataEcologica,Medio,3,Florencia
+870,Alphazap,TurismoExtremo,Medio,6,El Doncello
+871,Kanlam,CaminataEcologica,Bajo,3,Morelia
+872,Toughjoyfax,CaminataEcologica,Alto,2,Florencia
+873,Quo Lux,CaminataEcologica,Bajo,7,El Doncello
+874,Latlux,CaminataEcologica,Medio,3,El Doncello
+875,Zamit,CaminataEcologica,Bajo,8,Morelia
+876,Bitchip,TurismoExtremo,Bajo,1,El Doncello
+877,Bitchip,Cascada,Alto,8,El Doncello
+878,Alphazap,Cascada,Alto,3,El Doncello
+879,Gembucket,Cascada,Bajo,8,Florencia
+880,Kanlam,TurismoExtremo,Alto,4,Florencia
+881,Opela,CaminataEcologica,Bajo,7,Belén de los Andaquíes
+882,Namfix,Cascada,Medio,2,Florencia
+883,Cardguard,CaminataEcologica,Bajo,5,El Doncello
+884,Flexidy,Cascada,Alto,8,Belén de los Andaquíes
+885,Latlux,CaminataEcologica,Medio,2,Morelia
+886,Solarbreeze,CaminataEcologica,Medio,7,El Doncello
+887,Bamity,Cascada,Medio,1,Belén de los Andaquíes
+888,Regrant,CaminataEcologica,Bajo,2,Belén de los Andaquíes
+889,Tin,TurismoExtremo,Medio,3,Belén de los Andaquíes
+890,Y-Solowarm,TurismoExtremo,Medio,2,Morelia
+891,Pannier,CaminataEcologica,Medio,8,Morelia
+892,Cookley,TurismoExtremo,Alto,8,Morelia
+893,Bitchip,TurismoExtremo,Bajo,7,El Doncello
+894,Kanlam,CaminataEcologica,Bajo,8,Florencia
+895,Stringtough,CaminataEcologica,Alto,8,El Doncello
+896,Zaam-Dox,CaminataEcologica,Bajo,3,Florencia
+897,Domainer,Cascada,Medio,2,Belén de los Andaquíes
+898,Zamit,Cascada,Bajo,5,Belén de los Andaquíes
+899,Stim,CaminataEcologica,Alto,6,Belén de los Andaquíes
+900,Keylex,TurismoExtremo,Bajo,4,Morelia
+901,Tin,Cascada,Alto,6,El Doncello
+902,Flexidy,TurismoExtremo,Medio,6,Morelia
+903,Fixflex,TurismoExtremo,Alto,2,Belén de los Andaquíes
+904,Cardify,Cascada,Bajo,6,El Doncello
+905,Opela,TurismoExtremo,Medio,8,Morelia
+906,Tresom,TurismoExtremo,Medio,3,El Doncello
+907,Zoolab,CaminataEcologica,Medio,6,Belén de los Andaquíes
+908,Pannier,Cascada,Bajo,3,El Doncello
+909,Cookley,TurismoExtremo,Bajo,5,Florencia
+910,Voyatouch,CaminataEcologica,Alto,6,Florencia
+911,Transcof,TurismoExtremo,Bajo,7,El Doncello
+912,Bamity,TurismoExtremo,Alto,8,Morelia
+913,Asoka,Cascada,Medio,3,El Doncello
+914,It,CaminataEcologica,Alto,4,Belén de los Andaquíes
+915,Voyatouch,CaminataEcologica,Alto,2,Belén de los Andaquíes
+916,Fintone,CaminataEcologica,Medio,8,Florencia
+917,Holdlamis,TurismoExtremo,Alto,6,Belén de los Andaquíes
+918,Aerified,TurismoExtremo,Alto,1,El Doncello
+919,Cookley,Cascada,Medio,8,Morelia
+920,Voyatouch,Cascada,Bajo,3,Morelia
+921,Bigtax,CaminataEcologica,Bajo,4,El Doncello
+922,Tin,Cascada,Alto,7,Florencia
+923,Y-Solowarm,TurismoExtremo,Alto,3,Morelia
+924,Zaam-Dox,TurismoExtremo,Alto,2,El Doncello
+925,Transcof,CaminataEcologica,Medio,8,Morelia
+926,Andalax,CaminataEcologica,Alto,1,Florencia
+927,Kanlam,Cascada,Medio,2,El Doncello
+928,Home Ing,Cascada,Alto,8,Morelia
+929,Rank,TurismoExtremo,Alto,7,Florencia
+930,Stim,Cascada,Alto,6,Florencia
+931,Opela,CaminataEcologica,Bajo,5,Florencia
+932,Veribet,CaminataEcologica,Bajo,2,Belén de los Andaquíes
+933,Treeflex,Cascada,Bajo,4,Florencia
+934,Ronstring,Cascada,Bajo,6,Morelia
+935,Asoka,CaminataEcologica,Alto,5,El Doncello
+936,Bigtax,Cascada,Alto,6,Morelia
+937,Bitwolf,TurismoExtremo,Medio,3,Florencia
+938,Biodex,TurismoExtremo,Bajo,1,Morelia
+939,Lotlux,CaminataEcologica,Alto,2,Belén de los Andaquíes
+940,Bitchip,Cascada,Medio,8,El Doncello
+941,Flowdesk,CaminataEcologica,Medio,3,Florencia
+942,It,CaminataEcologica,Bajo,8,Belén de los Andaquíes
+943,Rank,Cascada,Bajo,3,Morelia
+944,Overhold,CaminataEcologica,Medio,1,Florencia
+945,Cardify,CaminataEcologica,Alto,5,Belén de los Andaquíes
+946,Matsoft,Cascada,Bajo,7,Belén de los Andaquíes
+947,Rank,TurismoExtremo,Alto,6,Florencia
+948,Y-find,TurismoExtremo,Medio,5,El Doncello
+949,Solarbreeze,CaminataEcologica,Alto,2,Florencia
+950,Bitchip,TurismoExtremo,Medio,2,El Doncello
+951,Y-find,Cascada,Alto,1,El Doncello
+952,Tampflex,Cascada,Bajo,4,Florencia
+953,Fintone,Cascada,Bajo,1,Florencia
+954,Fintone,Cascada,Medio,7,Morelia
+955,Home Ing,CaminataEcologica,Alto,7,Florencia
+956,Trippledex,CaminataEcologica,Medio,4,El Doncello
+957,Toughjoyfax,Cascada,Alto,3,El Doncello
+958,Bitwolf,TurismoExtremo,Bajo,7,El Doncello
+959,Fix San,CaminataEcologica,Bajo,8,Morelia
+960,Konklab,TurismoExtremo,Alto,1,El Doncello
+961,Y-find,TurismoExtremo,Bajo,5,Florencia
+962,Toughjoyfax,CaminataEcologica,Medio,7,Belén de los Andaquíes
+963,Biodex,Cascada,Medio,2,El Doncello
+964,Cookley,CaminataEcologica,Alto,6,Florencia
+965,Transcof,Cascada,Alto,3,Florencia
+966,Cardguard,Cascada,Alto,2,Belén de los Andaquíes
+967,Trippledex,CaminataEcologica,Bajo,4,Morelia
+968,Stringtough,TurismoExtremo,Alto,4,Morelia
+969,Asoka,CaminataEcologica,Alto,4,Morelia
+970,Namfix,Cascada,Medio,2,Belén de los Andaquíes
+971,Trippledex,Cascada,Alto,3,Morelia
+972,Stronghold,Cascada,Bajo,6,Belén de los Andaquíes
+973,Voyatouch,TurismoExtremo,Alto,8,El Doncello
+974,Greenlam,CaminataEcologica,Bajo,6,Belén de los Andaquíes
+975,Subin,CaminataEcologica,Bajo,3,Morelia
+976,Bigtax,TurismoExtremo,Medio,1,El Doncello
+977,Asoka,TurismoExtremo,Bajo,2,Florencia
+978,Pannier,CaminataEcologica,Medio,4,Morelia
+979,Bamity,CaminataEcologica,Bajo,7,Morelia
+980,Tempsoft,TurismoExtremo,Medio,5,Florencia
+981,Mat Lam Tam,Cascada,Medio,8,Belén de los Andaquíes
+982,Tin,TurismoExtremo,Bajo,5,Morelia
+983,Domainer,CaminataEcologica,Medio,1,El Doncello
+984,Toughjoyfax,TurismoExtremo,Bajo,3,Belén de los Andaquíes
+985,Mat Lam Tam,CaminataEcologica,Bajo,6,Florencia
+986,Asoka,Cascada,Alto,3,El Doncello
+987,Asoka,CaminataEcologica,Medio,8,Morelia
+988,Bamity,TurismoExtremo,Medio,3,Morelia
+989,Opela,CaminataEcologica,Medio,4,Morelia
+990,Toughjoyfax,TurismoExtremo,Bajo,2,Florencia
+991,Subin,Cascada,Alto,3,Morelia
+992,Temp,Cascada,Alto,7,Belén de los Andaquíes
+993,Redhold,CaminataEcologica,Alto,2,Belén de los Andaquíes
+994,Hatity,Cascada,Alto,3,Florencia
+995,Viva,CaminataEcologica,Alto,4,El Doncello
+996,Holdlamis,TurismoExtremo,Alto,8,El Doncello
+997,Holdlamis,CaminataEcologica,Medio,1,Florencia
+998,Tresom,CaminataEcologica,Alto,5,Morelia
+999,Alpha,CaminataEcologica,Alto,4,Belén de los Andaquíes
+1000,Bitchip,TurismoExtremo,Medio,5,El Doncello
