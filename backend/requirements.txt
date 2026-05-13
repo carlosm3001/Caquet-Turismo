@@ -6,3 +6,4 @@ pyjwt
 httpx
 cryptography
 itsdangerous
+google-generativeai

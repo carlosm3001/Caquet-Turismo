@@ -8,9 +8,10 @@ import os
 import random
 import jwt
 import httpx
+import google.generativeai as genai
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Plataforma Caquetá V2.2 - IA con Memoria")
+app = FastAPI(title="Amazonia-IA V3.0 - Generative Semantic Brain")
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
 SEMANTIC_ENGINE_URL = os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql")
@@ -20,6 +21,14 @@ if os.getenv("VERCEL"):
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_secret_key_123")
 ALGORITHM = "HS256"
+
+# --- CONFIGURACIÓN DE GEMINI (CEREBRO LLM) ---
+GEMINI_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_KEY:
+    genai.configure(api_key=GEMINI_KEY)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    model = None
 
 app.add_middleware(SessionMiddleware, secret_key="session_secret_xyz_789", same_site="lax", https_only=False)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -43,25 +52,6 @@ async def query_semantic_engine(sparql_query: str):
             return response.json()
         except: return []
 
-class NuevaActividad(BaseModel):
-    id: str
-    categoria: str
-    municipio: str
-    imagen: str = ""
-
-@app.get("/api/v1/auth/google/callback")
-async def google_auth_callback(request: Request):
-    try:
-        token = await oauth.google.authorize_access_token(request)
-        user_info = token.get('userinfo')
-        email = user_info['email']
-        if email not in users_db:
-            users_db[email] = {"role": "turista", "name": user_info['name']}
-        jwt_token = jwt.encode({"email": email, "role": users_db[email]["role"], "name": users_db[email]["name"], "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm=ALGORITHM)
-        target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
-        return HTMLResponse(content=f"<html><script>window.location.replace('{target_url}');</script></html>")
-    except: return RedirectResponse(url="/?error=auth")
-
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
     query = f"SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img WHERE {{ ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri . ?sitio rdf:type ?tipo_uri . FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class) OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }} }}"
@@ -77,78 +67,71 @@ async def get_actividades(municipio: str = None, categoria: str = None):
             seen.add(s_name)
     return lista
 
-# --- IA CON APRENDIZAJE Y MEMORIA (V5.0) ---
+# --- IA GENERATIVA SEMÁNTICA (V3.0) ---
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
     user_id = payload.get("email", "default")
-    
-    if user_id not in chat_context: 
-        chat_context[user_id] = {"mun": None, "cat": None, "history": [], "favorites": []}
-    
+    if user_id not in chat_context: chat_context[user_id] = {"history": []}
     ctx = chat_context[user_id]
-    ctx["history"].append(text)
-
-    # APRENDIZAJE: Detectar gustos
-    if "me gusta" in text or "amo" in text:
-        for m in ["florencia", "morelia", "doncello"]:
-            if m in text:
-                ctx["favorites"].append(m)
-                return {"reply": f"¡Anotado! He guardado en mi memoria semántica que te gusta **{m.capitalize()}**. De ahora en adelante, priorizaré mis recomendaciones sobre esa zona. ¿Quieres que veamos qué hay de nuevo allí?"}
-
-    # Detección de municipio
-    muns = ["florencia", "morelia", "doncello", "belen", "san vicente", "puerto rico"]
-    for m in muns:
-        if m in text: 
-            if ctx["mun"] == m: # Si repite el municipio, cambiamos la respuesta
-                results = await get_actividades(municipio=m)
-                rec = random.choice(results)
-                return {"reply": f"¡Veo que te apasiona {m.capitalize()}! Ya sabemos que hay muchos sitios allí, pero ¿qué te parece si exploramos específicamente **{rec['id']}**?"}
-            ctx["mun"] = m
-
-    # Detección de categorías
-    cats_map = {"Cascada": ["cascada", "chorro"], "Alojamiento": ["hotel", "dormir"], "CaminataEcologica": ["caminata", "senderismo"]}
-    for official, aliases in cats_map.items():
-        if any(alias in text for alias in aliases): ctx["cat"] = official
-
-    # RESPUESTA BASADA EN CONTEXTO
-    results = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
     
-    if not results:
-        return {"reply": "Aún estoy aprendiendo sobre esa combinación. ¿Por qué no probamos buscando solo por el municipio?"}
+    # 1. Extraer datos reales de la Ontología para alimentar el cerebro
+    sitios = await get_actividades()
+    resumen_datos = "\n".join([f"- {s['id']} es un {s['categoria']} en {s['municipio']} (Clima: {s['clima']}, Dificultad: {s['dificultad']})" for s in sitios[:20]])
 
-    # Evitar repetición usando el historial
-    rec = results[0]
-    for r in results:
-        if r['id'].lower() not in [h.lower() for h in ctx["history"]]:
-            rec = r
-            break
+    # 2. Si hay API Key, usamos el Cerebro Generativo Real
+    if model:
+        try:
+            prompt = f"""
+            Eres Amazonia-IA, el guía turístico más apasionado y experto del departamento del Caquetá, Colombia.
+            Tu personalidad es amable, culta y muy humana. NO eres un robot, eres un amigo local.
+            
+            CONOCIMIENTOS REALES (ONTOLOGÍA RDF):
+            {resumen_datos}
+            
+            HISTORIAL DE CONVERSACIÓN:
+            {ctx['history'][-5:]}
+            
+            PREGUNTA DEL USUARIO: "{text}"
+            
+            INSTRUCCIONES:
+            1. Usa solo la información de los conocimientos reales si el usuario pregunta por sitios.
+            2. Si no tienes el dato, invita a explorar Florencia o Morelia de forma amigable.
+            3. Sé variado, nunca repitas la misma frase.
+            4. Si el usuario te saluda, responde con calidez amazónica.
+            """
+            response = model.generate_content(prompt)
+            reply = response.text
+            ctx["history"].append(f"Usuario: {text} | IA: {reply}")
+            return {"reply": reply}
+        except Exception as e:
+            print(f"Error Gemini: {e}")
 
-    if ctx["mun"] and ctx["cat"]:
-        return {"reply": f"¡Tengo nuevas ideas para ti! En {ctx['mun'].capitalize()} hay {len(results)} opciones de {ctx['cat']}. Te sugiero conocer **{rec['id']}**. ¿Te cuento los detalles técnicos?"}
+    # 3. Fallback inteligente (Modo sin API Key pero con lógica mejorada)
+    saludos = ["¡Hola! El Caquetá te saluda.", "¡Claro que sí!", "Excelente pregunta."]
+    if any(m in text for m in ["florencia", "morelia", "doncello"]):
+        mun = [m for m in ["florencia", "morelia", "doncello"] if m in text][0]
+        results = await get_actividades(municipio=mun)
+        rec = random.choice(results)
+        return {"reply": f"¡Qué bien que te interese {mun.capitalize()}! Es una zona increíble. Por ejemplo, te sugiero visitar **{rec['id']}**, es de tipo {rec['categoria']}. ¿Te cuento los detalles técnicos?"}
     
-    if ctx["mun"]:
-        return {"reply": f"En {ctx['mun'].capitalize()} he mapeado {len(results)} maravillas. ¿Buscas una aventura en cascadas o quizás un sitio para descansar?"}
-
-    return {"reply": "¡Hola! Soy tu guía amazónico. ¿Qué parte del Caquetá te gustaría descubrir hoy?"}
+    return {"reply": f"{random.choice(saludos)} Soy tu guía del Caquetá. ¿Qué municipio te gustaría que exploremos juntos hoy?"}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
     q = f"SELECT (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m }}"
     res = await query_semantic_engine(q)
-    total = res[0]['c'] if res else 0
-    return {"total_tripletas": total, "usuarios_activos": len(users_db)}
+    return {"total_tripletas": res[0]['c'] if res else 0, "usuarios_activos": len(users_db)}
 
 @app.post("/api/v1/actividades")
 async def save_actividad(act: NuevaActividad):
-    rdf_id = act.id.replace(" ", "_")
-    rdf_mun = act.municipio.replace(" ", "_")
+    rdf_id = act.id.replace(" ", "_"); rdf_mun = act.municipio.replace(" ", "_")
     query = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> INSERT DATA {{ <{BASE_PREFIX}{rdf_id}> rdf:type <{BASE_PREFIX}{act.categoria}> . <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}ubicadaEn> <{BASE_PREFIX}{rdf_mun}> . <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}hasImageURL> '{act.imagen}' . }}"
     await query_semantic_engine(query)
     return {"status": "ok"}
 
 @app.get("/")
-async def read_index(): return {"message": "API V2.2 activa"}
+async def read_index(): return {"message": "API V3.0 Generativa activa"}
 
 if __name__ == "__main__":
     import uvicorn
