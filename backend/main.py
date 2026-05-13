@@ -97,9 +97,8 @@ async def login(data: UserLogin):
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
-    # En Docker, la URL externa puede ser diferente a la interna
-    # Usamos redirect_uri directo si es necesario o dejamos que request.url_for lo maneje
-    redirect_uri = request.url_for('google_auth_callback')
+    # Forzamos la URL de redirección desde el .env para evitar errores de detección en Docker
+    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", request.url_for('google_auth_callback'))
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
