@@ -11,7 +11,7 @@ import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Amazonia-IA V3.2 - Full Functional Cloud")
+app = FastAPI(title="Amazonia-IA V3.3 - Production Shield")
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
 SEMANTIC_ENGINE_URL = os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql")
@@ -25,22 +25,27 @@ ALGORITHM = "HS256"
 # --- CONFIGURACIÓN DE GEMINI ---
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 if GEMINI_KEY:
-    genai.configure(api_key=GEMINI_KEY)
-    llm_model = genai.GenerativeModel('gemini-1.5-flash')
+    try:
+        genai.configure(api_key=GEMINI_KEY)
+        llm_model = genai.GenerativeModel('gemini-1.5-flash')
+    except: llm_model = None
 else:
     llm_model = None
 
-app.add_middleware(SessionMiddleware, secret_key="session_secret_xyz_789", same_site="lax", https_only=False)
+# Middleware de Sesión (Necesario para OAuth)
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
+# --- CONFIGURACIÓN GOOGLE OAUTH ---
 oauth = OAuth()
-oauth.register(
-    name='google',
-    client_id=os.getenv("GOOGLE_CLIENT_ID"), 
-    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"), 
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={'scope': 'openid email profile'}
-)
+if os.getenv("GOOGLE_CLIENT_ID"):
+    oauth.register(
+        name='google',
+        client_id=os.getenv("GOOGLE_CLIENT_ID"), 
+        client_secret=os.getenv("GOOGLE_CLIENT_SECRET"), 
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+        client_kwargs={'scope': 'openid email profile'}
+    )
 
 users_db = {"admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador"}}
 chat_context = {} 
@@ -49,9 +54,10 @@ async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=35.0)
-            if response.status_code != 200: return []
-            return response.json()
-        except: return []
+            if response.status_code == 200:
+                return response.json()
+        except: pass
+        return []
 
 class NuevaActividad(BaseModel):
     id: str
@@ -59,23 +65,15 @@ class NuevaActividad(BaseModel):
     municipio: str
     imagen: str = ""
 
-class UserLogin(BaseModel):
-    email: str
-    password: str
-
-# --- ENDPOINTS DE AUTENTICACIÓN ---
-
-@app.post("/api/v1/login")
-async def login(data: UserLogin):
-    u = users_db.get(data.email)
-    if u and u["password"] == data.password:
-        token = jwt.encode({"email": data.email, "role": u["role"], "name": u["name"], "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm=ALGORITHM)
-        return {"role": u["role"], "name": u["name"], "email": data.email, "token": token}
-    raise HTTPException(status_code=401)
+# --- ENDPOINTS DE AUTENTICACIÓN (BLINDADOS) ---
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
-    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", request.url_for('google_auth_callback'))
+    # Forzamos HTTPS en Vercel para evitar el Error 500 de Authlib
+    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI")
+    if not redirect_uri:
+        url = request.url_for('google_auth_callback')
+        redirect_uri = str(url).replace("http://", "https://") if os.getenv("VERCEL") else str(url)
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
@@ -94,20 +92,20 @@ async def google_auth_callback(request: Request):
         
         target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"<html><script>window.location.replace('{target_url}');</script></html>")
-    except: return RedirectResponse(url="/?error=auth")
+    except Exception as e:
+        return HTMLResponse(content=f"<h2>Error de Autenticación</h2><p>{str(e)}</p><a href='/'>Volver</a>", status_code=500)
 
-# --- ENDPOINTS DE DATOS (ONTOLOGÍA) ---
+# --- ENDPOINTS DE DATOS ---
 
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
     query = f"""
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
     SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img
     WHERE {{
       ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri .
       ?sitio rdf:type ?tipo_uri .
-      FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class)
+      FILTER(?tipo_uri != <http://www.w3.org/2002/07/owl#NamedIndividual> && ?tipo_uri != <http://www.w3.org/2002/07/owl#Class>)
       OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }}
       OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }}
       OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }}
@@ -130,15 +128,6 @@ async def get_actividades(municipio: str = None, categoria: str = None):
             seen.add(s_name)
     return lista
 
-@app.post("/api/v1/actividades")
-async def save_actividad(act: NuevaActividad):
-    rdf_id = act.id.replace(" ", "_"); rdf_mun = act.municipio.replace(" ", "_")
-    query = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> INSERT DATA {{ <{BASE_PREFIX}{rdf_id}> rdf:type <{BASE_PREFIX}{act.categoria}> . <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}ubicadaEn> <{BASE_PREFIX}{rdf_mun}> . <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}hasImageURL> '{act.imagen}' . }}"
-    await query_semantic_engine(query)
-    return {"status": "ok"}
-
-# --- IA GENERATIVA (V3.2) ---
-
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
@@ -147,27 +136,18 @@ async def chat_ai(payload: dict = Body(...)):
     ctx = chat_context[user_id]
     
     sitios = await get_actividades()
-    resumen_datos = "\n".join([f"- {s['id']} en {s['municipio']} ({s['categoria']})" for s in sitios[:15]])
+    resumen_datos = "\n".join([f"- {s['id']} en {s['municipio']} ({s['categoria']})" for s in sitios[:12]])
 
     if llm_model:
         try:
-            prompt = f"Eres Amazonia-IA, guía del Caquetá. Datos reales de la ontología:\n{resumen_datos}\nHistorial reciente:\n{ctx['history'][-3:]}\nUsuario: {text}\nResponde de forma humana y breve."
+            prompt = f"Eres Amazonia-IA, un guía experto y humano del Caquetá. Usa estos datos reales:\n{resumen_datos}\nResponde amablemente a: {text}"
             response = llm_model.generate_content(prompt)
-            reply = response.text
-            ctx["history"].append(f"U: {text} | IA: {reply}")
-            return {"reply": reply}
+            return {"reply": response.text}
         except: pass
-
-    return {"reply": "¡Hola! Estoy despertando mis sentidos amazónicos. ¿Hablamos de Florencia o Morelia?"}
-
-@app.get("/api/v1/admin/dashboard")
-async def admin_dashboard():
-    q = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m }}"
-    res = await query_semantic_engine(q)
-    return {"total_tripletas": res[0]['c'] if res else 0, "usuarios_activos": len(users_db)}
+    return {"reply": "¡Hola! Soy tu guía. ¿Quieres explorar las maravillas del Caquetá hoy?"}
 
 @app.get("/")
-async def read_root(): return {"status": "Amazonia-IA V3.2 Online"}
+async def read_root(): return {"status": "V3.3 Active"}
 
 if __name__ == "__main__":
     import uvicorn
