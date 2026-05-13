@@ -10,11 +10,11 @@ import random
 import jwt
 import httpx
 import google.generativeai as genai
+import re
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Amazonia-IA V4.0 - Clean Data & Expert Guide")
+app = FastAPI(title="Amazonia-IA V4.1 - Real Data Filter & Smart Guide")
 
-# Middleware para Vercel
 class ProxyHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if os.getenv("VERCEL"): request.scope["scheme"] = "https"
@@ -29,7 +29,6 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql"))
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 
-# Cerebro Gemini
 llm_model = None
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 if GEMINI_KEY:
@@ -64,16 +63,18 @@ async def get_actividades(municipio: str = None, categoria: str = None):
     lista = []
     seen = set()
     
-    # LISTA DE NOMBRES A IGNORAR (DATOS DE PRUEBA)
-    blacklist = ["bitchip", "wrapsafe", "fintone", "span", "ronstring", "prodder", "alpha", "bravo", "charlie", "delta"]
-
     for row in results:
         s_name = row.get("sitio", "").split("#")[-1].replace("_", " ")
         m_uri = row.get("mun_uri", "").lower()
         t_uri = row.get("tipo_uri", "").lower()
         
-        # FILTRO DE CALIDAD
-        if any(bad in s_name.lower() for bad in blacklist): continue
+        # --- FILTRO DE CALIDAD AVANZADO ---
+        # 1. Ignorar nombres sospechosos de ser generados (Sin espacios, sin guiones, palabras cortas raras)
+        if not "_" in row.get("sitio", "") and not " " in s_name and len(s_name) < 10 and s_name[0].isupper():
+            # Excepción para nombres reales cortos si existieran, pero "Bigtax" etc caen aquí
+            if not any(word in s_name.lower() for word in ["hotel", "posada", "finca", "cascada"]):
+                continue
+
         if municipio and municipio.lower() not in m_uri: continue
         if categoria and categoria.lower() not in t_uri: continue
         
@@ -81,13 +82,16 @@ async def get_actividades(municipio: str = None, categoria: str = None):
             lista.append({
                 "id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], 
                 "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), 
-                "clima": row.get("clima", "Cálido Selvático"), "dificultad": row.get("dif", "Media"), 
+                "clima": row.get("clima", "Cálido Tropical"), "dificultad": row.get("dif", "Media"), 
                 "imagen": row.get("img", "")
             })
             seen.add(s_name)
+    
+    # Priorizar nombres con "_" (los que nosotros creamos)
+    lista.sort(key=lambda x: "_" in x["id"], reverse=True)
     return lista
 
-# --- IA CON GUÍA EXPERTO (V4.0) ---
+# --- IA EXPERTA V4.1 ---
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
@@ -95,43 +99,58 @@ async def chat_ai(payload: dict = Body(...)):
     if user_id not in chat_context: chat_context[user_id] = {"history": [], "suggested": [], "mun": None, "cat": None, "last_rec": None}
     ctx = chat_context[user_id]
     
-    # 1. DETECTAR INTENCIÓN DE DETALLES
+    # 1. INTENCIÓN: DETALLES O OTRO LUGAR
     if any(word in text for word in ["detalle", "más información", "cuentame", "como es"]):
         if ctx["last_rec"]:
             s = ctx["last_rec"]
-            return {"reply": f"¡Por supuesto! El sitio **{s['id']}** es maravilloso. Es de tipo {s['categoria']} y se encuentra en {s['municipio']}. Quienes lo visitan disfrutan de un clima {s['clima']} y el acceso es de dificultad {s['dificultad']}. ¿Te gustaría saber de otro lugar?"}
+            return {"reply": f"¡Claro! **{s['id']}** es un sitio de tipo {s['categoria']} en {s['municipio']}. El clima es {s['clima']} y su acceso es de dificultad {s['dificultad']}. ¿Buscamos otro sitio o quieres cambiar de municipio?"}
+        return {"reply": "Me encantaría darte detalles, pero primero dime qué lugar o municipio te interesa."}
 
-    # 2. DETECTAR MUNICIPIO Y CATEGORÍA
+    # 2. INTENCIÓN: OTRO LUGAR (Rompe el bucle)
+    if any(word in text for word in ["otro", "otra", "diferente", "siguiente"]):
+        sitios = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
+        # Filtramos los ya sugeridos
+        nuevos = [s for s in sitios if s['id'] not in ctx["suggested"]]
+        if nuevos:
+            rec = nuevos[0]
+            ctx["suggested"].append(rec['id'])
+            ctx["last_rec"] = rec
+            return {"reply": f"¡Entendido! Aquí tienes otra opción: **{rec['id']}** en {rec['municipio']}. ¿Quieres que te cuente cómo es este lugar?"}
+        return {"reply": "He explorado todas mis opciones actuales en esa zona. ¿Qué tal si probamos en otro municipio?"}
+
+    # 3. DETECTAR MUNICIPIO Y CATEGORÍA
     muns = ["florencia", "morelia", "doncello", "belen", "san vicente"]
-    cats_map = {"cascada": ["cascada", "chorro", "agua"], "alojamiento": ["hospedaje", "dormir", "estadia", "alojamiento", "hotel"]}
+    cats_map = {"cascada": ["cascada", "chorro"], "alojamiento": ["hospedaje", "dormir", "hotel", "posada", "estadia"]}
     
     for m in muns: 
-        if m in text: ctx["mun"] = m
+        if m in text: 
+            if ctx["mun"] != m: ctx["suggested"] = [] # Limpiar sugeridos al cambiar municipio
+            ctx["mun"] = m
     for cat_id, aliases in cats_map.items():
-        if any(a in text for a in aliases): ctx["cat"] = cat_id
+        if any(a in text for a in aliases): 
+            if ctx["cat"] != cat_id: ctx["suggested"] = []
+            ctx["cat"] = cat_id
 
-    # 3. OBTENER DATOS LIMPIOS
+    # 4. OBTENER DATOS Y RESPONDER
     sitios = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
-    random.shuffle(sitios)
     
     if llm_model:
         try:
-            data_context = "\n".join([f"- {s['id']} ({s['categoria']}) en {s['municipio']}" for s in sitios[:10]])
-            prompt = f"Eres Amazonia-IA, un guía experto del Caquetá. Datos reales:\n{data_context}\nUsuario dice: {text}\nResponde humano, breve y sugiere un sitio de la lista."
+            prompt = f"Eres Amazonia-IA, guía experto. Datos: {sitios[:10]}. Usuario: {text}. Responde amigable y sugiere un sitio. No repitas."
             response = llm_model.generate_content(prompt)
             return {"reply": response.text}
         except: pass
 
-    # 4. FALLBACK INTELIGENTE (MODO EXPERTO SIN REPETICIONES)
     if sitios:
         rec = sitios[0]
-        ctx["last_rec"] = rec # Guardamos para los detalles
+        ctx["suggested"].append(rec['id'])
+        ctx["last_rec"] = rec
         if ctx["mun"] and ctx["cat"]:
-            return {"reply": f"¡Excelente elección! En {ctx['mun'].capitalize()} tengo {len(sitios)} opciones de {ctx['cat']}. Te sugiero visitar **{rec['id']}**. ¿Te gustaría que te cuente los detalles técnicos?"}
+            return {"reply": f"¡Qué bien! En {ctx['mun'].capitalize()} encontré {len(sitios)} sitios de {ctx['cat']}. Te sugiero conocer **{rec['id']}**. ¿Te cuento los detalles técnicos?"}
         if ctx["mun"]:
-            return {"reply": f"He encontrado {len(sitios)} destinos en {ctx['mun'].capitalize()}. ¿Buscas una cascada o un sitio para pasar la noche?"}
+            return {"reply": f"En {ctx['mun'].capitalize()} hay {len(sitios)} tesoros registrados. ¿Buscas una cascada o un sitio para pasar la noche?"}
         
-    return {"reply": "¡Hola! Soy tu guía del Caquetá. ¿Qué municipio te gustaría explorar hoy?"}
+    return {"reply": "¡Hola! Soy tu guía del Caquetá. ¿A qué municipio te gustaría que viajáramos hoy?"}
 
 @app.get("/api/v1/auth/google/callback")
 async def google_auth_callback(request: Request):
@@ -143,7 +162,7 @@ async def google_auth_callback(request: Request):
     except: return RedirectResponse(url="/")
 
 @app.get("/")
-async def root(): return {"status": "V4.0 Clean Engine Ready"}
+async def root(): return {"status": "V4.1 Smart Filter Active"}
 
 if __name__ == "__main__":
     import uvicorn
