@@ -209,19 +209,25 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        ${data.map(d => `
-                        <div onclick="requireAuth()" class="group bg-white rounded-[4rem] overflow-hidden shadow-2xl hover:-translate-y-4 transition-all cursor-pointer border border-slate-100">
-                            <div class="h-72 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000" style="background-image: url('${d.imagen}')"></div>
-                            <div class="p-10">
-                                <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-full inline-block mb-4">${d.categoria}</span>
-                                <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-2">${d.id}</h3>
-                                <p class="text-slate-400 text-sm mb-8 flex items-center gap-2 font-medium italic"><i class="fas fa-map-marker-alt text-emerald-500"></i> ${d.municipio}</p>
-                                <div class="flex justify-between items-center border-t border-slate-50 pt-8">
-                                    <div class="flex flex-col"><span class="text-[9px] uppercase font-bold text-slate-300 tracking-widest">Clima</span><span class="text-xs font-black text-slate-600">${d.clima}</span></div>
-                                    <div class="flex flex-col text-right"><span class="text-[9px] uppercase font-bold text-slate-300 tracking-widest">Riesgo</span><span class="text-xs font-black text-emerald-600">${d.dificultad}</span></div>
+                        ${data.map(d => {
+                            // Filtro de seguridad para evitar errores 404 "None"
+                            const imgUrl = (!d.imagen || d.imagen === 'None' || d.imagen === '') 
+                                ? 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800' 
+                                : d.imagen;
+                            return `
+                            <div onclick="requireAuth()" class="group bg-white rounded-[4rem] overflow-hidden shadow-2xl hover:-translate-y-4 transition-all cursor-pointer border border-slate-100">
+                                <div class="h-72 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000" style="background-image: url('${imgUrl}')"></div>
+                                <div class="p-10">
+                                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-full inline-block mb-4">${d.categoria}</span>
+                                    <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-2">${d.id}</h3>
+                                    <p class="text-slate-400 text-sm mb-8 flex items-center gap-2 font-medium italic"><i class="fas fa-map-marker-alt text-emerald-500"></i> ${d.municipio}</p>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-8">
+                                        <div class="flex flex-col"><span class="text-[9px] uppercase font-bold text-slate-300 tracking-widest">Clima</span><span class="text-xs font-black text-slate-600">${d.clima}</span></div>
+                                        <div class="flex flex-col text-right"><span class="text-[9px] uppercase font-bold text-slate-300 tracking-widest">Riesgo</span><span class="text-xs font-black text-emerald-600">${d.dificultad}</span></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`).join('')}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>`;
         }
