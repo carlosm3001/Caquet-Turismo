@@ -95,6 +95,10 @@
         : window.location.origin + "/api/v1";
     let user = null;
 
+    function toggleLogin(show) { document.getElementById('loginOverlay').classList.toggle('hidden', !show); }
+    function logout() { localStorage.removeItem('access_token'); sessionStorage.clear(); window.location.href = "/"; }
+    function loginWithGoogle() { window.location.href = `${API}/auth/google`; }
+
     // --- OPTIMIZACIÓN: WAKE UP & CACHE ---
     window.onload = () => {
         // Despertar motor de inmediato
