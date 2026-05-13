@@ -99,6 +99,7 @@ async def login(data: UserLogin):
 async def google_login(request: Request):
     # Forzamos la URL de redirección desde el .env para evitar errores de detección en Docker
     redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", request.url_for('google_auth_callback'))
+    print(f"DEBUG: Enviando redirect_uri a Google -> {redirect_uri}", flush=True)
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
@@ -122,7 +123,8 @@ async def google_auth_callback(request: Request):
         u = users_db[email]
         jwt_token = create_token({"email": email, "role": u["role"], "name": u["name"]})
         
-        # 2. Redirección final segura (UNIFICADA AL PUERTO 8001)
+        # 2. Redirección final segura
+        target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"""
             <html>
                 <body style="background:#064e3b; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;">
@@ -130,8 +132,7 @@ async def google_auth_callback(request: Request):
                         <h2>¡Sesión Validada!</h2>
                         <p>Entrando a la plataforma...</p>
                         <script>
-                            // En Docker Nginx estará en el puerto 80
-                            window.location.replace("http://localhost/?token={jwt_token}");
+                            window.location.replace("{target_url}");
                         </script>
                     </div>
                 </body>
@@ -139,7 +140,8 @@ async def google_auth_callback(request: Request):
         """)
     except Exception as e:
         print(f"Error en Google Callback: {e}")
-        return RedirectResponse(url="http://localhost/?error=auth_failed")
+        error_url = "/?error=auth_failed" if os.getenv("VERCEL") else "http://localhost/?error=auth_failed"
+        return RedirectResponse(url=error_url)
 
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
