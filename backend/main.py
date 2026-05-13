@@ -46,12 +46,13 @@ users_db = {
     "admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador Principal"}
 }
 
+# --- MEMORIA EXTENDIDA ---
 chat_context = {} 
 
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=20.0)
+            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=25.0)
             response.raise_for_status()
             return response.json()
         except Exception as e:
@@ -131,7 +132,6 @@ async def google_auth_callback(request: Request):
 
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
-    # SPARQL optimizado
     query = f"""
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif
@@ -146,137 +146,93 @@ async def get_actividades(municipio: str = None, categoria: str = None):
     results = await query_semantic_engine(query)
     lista = []
     seen = set()
-    
     for row in results:
-        m_uri = row.get("mun_uri", "")
-        t_uri = row.get("tipo_uri", "")
-        s_uri = row.get("sitio", "")
-        
+        m_uri, t_uri, s_uri = row.get("mun_uri", ""), row.get("tipo_uri", ""), row.get("sitio", "")
         m_name = m_uri.split("#")[-1].replace("_", " ") if "#" in m_uri else m_uri
         t_name = t_uri.split("#")[-1] if "#" in t_uri else t_uri
         s_name = s_uri.split("#")[-1].replace("_", " ") if "#" in s_uri else s_uri
-        
         if municipio and municipio.lower() not in m_name.lower(): continue
         if categoria and categoria.lower() not in t_name.lower(): continue
-        
         if s_name not in seen:
-            lista.append({
-                "id": s_name,
-                "categoria": t_name,
-                "municipio": m_name,
-                "clima": row.get("clima", "Tropical"),
-                "dificultad": row.get("dif", "Media")
-            })
+            lista.append({"id": s_name, "categoria": t_name, "municipio": m_name, "clima": row.get("clima", "Tropical"), "dificultad": row.get("dif", "Media")})
             seen.add(s_name)
     return lista
 
-# --- IA CON MEMORIA DE CONTEXTO (HUMANIZADA 2.0) ---
+# --- IA CON MEMORIA DE CONTEXTO (HUMANIZADA FINAL 3.0) ---
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
     user_id = payload.get("email", "default")
-    
-    if user_id not in chat_context: 
-        chat_context[user_id] = {"mun": None, "cat": None, "last_results": []}
-    
+    if user_id not in chat_context: chat_context[user_id] = {"mun": None, "cat": None, "last_results": []}
     ctx = chat_context[user_id]
-    
-    # 1. SALUDOS Y CORTESÍA
-    if any(greet in text for greet in ["hola", "buenos dias", "buenas tardes"]):
-        return {"reply": "¡Hola! Soy tu guía semántico del Caquetá. ¿A qué municipio te gustaría viajar hoy o qué tipo de actividad buscas?"}
 
-    # 2. DETECCIÓN DE MUNICIPIOS
+    # 1. DETECCIÓN DE CONFIRMACIÓN (Rompe el bucle de "si cuéntame más")
+    if any(word in text for word in ["si", "sí", "claro", "por favor", "porfavor", "adelante", "dale"]):
+        if ctx["last_results"]:
+            s = ctx["last_results"][0]
+            # Limpiamos resultados para evitar repetir el mismo detalle mil veces
+            ctx["last_results"] = ctx["last_results"][1:] if len(ctx["last_results"]) > 1 else []
+            return {"reply": f"¡Claro que sí! Hablemos de **{s['id']}**. Es un sitio de tipo {s['categoria']} ubicado en {s['municipio']}. Quienes lo visitan disfrutan de un clima {s['clima']} y su acceso tiene una dificultad {s['dificultad']}. ¿Deseas conocer otro lugar o prefieres cambiar de municipio?"}
+
+    # 2. DETECCIÓN DE MUNICIPIOS Y CATEGORÍAS
     muns = ["florencia", "morelia", "doncello", "belen", "san vicente", "puerto rico"]
     for m in muns:
         if m in text: ctx["mun"] = m
-
-    # 3. DETECCIÓN DE CATEGORÍAS (Mapeo a la Ontología)
     cats_map = {
         "Cascada": ["cascada", "chorro", "quebrada", "caida"],
-        "Alojamiento": ["hospedaje", "hotel", "dormir", "alojamiento", "donde quedar", "posada"],
+        "Alojamiento": ["hospedaje", "hotel", "dormir", "alojamiento", "quedar", "posada", "finca"],
         "CaminataEcologica": ["caminata", "senderismo", "senderos", "caminar"],
         "TurismoExtremo": ["extremo", "deporte", "aventura", "rapel"]
     }
     for official, aliases in cats_map.items():
-        if any(alias in text for alias in aliases):
-            ctx["cat"] = official
+        if any(alias in text for alias in aliases): ctx["cat"] = official
 
-    # 4. CASO: DETALLES PROFUNDOS
-    if any(word in text for word in ["más información", "detalle", "hablame mas", "cuéntame"]):
-        if ctx["last_results"]:
-            s = random.choice(ctx["last_results"])
-            return {"reply": f"Hablemos de **{s['id']}**. Es un sitio de tipo {s['categoria']} ubicado en {s['municipio']}. Quienes lo visitan disfrutan de un clima {s['clima']} y su acceso tiene una dificultad {s['dificultad']}. ¿Te interesa conocer otro lugar?"}
-        return {"reply": "Claro, pero primero dime qué municipio o actividad te interesa para darte detalles reales."}
-
-    # 5. CASO: CLIMA
+    # 3. CASO: CLIMA
     if "clima" in text or "temperatura" in text:
-        if not ctx["mun"]: return {"reply": "¿De qué municipio quieres conocer el clima?"}
+        if not ctx["mun"]: return {"reply": "Con gusto, pero ¿de qué municipio quieres conocer el clima?"}
         q = f"SELECT ?clima WHERE {{ ?m <{BASE_PREFIX}clima> ?clima . FILTER(CONTAINS(LCASE(STR(?m)), '{ctx['mun']}')) }} LIMIT 1"
         res = await query_semantic_engine(q)
         clima = res[0]['clima'] if res else "Cálido"
-        return {"reply": f"El clima en {ctx['mun'].capitalize()} es predominantemente **{clima}**. ¡Perfecto para la aventura!"}
+        return {"reply": f"El clima en {ctx['mun'].capitalize()} es predominantemente **{clima}**. ¡Un clima fantástico para el turismo!"}
 
-    # 6. LÓGICA DE BÚSQUEDA Y RESPUESTA
+    # 4. BÚSQUEDA Y RESPUESTA
     results = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
-    
-    # Si no hay resultados con el filtro de categoría, intentamos solo municipio para ser útiles
     if not results and ctx["mun"] and ctx["cat"]:
         results = await get_actividades(municipio=ctx["mun"])
         if results:
-            msg = f"No tengo registros exactos de {ctx['cat']} en {ctx['mun'].capitalize()}, pero encontré {len(results)} otros lugares allí. ¿Te gustaría ver cascadas o caminatas?"
             ctx["cat"] = None
-            return {"reply": msg}
+            return {"reply": f"No encontré ese tipo de actividad exacta, pero en {ctx['mun'].capitalize()} tengo {len(results)} sitios geniales. ¿Quieres ver cascadas o quizás buscas donde dormir?"}
 
     if not results:
-        return {"reply": "Vaya, no encontré datos para esa búsqueda en mi ontología. ¿Qué tal si probamos con un municipio como Florencia o Morelia?"}
+        return {"reply": "Vaya, no encontré datos para esa búsqueda. ¿Probamos con otro municipio como Florencia o Morelia?"}
 
     ctx["last_results"] = results
-    
-    # Respuesta amigable según el contexto
     if ctx["mun"] and ctx["cat"]:
-        return {"reply": f"¡Excelente elección! En {ctx['mun'].capitalize()} encontré {len(results)} opciones de {ctx['cat']}. Te sugiero visitar **{results[0]['id']}**. ¿Quieres que te cuente más sobre este sitio?"}
+        return {"reply": f"¡Excelente elección! En {ctx['mun'].capitalize()} encontré {len(results)} sitios de {ctx['cat']}. Te sugiero visitar **{results[0]['id']}**. ¿Quieres que te cuente más sobre este lugar?"}
     
     if ctx["mun"]:
-        return {"reply": f"En {ctx['mun'].capitalize()} hay {len(results)} lugares increíbles registrados en mi base de datos. ¿Buscas cascadas, caminatas o quizás un sitio para dormir?"}
+        return {"reply": f"En {ctx['mun'].capitalize()} hay {len(results)} lugares increíbles. ¿Buscas cascadas, caminatas o quizás un sitio para dormir?"}
 
-    # Fallback final
     rec = random.choice(results)
-    return {"reply": f"¡El Caquetá es asombroso! Tengo {len(results)} sitios mapeados. Por ejemplo, en {rec['municipio']} podrías visitar **{rec['id']}**. ¿Qué municipio te gustaría explorar?"}
+    return {"reply": f"¡Hola! El Caquetá es asombroso. Tengo {len(results)} sitios mapeados. Por ejemplo, en {rec['municipio']} podrías visitar **{rec['id']}**. ¿Qué municipio te gustaría explorar?"}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
     q1 = f"SELECT ?m (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m }} GROUP BY ?m"
     res1_raw = await query_semantic_engine(q1)
     res1 = {row["m"].split("#")[-1].replace("_", " "): int(row["c"]) for row in res1_raw}
-    
     q2 = f"SELECT ?t (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s a ?t . FILTER(?t != <http://www.w3.org/2002/07/owl#NamedIndividual> && ?t != <http://www.w3.org/2002/07/owl#Class>) }} GROUP BY ?t"
     res2_raw = await query_semantic_engine(q2)
     res2 = {row["t"].split("#")[-1]: int(row["c"]) for row in res2_raw}
-    
     async with httpx.AsyncClient() as client:
         try:
             status_resp = await client.get(SEMANTIC_ENGINE_URL.replace("/sparql", "/status"))
             total_tripletas = status_resp.json().get("tripletas", 0)
-        except:
-            total_tripletas = 0
-
+        except: total_tripletas = 0
     return {"municipios": res1, "categorias": res2, "usuarios_activos": len(users_db), "total_tripletas": total_tripletas}
 
-@app.get("/api/v1/admin/users")
-async def get_all_users():
-    return [{"email": email, "name": u["name"], "role": u["role"]} for email, u in users_db.items()]
-
-@app.get("/api/v1/admin/ontology/full")
-async def get_full_ontology():
-    query = "SELECT ?s ?p ?o WHERE { ?s ?p ?o }"
-    results = await query_semantic_engine(query)
-    return [{"sujeto": row["s"].split("#")[-1] if "#" in row["s"] else row["s"], 
-             "predicado": row["p"].split("#")[-1] if "#" in row["p"] else row["p"], 
-             "objeto": row["o"].split("#")[-1] if "#" in row["o"] else row["o"]} for row in results]
-
 @app.get("/")
-async def read_index():
-    return {"message": "API Backend Caquetá activa."}
+async def read_index(): return {"message": "API Backend Caquetá activa."}
 
 if __name__ == "__main__":
     import uvicorn

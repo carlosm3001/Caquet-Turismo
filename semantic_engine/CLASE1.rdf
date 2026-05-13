@@ -235,6 +235,18 @@
         <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
     </owl:NamedIndividual>
 
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Posada_Turistica_Morelia">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Finca_La_Esmeralda">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_El_Danubio">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
         <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
