@@ -1,0 +1,1661 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3/"
+     xml:base="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:untitled-ontology-3="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#realizaReserva -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#realizaReserva">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Turista"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tieneRecurso -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tieneRecurso">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ubicadaEn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ubicadaEn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#clima -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#clima">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#email -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#email">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nivelDificultad -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nivelDificultad">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nombreActividad -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nombreActividad">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#RecursoTuristico"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Admin -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Admin">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Persona"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#RecursoTuristico"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Operador -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Operador">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Persona"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Persona -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Persona"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#RecursoTuristico -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#RecursoTuristico"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Turista -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Turista">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Persona"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Aerified -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_Las_Delicias">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alpha -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_La_Novia">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hotel_Caqueta_Real">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Posada_Turistica_Morelia">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Finca_La_Esmeralda">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_El_Danubio">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alphazap -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Finca_Turistica_La_Esmeralda">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Andalax -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Andalax">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Asoka -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Asoka">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bamity -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bamity">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bigtax -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bigtax">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Biodex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Biodex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bitchip -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bitchip">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bitwolf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bitwolf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bytecard -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Bytecard">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Caminata_Las_Dalias -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Caminata_Las_Dalias">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cardguard -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cardguard">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cardify -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cardify">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cookley -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cookley">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Daltfresh -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Daltfresh">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Domainer -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Domainer">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Duobam -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Duobam">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Fintone -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Fintone">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#FixSan -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#FixSan">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Fixflex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Fixflex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Flexidy -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Flexidy">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Flowdesk -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Flowdesk">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Gembucket -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Gembucket">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Greenlam -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Greenlam">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hatity -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hatity">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Holdlamis -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Holdlamis">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#HomeIng -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#HomeIng">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hostal -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hostal"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hotel -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hotel"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#It -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#It">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Job -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Job">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Kanlam -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Kanlam">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Keylex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Keylex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Konklab -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Konklab">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Konklux -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Konklux">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Latlux -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Latlux">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Lotlux -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Lotlux">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Lotstring -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Lotstring">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#MatLamTam -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#MatLamTam">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Matsoft -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Matsoft">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Namfix -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Namfix">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Opela -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Opela">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Otcom -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Otcom">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Overhold -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Overhold">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Pannier -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Pannier">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Prodder -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Prodder">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#QuoLux -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#QuoLux">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rank -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rank">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Redhold -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Redhold">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Regrant -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Regrant">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Ronstring -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Ronstring">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Solarbreeze -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Solarbreeze">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Sonair -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Sonair">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Sonsing -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Sonsing">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Span -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Span">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Stim -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Stim">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Stringtough -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Stringtough">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Stronghold -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Stronghold">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Sub-Ex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Sub-Ex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Subin -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Subin">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tampflex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tampflex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Temp -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Temp">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tempsoft -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tempsoft">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tin -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tin">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Toughjoyfax -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Toughjoyfax">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Transcof -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Transcof">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Treeflex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Treeflex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tres-Zap -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tres-Zap">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tresom -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Tresom">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Trippledex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Trippledex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Vagram -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Vagram">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Ventosanzap -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Ventosanzap">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Veribet -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Veribet">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Viva -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Viva">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Voltsillam -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Voltsillam">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Voyatouch -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Voyatouch">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Wrapsafe -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Wrapsafe">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Y-Solowarm -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Y-Solowarm">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Y-find -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Y-find">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zaam-Dox -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zaam-Dox">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zamit -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zamit">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zathin -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zathin">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zontrax -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zontrax">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zoolab -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Zoolab">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
+        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tipo_alojamiento -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tipo_alojamiento"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#FincaTurÃ­stica -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#FincaTurÃ­stica"/>
+<owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
+        <untitled-ontology-3:clima>Cálido Húmedo (27°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
+        <untitled-ontology-3:clima>Tropical Cálido (28°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello">
+        <untitled-ontology-3:clima>Cálido Tropical (26°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃes">
+        <untitled-ontology-3:clima>Templado/Cálido (25°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+
+
