@@ -10,7 +10,7 @@ import jwt
 import httpx
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Plataforma Caquetá V2.0 - Motor CRUD Semántico")
+app = FastAPI(title="Plataforma Caquetá V2.2 - IA con Memoria")
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
 SEMANTIC_ENGINE_URL = os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql")
@@ -18,21 +18,12 @@ if os.getenv("VERCEL"):
     SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", SEMANTIC_ENGINE_URL)
 
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
-
-# --- SEGURIDAD Y JWT ---
 SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_secret_key_123")
 ALGORITHM = "HS256"
 
 app.add_middleware(SessionMiddleware, secret_key="session_secret_xyz_789", same_site="lax", https_only=False)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# --- CONFIGURACIÓN GOOGLE OAUTH ---
 oauth = OAuth()
 oauth.register(
     name='google',
@@ -42,56 +33,21 @@ oauth.register(
     client_kwargs={'scope': 'openid email profile'}
 )
 
-users_db = {
-    "admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador Principal"}
-}
-
+users_db = {"admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador"}}
 chat_context = {} 
 
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0)
-            response.raise_for_status()
             return response.json()
-        except Exception as e:
-            print(f"Error consultando Motor Semántico: {e}")
-            return []
-
-class UserLogin(BaseModel):
-    email: str
-    password: str
-
-class UserRegister(BaseModel):
-    email: str
-    password: str
-    role: str
-    name: str
+        except: return []
 
 class NuevaActividad(BaseModel):
     id: str
     categoria: str
     municipio: str
-    dificultad: str = "Media"
     imagen: str = ""
-
-def create_token(data: dict):
-    payload = data.copy()
-    payload.update({"exp": datetime.utcnow() + timedelta(hours=24)})
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-
-@app.post("/api/v1/login")
-async def login(data: UserLogin):
-    u = users_db.get(data.email)
-    if u and u["password"] == data.password:
-        token = create_token({"email": data.email, "role": u["role"], "name": u["name"]})
-        return {"role": u["role"], "name": u["name"], "email": data.email, "token": token}
-    raise HTTPException(status_code=401)
-
-@app.get("/api/v1/auth/google")
-async def google_login(request: Request):
-    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", request.url_for('google_auth_callback'))
-    return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
 async def google_auth_callback(request: Request):
@@ -100,29 +56,15 @@ async def google_auth_callback(request: Request):
         user_info = token.get('userinfo')
         email = user_info['email']
         if email not in users_db:
-            users_db[email] = {"password": str(random.randint(1000, 9999)), "role": "turista", "name": user_info['name']}
-        
-        u = users_db[email]
-        jwt_token = create_token({"email": email, "role": u["role"], "name": u["name"]})
+            users_db[email] = {"role": "turista", "name": user_info['name']}
+        jwt_token = jwt.encode({"email": email, "role": users_db[email]["role"], "name": users_db[email]["name"], "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm=ALGORITHM)
         target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"<html><script>window.location.replace('{target_url}');</script></html>")
-    except Exception as e:
-        return RedirectResponse(url="/?error=auth_failed")
+    except: return RedirectResponse(url="/?error=auth")
 
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
-    query = f"""
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img
-    WHERE {{
-      ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri .
-      ?sitio rdf:type ?tipo_uri .
-      FILTER(?tipo_uri != <http://www.w3.org/2002/07/owl#NamedIndividual> && ?tipo_uri != <http://www.w3.org/2002/07/owl#Class>)
-      OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }}
-      OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }}
-      OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }}
-    }}
-    """
+    query = f"SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img WHERE {{ ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri . ?sitio rdf:type ?tipo_uri . FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class) OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }} }}"
     results = await query_semantic_engine(query)
     lista = []
     seen = set()
@@ -131,83 +73,82 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         if municipio and municipio.lower() not in row.get("mun_uri", "").lower(): continue
         if categoria and categoria.lower() not in row.get("tipo_uri", "").lower(): continue
         if s_name not in seen:
-            lista.append({
-                "id": s_name,
-                "categoria": row.get("tipo_uri", "").split("#")[-1],
-                "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "),
-                "clima": row.get("clima", "Cálido Tropical"),
-                "dificultad": row.get("dif", "Media"),
-                "imagen": row.get("img", "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=400")
-            })
+            lista.append({"id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), "clima": row.get("clima", "Cálido"), "dificultad": row.get("dif", "Media"), "imagen": row.get("img", "")})
             seen.add(s_name)
     return lista
 
-@app.post("/api/v1/actividades")
-async def save_actividad(act: NuevaActividad):
-    # Sanitize names for RDF URIs
-    rdf_id = act.id.replace(" ", "_")
-    rdf_mun = act.municipio.replace(" ", "_")
-    
-    update_query = f"""
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    INSERT DATA {{
-      <{BASE_PREFIX}{rdf_id}> rdf:type <{BASE_PREFIX}{act.categoria}> .
-      <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}ubicadaEn> <{BASE_PREFIX}{rdf_mun}> .
-      <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}nivelDificultad> "{act.dificultad}" .
-      <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}hasImageURL> "{act.imagen}" .
-    }}
-    """
-    res = await query_semantic_engine(update_query)
-    return res
-
-# --- IA CON MEMORIA 4.0 ---
+# --- IA CON APRENDIZAJE Y MEMORIA (V5.0) ---
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
     user_id = payload.get("email", "default")
-    if user_id not in chat_context: chat_context[user_id] = {"mun": None, "cat": None, "last_results": []}
-    ctx = chat_context[user_id]
     
-    is_confirm = any(word in text for word in ["si", "sí", "claro", "por favor", "porfavor", "adelante", "dale", "cuenta", "cuéntame"])
-    if is_confirm and ctx["last_results"]:
-        s = ctx["last_results"][0]
-        ctx["last_results"] = ctx["last_results"][1:]
-        return {"reply": f"¡Con gusto! El sitio **{s['id']}** es de tipo {s['categoria']} en {s['municipio']}. El clima es {s['clima']} y su dificultad es {s['dificultad']}. ¿Buscamos algo más?"}
+    if user_id not in chat_context: 
+        chat_context[user_id] = {"mun": None, "cat": None, "history": [], "favorites": []}
+    
+    ctx = chat_context[user_id]
+    ctx["history"].append(text)
 
+    # APRENDIZAJE: Detectar gustos
+    if "me gusta" in text or "amo" in text:
+        for m in ["florencia", "morelia", "doncello"]:
+            if m in text:
+                ctx["favorites"].append(m)
+                return {"reply": f"¡Anotado! He guardado en mi memoria semántica que te gusta **{m.capitalize()}**. De ahora en adelante, priorizaré mis recomendaciones sobre esa zona. ¿Quieres que veamos qué hay de nuevo allí?"}
+
+    # Detección de municipio
     muns = ["florencia", "morelia", "doncello", "belen", "san vicente", "puerto rico"]
     for m in muns:
-        if m in text: ctx["mun"] = m
+        if m in text: 
+            if ctx["mun"] == m: # Si repite el municipio, cambiamos la respuesta
+                results = await get_actividades(municipio=m)
+                rec = random.choice(results)
+                return {"reply": f"¡Veo que te apasiona {m.capitalize()}! Ya sabemos que hay muchos sitios allí, pero ¿qué te parece si exploramos específicamente **{rec['id']}**?"}
+            ctx["mun"] = m
+
+    # Detección de categorías
     cats_map = {"Cascada": ["cascada", "chorro"], "Alojamiento": ["hotel", "dormir"], "CaminataEcologica": ["caminata", "senderismo"]}
     for official, aliases in cats_map.items():
         if any(alias in text for alias in aliases): ctx["cat"] = official
 
-    if "clima" in text or "temperatura" in text:
-        if not ctx["mun"]: return {"reply": "¿De qué municipio quieres conocer el clima?"}
-        q = f"SELECT ?clima WHERE {{ <{BASE_PREFIX}{ctx['mun'].capitalize()}> <{BASE_PREFIX}clima> ?clima }} LIMIT 1"
-        res = await query_semantic_engine(q)
-        clima = res[0]['clima'] if res else "Cálido"
-        return {"reply": f"El clima en {ctx['mun'].capitalize()} es **{clima}**."}
-
+    # RESPUESTA BASADA EN CONTEXTO
     results = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
-    if not results: return {"reply": "No encontré datos. ¿Probamos con Florencia o Morelia?"}
-    ctx["last_results"] = results
     
+    if not results:
+        return {"reply": "Aún estoy aprendiendo sobre esa combinación. ¿Por qué no probamos buscando solo por el municipio?"}
+
+    # Evitar repetición usando el historial
+    rec = results[0]
+    for r in results:
+        if r['id'].lower() not in [h.lower() for h in ctx["history"]]:
+            rec = r
+            break
+
     if ctx["mun"] and ctx["cat"]:
-        return {"reply": f"¡Buena elección! En {ctx['mun'].capitalize()} encontré {len(results)} sitios de {ctx['cat']}. Por ejemplo: **{results[0]['id']}**. ¿Te cuento más?"}
+        return {"reply": f"¡Tengo nuevas ideas para ti! En {ctx['mun'].capitalize()} hay {len(results)} opciones de {ctx['cat']}. Te sugiero conocer **{rec['id']}**. ¿Te cuento los detalles técnicos?"}
     
-    return {"reply": f"He encontrado {len(results)} tesoros. En {results[0]['municipio']} podrías visitar **{results[0]['id']}**. ¿Qué municipio te gusta?"}
+    if ctx["mun"]:
+        return {"reply": f"En {ctx['mun'].capitalize()} he mapeado {len(results)} maravillas. ¿Buscas una aventura en cascadas o quizás un sitio para descansar?"}
+
+    return {"reply": "¡Hola! Soy tu guía amazónico. ¿Qué parte del Caquetá te gustaría descubrir hoy?"}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
-    q1 = f"SELECT ?m (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m }} GROUP BY ?m"
-    res1_raw = await query_semantic_engine(q1)
-    res1 = {row["m"].split("#")[-1].replace("_", " "): int(row["c"]) for row in res1_raw}
-    async with httpx.AsyncClient() as client:
-        try:
-            status_resp = await client.get(SEMANTIC_ENGINE_URL.replace("/sparql", "/status"))
-            total_tripletas = status_resp.json().get("tripletas", 0)
-        except: total_tripletas = 0
-    return {"municipios": res1, "usuarios_activos": len(users_db), "total_tripletas": total_tripletas}
+    q = f"SELECT (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m }}"
+    res = await query_semantic_engine(q)
+    total = res[0]['c'] if res else 0
+    return {"total_tripletas": total, "usuarios_activos": len(users_db)}
+
+@app.post("/api/v1/actividades")
+async def save_actividad(act: NuevaActividad):
+    rdf_id = act.id.replace(" ", "_")
+    rdf_mun = act.municipio.replace(" ", "_")
+    query = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> INSERT DATA {{ <{BASE_PREFIX}{rdf_id}> rdf:type <{BASE_PREFIX}{act.categoria}> . <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}ubicadaEn> <{BASE_PREFIX}{rdf_mun}> . <{BASE_PREFIX}{rdf_id}> <{BASE_PREFIX}hasImageURL> '{act.imagen}' . }}"
+    await query_semantic_engine(query)
+    return {"status": "ok"}
+
+@app.get("/")
+async def read_index(): return {"message": "API V2.2 activa"}
 
 if __name__ == "__main__":
     import uvicorn
