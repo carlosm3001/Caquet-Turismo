@@ -131,8 +131,82 @@ async def chat_ai(payload: dict = Body(...)):
     
     return {"reply": "¡Hola! ¿A qué parte del Caquetá te gustaría ir hoy?"}
 
-@app.get("/")
-async def root(): return {"status": "V4.2 Online"}
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+@app.post("/api/v1/login")
+async def login(data: LoginRequest):
+    user = users_db.get(data.email)
+    if not user or user["password"] != data.password:
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    
+    token = jwt.encode({
+        "email": data.email,
+        "name": user["name"],
+        "role": user["role"],
+        "exp": datetime.utcnow() + timedelta(hours=24)
+    }, SECRET_KEY, algorithm="HS256")
+    
+    return {"token": token}
+
+@app.get("/status")
+async def get_status():
+    async with httpx.AsyncClient() as client:
+        try:
+            # Intentar despertar al motor semántico
+            resp = await client.get(SEMANTIC_ENGINE_URL.replace("/sparql", "/status"), timeout=5.0)
+            engine_status = resp.json() if resp.status_code == 200 else {"status": "offline"}
+        except:
+            engine_status = {"status": "error"}
+    
+    return {
+        "status": "V4.2 Online",
+        "semantic_engine": engine_status,
+        "timestamp": datetime.utcnow()
+    }
+
+@app.get("/api/v1/admin/dashboard")
+async def admin_dashboard():
+    query = "SELECT (COUNT(*) as ?count) WHERE { ?s ?p ?o }"
+    results = await query_semantic_engine(query)
+    total = results[0].get("count", "0") if results else "0"
+    return {"total_tripletas": total}
+
+@app.post("/api/v1/actividades")
+async def create_actividad(payload: dict = Body(...)):
+    name = payload.get("id", "").replace(" ", "_")
+    cat = payload.get("categoria", "Actividad")
+    mun = payload.get("municipio", "Florencia").replace(" ", "_")
+    img = payload.get("imagen", "")
+    
+    sparql_update = f"""
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    INSERT DATA {{
+      <{BASE_PREFIX}{name}> rdf:type <{BASE_PREFIX}{cat}> .
+      <{BASE_PREFIX}{name}> <{BASE_PREFIX}ubicadaEn> <{BASE_PREFIX}{mun}> .
+      <{BASE_PREFIX}{name}> <{BASE_PREFIX}hasImageURL> "{img}" .
+    }}
+    """
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_update}, timeout=30.0)
+            if response.status_code == 200:
+                return {"status": "success", "message": f"Lugar {name} creado"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    
+    raise HTTPException(status_code=500, detail="Error al conectar con el motor semántico")
+
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    index_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    return "<html><body><h1>Amazonia-IA API Online</h1><p>Frontend no encontrado en /frontend/index.html</p></body></html>"
 
 if __name__ == "__main__":
     import uvicorn

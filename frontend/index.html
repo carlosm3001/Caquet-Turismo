@@ -72,7 +72,9 @@
 <button id="chatBtn" onclick="toggleChat()" class="fixed bottom-8 right-8 w-20 h-20 bg-emerald-950 text-white rounded-[2.5rem] shadow-2xl hidden items-center justify-center text-3xl z-[4000] hover:scale-110 transition-all border-4 border-emerald-400/20"><i class="fas fa-comment-dots text-emerald-400"></i></button>
 
 <script>
-    const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? "http://localhost:8001/api/v1" : "/api/v1";
+    const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+        ? "http://localhost:8001/api/v1" 
+        : window.location.origin + "/api/v1";
     let user = null;
 
     // --- OPTIMIZACIÓN: WAKE UP & CACHE ---
