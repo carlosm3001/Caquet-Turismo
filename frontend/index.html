@@ -80,7 +80,7 @@
     // --- OPTIMIZACIÓN: WAKE UP & CACHE ---
     window.onload = () => {
         // Despertar motor de inmediato
-        fetch(`${API.replace('/api/v1', '')}/status`).catch(() => {});
+        fetch(`${API}/status`).catch(() => {});
         
         const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('access_token');
         if (token) {

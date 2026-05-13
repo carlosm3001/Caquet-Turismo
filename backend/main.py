@@ -150,7 +150,7 @@ async def login(data: LoginRequest):
     
     return {"token": token}
 
-@app.get("/status")
+@app.get("/api/v1/status")
 async def get_status():
     async with httpx.AsyncClient() as client:
         try:
