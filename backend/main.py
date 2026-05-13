@@ -188,29 +188,42 @@ async def chat_ai(payload: dict = Body(...)):
     if user_id not in chat_context: chat_context[user_id] = {"mun": None, "cat": None}
     ctx = chat_context[user_id]
 
-    # Lista dinámica de municipios y categorías desde la charla
+    # Detección de municipios y categorías
     muns = ["florencia", "morelia", "doncello", "belen", "san vicente", "puerto rico"]
-    cats = ["cascada", "caminata", "senderismo", "extremo", "hospedaje", "reserva"]
+    cats = ["cascada", "caminata", "senderismo", "extremo", "hotel", "reserva"]
     
     for m in muns:
         if m in text: ctx["mun"] = m
     for c in cats:
-        if c in text: ctx["cat"] = c.replace("senderismo", "Caminata").replace("hospedaje", "Hotel")
+        if c in text: ctx["cat"] = c
 
-    # Si el usuario pregunta por "opciones" o "lugares", hacemos una búsqueda real
+    # 1. CASO: Pregunta por CANTIDAD (¿Cuántos...?)
+    if "cuántos" in text or "cuantos" in text or "cantidad" in text:
+        q_count = f"SELECT (COUNT(?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m . FILTER(CONTAINS(LCASE(STR(?m)), '{ctx['mun'] or ''}')) }}"
+        res = await query_semantic_engine(q_count)
+        count = res[0]['c'] if res else "0"
+        return {"reply": f"En mi base de datos RDF tengo registrados **{count} sitios** en {ctx['mun'] or 'el departamento'}. ¿Quieres ver la lista?"}
+
+    # 2. CASO: Pregunta por CLIMA
+    if "clima" in text or "temperatura" in text or "clima" in text:
+        if not ctx["mun"]: return {"reply": "¿De qué municipio te gustaría saber el clima?"}
+        q_clima = f"SELECT ?clima WHERE {{ ?m <{BASE_PREFIX}clima> ?clima . FILTER(CONTAINS(LCASE(STR(?m)), '{ctx['mun']}')) }} LIMIT 1"
+        res = await query_semantic_engine(q_clima)
+        clima = res[0]['clima'] if res else "Tropical"
+        return {"reply": f"El clima en {ctx['mun'].capitalize()} es predominantemente **{clima}**. Es ideal para actividades de {ctx['cat'] or 'naturaleza'}."}
+
+    # 3. CASO: Búsqueda general de actividades
     results = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
-    
     if not results:
-        return {"reply": "Vaya, no encontré nada específico para esa combinación en mi base de datos RDF. ¿Deseas buscar en otro municipio?"}
+        return {"reply": "Aún no tengo registros específicos para esa búsqueda. ¿Quieres probar con otro municipio del Caquetá?"}
 
-    # Construir respuesta inteligente
     if ctx["mun"] and ctx["cat"]:
-        reply = f"En {ctx['mun'].capitalize()} tengo {len(results)} opciones de {ctx['cat']}. Te recomiendo visitar **{results[0]['id']}**, tiene una dificultad {results[0]['dificultad']}."
+        reply = f"¡Buena elección! En {ctx['mun'].capitalize()} encontré {len(results)} opciones de {ctx['cat']}. El sitio **{results[0]['id']}** es muy popular."
     elif ctx["mun"]:
-        reply = f"He explorado {ctx['mun'].capitalize()} en la ontología y encontré {len(results)} sitios. ¿Te interesa alguna actividad como cascadas o caminatas?"
+        reply = f"He encontrado {len(results)} destinos en {ctx['mun'].capitalize()}. ¿Buscas algo como cascadas o prefieres hospedaje?"
     else:
         rec = random.choice(results)
-        reply = f"¡El Caquetá es hermoso! He encontrado {len(results)} sitios turísticos en total. ¿Qué tal si empezamos explorando **{rec['id']}** en {rec['municipio']}?"
+        reply = f"Caquetá tiene {len(results)} maravillas semánticas. Te sugiero empezar por **{rec['id']}** en {rec['municipio']}. ¿Te cuento más?"
     
     return {"reply": reply, "data": results}
 
