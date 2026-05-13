@@ -23,7 +23,7 @@ class ProxyHeadersMiddleware(BaseHTTPMiddleware):
 app.add_middleware(ProxyHeadersMiddleware)
 
 SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_safe_2026")
-app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=False)
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=True if os.getenv("VERCEL") else False)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
