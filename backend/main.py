@@ -50,90 +50,45 @@ if os.getenv("GOOGLE_CLIENT_ID"):
         client_kwargs={'scope': 'openid email profile'}
     )
 
-users_db = {"admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador"}}
-chat_context = {} 
+import json
 
-async def query_semantic_engine(sparql_query: str):
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0)
-            return response.json() if response.status_code == 200 else []
-        except: return []
+# --- PERSISTENCIA DE USUARIOS ---
+USERS_FILE = "users.json"
+def load_users():
+    if os.path.exists(USERS_FILE):
+        with open(USERS_FILE, "r") as f: return json.load(f)
+    return {"admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador"}}
 
-# --- ENDPOINTS DE AUTENTICACIÓN (RESTAURADOS) ---
+def save_users(db):
+    with open(USERS_FILE, "w") as f: json.dump(db, f)
 
-@app.get("/api/v1/auth/google")
-async def google_login(request: Request):
-    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI")
-    if not redirect_uri:
-        url = request.url_for('google_auth_callback')
-        redirect_uri = str(url).replace("http://", "https://") if os.getenv("VERCEL") else str(url)
-    return await oauth.google.authorize_redirect(request, redirect_uri)
+users_db = load_users()
 
-@app.get("/api/v1/auth/google/callback")
-async def google_auth_callback(request: Request):
-    try:
-        token = await oauth.google.authorize_access_token(request)
-        user_info = token.get('userinfo')
-        email = user_info['email']
-        jwt_token = jwt.encode({"email": email, "name": user_info['name'], "role": "turista", "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm="HS256")
-        target_url = "/?token=" + jwt_token
-        return HTMLResponse(content=f"<html><script>window.location.replace('{target_url}');</script></html>")
-    except Exception as e:
-        return RedirectResponse(url="/?error=auth_failed")
-
-# --- ENDPOINTS DE DATOS ---
-
-@app.get("/api/v1/actividades")
-async def get_actividades(municipio: str = None, categoria: str = None):
-    query = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX owl: <http://www.w3.org/2002/07/owl#> SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img WHERE {{ ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri . ?sitio rdf:type ?tipo_uri . FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class) OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }} }}"
-    results = await query_semantic_engine(query)
-    lista = []
-    seen = set()
-    blacklist = ["bitchip", "wrapsafe", "fintone", "span", "ronstring", "prodder", "hatity", "flexidy", "bigtax"]
-    for row in results:
-        s_name = row.get("sitio", "").split("#")[-1].replace("_", " ")
-        if any(bad in s_name.lower() for bad in blacklist): continue
-        if municipio and municipio.lower() not in row.get("mun_uri", "").lower(): continue
-        if s_name not in seen:
-            lista.append({"id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), "clima": row.get("clima", "Cálido"), "dificultad": row.get("dif", "Media"), "imagen": row.get("img", "")})
-            seen.add(s_name)
-    return lista
-
-@app.post("/api/v1/chat")
-async def chat_ai(payload: dict = Body(...)):
-    text = payload.get("message", "").lower()
-    user_id = payload.get("email", "default")
-    if user_id not in chat_context: chat_context[user_id] = {"suggested": [], "last_rec": None}
-    ctx = chat_context[user_id]
-    
-    if any(w in text for word in ["detalle", "cuentame", "info"]):
-        if ctx["last_rec"]:
-            s = ctx["last_rec"]
-            return {"reply": f"¡Claro! **{s['id']}** es un lugar de tipo {s['categoria']} en {s['municipio']}. Clima {s['clima']} y dificultad {s['dificultad']}."}
-
-    muns = ["florencia", "morelia", "doncello", "belen"]
-    mun = next((m for m in muns if m in text), None)
-    sitios = await get_actividades(municipio=mun)
-    random.shuffle(sitios)
-    
-    if llm_model:
-        try:
-            prompt = f"Eres Amazonia-IA, un guía experto. Datos: {sitios[:10]}. Usuario: {text}. Responde amigable."
-            response = llm_model.generate_content(prompt)
-            return {"reply": response.text}
-        except: pass
-
-    if sitios:
-        rec = sitios[0]
-        ctx["last_rec"] = rec
-        return {"reply": f"¡Hola! Encontré sitios geniales. Te sugiero conocer **{rec['id']}** en {rec['municipio']}. ¿Te cuento más detalles?"}
-    
-    return {"reply": "¡Hola! ¿A qué parte del Caquetá te gustaría ir hoy?"}
-
-class LoginRequest(BaseModel):
+class RegisterRequest(BaseModel):
+    name: str
     email: str
     password: str
+
+@app.post("/api/v1/register")
+async def register(data: RegisterRequest):
+    if data.email in users_db:
+        raise HTTPException(status_code=400, detail="El correo ya está registrado")
+    
+    users_db[data.email] = {
+        "password": data.password,
+        "role": "turista",
+        "name": data.name
+    }
+    save_users(users_db)
+    
+    token = jwt.encode({
+        "email": data.email,
+        "name": data.name,
+        "role": "turista",
+        "exp": datetime.utcnow() + timedelta(hours=24)
+    }, SECRET_KEY, algorithm="HS256")
+    
+    return {"token": token}
 
 @app.post("/api/v1/login")
 async def login(data: LoginRequest):
