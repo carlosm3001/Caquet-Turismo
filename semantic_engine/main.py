@@ -4,8 +4,8 @@ import os
 
 app = FastAPI(title="Motor Semántico Caquetá - SPARQL Endpoint")
 
-# Ruta donde se montará el volumen en Docker
-RDF_PATH = "/data/ontologia/CLASE1.rdf"
+# Ruta flexible: busca en la carpeta actual o en el volumen de Docker
+RDF_PATH = "CLASE1.rdf" if os.path.exists("CLASE1.rdf") else "/data/ontologia/CLASE1.rdf"
 
 g = rdflib.Graph()
 
