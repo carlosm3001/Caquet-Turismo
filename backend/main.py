@@ -46,13 +46,12 @@ users_db = {
     "admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador Principal"}
 }
 
-# --- MEMORIA EXTENDIDA ---
 chat_context = {} 
 
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=25.0)
+            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0)
             response.raise_for_status()
             return response.json()
         except Exception as e:
@@ -102,15 +101,10 @@ async def google_auth_callback(request: Request):
         
         email = user_info['email']
         if email not in users_db:
-            users_db[email] = {
-                "password": str(random.randint(100000, 999999)),
-                "role": "turista",
-                "name": user_info['name']
-            }
+            users_db[email] = {"password": str(random.randint(100000, 999999)), "role": "turista", "name": user_info['name']}
         
         u = users_db[email]
         jwt_token = create_token({"email": email, "role": u["role"], "name": u["name"]})
-        
         target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"""
             <html>
@@ -118,9 +112,7 @@ async def google_auth_callback(request: Request):
                     <div style="text-align:center;">
                         <h2>¡Sesión Validada!</h2>
                         <p>Entrando a la plataforma...</p>
-                        <script>
-                            window.location.replace("{target_url}");
-                        </script>
+                        <script>window.location.replace("{target_url}");</script>
                     </div>
                 </body>
             </html>
@@ -154,11 +146,13 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         if municipio and municipio.lower() not in m_name.lower(): continue
         if categoria and categoria.lower() not in t_name.lower(): continue
         if s_name not in seen:
-            lista.append({"id": s_name, "categoria": t_name, "municipio": m_name, "clima": row.get("clima", "Tropical"), "dificultad": row.get("dif", "Media")})
+            clima_val = row.get("clima")
+            if not clima_val or clima_val == "None": clima_val = "Cálido Tropical"
+            lista.append({"id": s_name, "categoria": t_name, "municipio": m_name, "clima": clima_val, "dificultad": row.get("dif", "Media")})
             seen.add(s_name)
     return lista
 
-# --- IA CON MEMORIA DE CONTEXTO (HUMANIZADA FINAL 3.0) ---
+# --- IA CON MEMORIA DE CONTEXTO (HUMANIZADA FINAL 4.0) ---
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
@@ -166,15 +160,22 @@ async def chat_ai(payload: dict = Body(...)):
     if user_id not in chat_context: chat_context[user_id] = {"mun": None, "cat": None, "last_results": []}
     ctx = chat_context[user_id]
 
-    # 1. DETECCIÓN DE CONFIRMACIÓN (Rompe el bucle de "si cuéntame más")
-    if any(word in text for word in ["si", "sí", "claro", "por favor", "porfavor", "adelante", "dale"]):
-        if ctx["last_results"]:
-            s = ctx["last_results"][0]
-            # Limpiamos resultados para evitar repetir el mismo detalle mil veces
-            ctx["last_results"] = ctx["last_results"][1:] if len(ctx["last_results"]) > 1 else []
-            return {"reply": f"¡Claro que sí! Hablemos de **{s['id']}**. Es un sitio de tipo {s['categoria']} ubicado en {s['municipio']}. Quienes lo visitan disfrutan de un clima {s['clima']} y su acceso tiene una dificultad {s['dificultad']}. ¿Deseas conocer otro lugar o prefieres cambiar de municipio?"}
+    # Detección de confirmación activa
+    is_confirm = any(word in text for word in ["si", "sí", "claro", "por favor", "porfavor", "adelante", "dale", "cuenta", "cuéntame"])
+    
+    # Si el usuario confirma y hay resultados previos, DAMOS DETALLES
+    if is_confirm and ctx["last_results"]:
+        s = ctx["last_results"][0]
+        ctx["last_results"] = ctx["last_results"][1:] # Rotamos para que la próxima vez dé otro sitio
+        frases = [
+            f"¡Con mucho gusto! El sitio **{s['id']}** es una joya.",
+            f"Claro que sí, hablemos de **{s['id']}**.",
+            f"Excelente elección. **{s['id']}** es un lugar increíble.",
+            f"Te cuento: **{s['id']}** es muy visitado por turistas."
+        ]
+        return {"reply": f"{random.choice(frases)} Es de tipo {s['categoria']} y está en el municipio de {s['municipio']}. Quienes lo visitan disfrutan de un clima {s['clima']} y su acceso es de dificultad {s['dificultad']}. ¿Te gustaría que te hable de otro lugar o buscamos algo diferente?"}
 
-    # 2. DETECCIÓN DE MUNICIPIOS Y CATEGORÍAS
+    # Detección de municipios y categorías
     muns = ["florencia", "morelia", "doncello", "belen", "san vicente", "puerto rico"]
     for m in muns:
         if m in text: ctx["mun"] = m
@@ -187,34 +188,36 @@ async def chat_ai(payload: dict = Body(...)):
     for official, aliases in cats_map.items():
         if any(alias in text for alias in aliases): ctx["cat"] = official
 
-    # 3. CASO: CLIMA
+    # CASO: CLIMA (SPARQL directo)
     if "clima" in text or "temperatura" in text:
-        if not ctx["mun"]: return {"reply": "Con gusto, pero ¿de qué municipio quieres conocer el clima?"}
+        if not ctx["mun"]: return {"reply": "¿De qué municipio quieres conocer el clima para darte el dato exacto?"}
         q = f"SELECT ?clima WHERE {{ ?m <{BASE_PREFIX}clima> ?clima . FILTER(CONTAINS(LCASE(STR(?m)), '{ctx['mun']}')) }} LIMIT 1"
         res = await query_semantic_engine(q)
-        clima = res[0]['clima'] if res else "Cálido"
-        return {"reply": f"El clima en {ctx['mun'].capitalize()} es predominantemente **{clima}**. ¡Un clima fantástico para el turismo!"}
+        clima = res[0]['clima'] if (res and res[0]['clima'] != 'None') else "Cálido Tropical"
+        return {"reply": f"El clima actual en {ctx['mun'].capitalize()} es **{clima}**. ¡Es un tiempo ideal para salir de aventura!"}
 
-    # 4. BÚSQUEDA Y RESPUESTA
+    # BÚSQUEDA Y RESPUESTA
     results = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
+    
     if not results and ctx["mun"] and ctx["cat"]:
         results = await get_actividades(municipio=ctx["mun"])
         if results:
             ctx["cat"] = None
-            return {"reply": f"No encontré ese tipo de actividad exacta, pero en {ctx['mun'].capitalize()} tengo {len(results)} sitios geniales. ¿Quieres ver cascadas o quizás buscas donde dormir?"}
+            return {"reply": f"Vaya, no encontré {ctx['cat']} registrados allí, pero en {ctx['mun'].capitalize()} tengo {len(results)} otros sitios que te encantarán. ¿Quieres ver cascadas o quizás buscas alojamiento?"}
 
     if not results:
-        return {"reply": "Vaya, no encontré datos para esa búsqueda. ¿Probamos con otro municipio como Florencia o Morelia?"}
+        return {"reply": "Lo siento, no tengo datos semánticos para esa búsqueda. ¿Probamos con un municipio como Florencia o Morelia?"}
 
     ctx["last_results"] = results
+    
     if ctx["mun"] and ctx["cat"]:
-        return {"reply": f"¡Excelente elección! En {ctx['mun'].capitalize()} encontré {len(results)} sitios de {ctx['cat']}. Te sugiero visitar **{results[0]['id']}**. ¿Quieres que te cuente más sobre este lugar?"}
+        return {"reply": f"¡Qué buena elección! En {ctx['mun'].capitalize()} encontré {len(results)} opciones de {ctx['cat']}. Te sugiero visitar **{results[0]['id']}**. ¿Quieres que te cuente más sobre este lugar?"}
     
     if ctx["mun"]:
-        return {"reply": f"En {ctx['mun'].capitalize()} hay {len(results)} lugares increíbles. ¿Buscas cascadas, caminatas o quizás un sitio para dormir?"}
+        return {"reply": f"En {ctx['mun'].capitalize()} hay {len(results)} lugares esperando por ti. ¿Buscas cascadas, caminatas o un sitio para dormir?"}
 
     rec = random.choice(results)
-    return {"reply": f"¡Hola! El Caquetá es asombroso. Tengo {len(results)} sitios mapeados. Por ejemplo, en {rec['municipio']} podrías visitar **{rec['id']}**. ¿Qué municipio te gustaría explorar?"}
+    return {"reply": f"¡Hola! El Caquetá es asombroso y tengo {len(results)} sitios mapeados. Por ejemplo, en {rec['municipio']} podrías visitar **{rec['id']}**. ¿Qué municipio te gustaría explorar?"}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
@@ -232,7 +235,7 @@ async def admin_dashboard():
     return {"municipios": res1, "categorias": res2, "usuarios_activos": len(users_db), "total_tripletas": total_tripletas}
 
 @app.get("/")
-async def read_index(): return {"message": "API Backend Caquetá activa."}
+async def read_index(): return {"message": "API Backend activa."}
 
 if __name__ == "__main__":
     import uvicorn

@@ -1637,6 +1637,21 @@
     <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#FincaTurÃ­stica -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#FincaTurÃ­stica"/>
+<owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
+        <untitled-ontology-3:clima>Cálido Húmedo (27°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
+        <untitled-ontology-3:clima>Tropical Cálido (28°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello">
+        <untitled-ontology-3:clima>Cálido Tropical (26°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃes">
+        <untitled-ontology-3:clima>Templado/Cálido (25°C)</untitled-ontology-3:clima>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
