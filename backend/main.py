@@ -11,31 +11,25 @@ import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
 
-# --- CONFIGURACIÓN DE EMERGENCIA V3.4 ---
-app = FastAPI(title="Amazonia-IA V3.4 - Emergency Stable")
+app = FastAPI(title="Amazonia-IA V3.5 - Final Auth Fix")
 
 SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_ultra_safe_secret_999")
 ALGORITHM = "HS256"
 
-# Middleware de Sesión Robustecido
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=False)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-# --- SERVICIOS ---
 SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql"))
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 
-# --- IA GEMINI (CON ESCUDO) ---
 llm_model = None
 try:
     GEMINI_KEY = os.getenv("GEMINI_API_KEY")
     if GEMINI_KEY:
         genai.configure(api_key=GEMINI_KEY)
         llm_model = genai.GenerativeModel('gemini-1.5-flash')
-except Exception as e:
-    print(f"IA Shield: {e}")
+except: pass
 
-# --- GOOGLE OAUTH ---
 oauth = OAuth()
 if os.getenv("GOOGLE_CLIENT_ID"):
     oauth.register(
@@ -53,23 +47,19 @@ async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0)
-            if response.status_code == 200: return response.json()
-        except: pass
-        return []
-
-class NuevaActividad(BaseModel):
-    id: str
-    categoria: str
-    municipio: str
-    imagen: str = ""
+            return response.json() if response.status_code == 200 else []
+        except: return []
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
-    # Detección inteligente de protocolo para evitar Error 500
-    scheme = request.headers.get("x-forwarded-proto", "http")
-    redirect_uri = request.url_for('google_auth_callback')
-    if os.getenv("VERCEL"):
-        redirect_uri = str(redirect_uri).replace("http://", "https://")
+    # PRIORIDAD TOTAL: Si existe la variable en Vercel, usamos esa sin dudar.
+    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI")
+    if not redirect_uri:
+        # Fallback si no está la variable
+        url = request.url_for('google_auth_callback')
+        redirect_uri = str(url).replace("http://", "https://") if os.getenv("VERCEL") else str(url)
+    
+    print(f"DEBUG AUTH: Enviando redirect_uri -> {redirect_uri}")
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
@@ -86,26 +76,14 @@ async def google_auth_callback(request: Request):
             "exp": datetime.utcnow() + timedelta(hours=24)
         }, SECRET_KEY, algorithm=ALGORITHM)
         
-        target_url = "/?token=" + jwt_token
+        target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"<html><script>window.location.replace('{target_url}');</script></html>")
     except Exception as e:
-        return HTMLResponse(content=f"<h2>Error de Conexión Google</h2><p>{str(e)}</p><a href='/'>Reintentar</a>")
+        return HTMLResponse(content=f"<h2>Error Auth</h2><p>{str(e)}</p><a href='/'>Reintentar</a>")
 
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
-    query = f"""
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
-    SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img
-    WHERE {{
-      ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri .
-      ?sitio rdf:type ?tipo_uri .
-      FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class)
-      OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }}
-      OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }}
-      OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }}
-    }}
-    """
+    query = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX owl: <http://www.w3.org/2002/07/owl#> SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img WHERE {{ ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri . ?sitio rdf:type ?tipo_uri . FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class) OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }} }}"
     results = await query_semantic_engine(query)
     lista = []
     seen = set()
@@ -114,12 +92,7 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         if municipio and municipio.lower() not in row.get("mun_uri", "").lower(): continue
         if categoria and categoria.lower() not in row.get("tipo_uri", "").lower(): continue
         if s_name not in seen:
-            lista.append({
-                "id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], 
-                "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), 
-                "clima": row.get("clima", "Cálido"), "dificultad": row.get("dif", "Media"), 
-                "imagen": row.get("img", "")
-            })
+            lista.append({"id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), "clima": row.get("clima", "Cálido"), "dificultad": row.get("dif", "Media"), "imagen": row.get("img", "")})
             seen.add(s_name)
     return lista
 
@@ -129,12 +102,12 @@ async def chat_ai(payload: dict = Body(...)):
     if llm_model:
         try:
             sitios = await get_actividades()
-            data = "\n".join([f"- {s['id']} en {s['municipio']}" for s in sitios[:10]])
-            prompt = f"Eres un guía del Caquetá. Datos: {data}. Usuario dice: {text}. Responde amable."
+            resumen = "\n".join([f"- {s['id']} en {s['municipio']}" for s in sitios[:10]])
+            prompt = f"Eres un guía del Caquetá. Datos: {resumen}. Responde a: {text}"
             response = llm_model.generate_content(prompt)
             return {"reply": response.text}
         except: pass
-    return {"reply": "¡Hola! ¿A qué parte del Caquetá te gustaría ir hoy?"}
+    return {"reply": "¡Hola! ¿Cómo puedo ayudarte con tu viaje?"}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
@@ -143,7 +116,7 @@ async def admin_dashboard():
     return {"total_tripletas": res[0]['c'] if res else 0, "usuarios_activos": len(users_db)}
 
 @app.get("/")
-async def read_root(): return {"status": "V3.4 Stable Ready"}
+async def read_root(): return {"status": "V3.5 Final Auth Fix"}
 
 if __name__ == "__main__":
     import uvicorn
