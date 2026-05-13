@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Docker
+.env
+data/
+
+# Local backups and logs
+backup_v1_1/
+RESPALDO_COMPLETO_PROYECTO.txt
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

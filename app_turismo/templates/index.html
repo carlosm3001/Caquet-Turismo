@@ -3,78 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turismo Caquetá</title>
+    <title>Caquetá Turismo - Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #1b5e20; --secondary: #0d47a1; --accent: #ff9800; --bg: #f5f7fa; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); }
-        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 20px; text-align: center; }
-        .search-container { max-width: 500px; margin: -20px auto 20px; background: white; padding: 10px 20px; border-radius: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; }
-        .search-container input { flex: 1; border: none; padding: 10px; font-size: 1.1rem; outline: none; }
+        :root { --primary: #2e7d32; --secondary: #1565c0; --bg: #f8f9fa; --sidebar: #1a1a1a; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
         
-        /* Estilos de los Filtros Rápidos */
-        .filter-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; padding: 0 20px; flex-wrap: wrap; }
-        .filter-chip { 
-            padding: 8px 18px; background: white; border: 1.5px solid #ddd; border-radius: 20px; 
-            cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: all 0.2s; color: #555;
+        .sidebar { width: 260px; background: var(--sidebar); color: #888; display: flex; flex-direction: column; transition: 0.3s; }
+        .sidebar-header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #333; }
+        .sidebar-header h2 { color: white; margin: 0; font-size: 1.5rem; letter-spacing: 2px; }
+        
+        .nav-menu { flex: 1; padding: 20px 0; }
+        .nav-item { 
+            padding: 15px 30px; display: flex; align-items: center; gap: 15px; 
+            cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; 
         }
-        .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .filter-chip:hover:not(.active) { background: #eee; }
+        .nav-item:hover { background: #222; color: white; }
+        .nav-item.active { background: #222; color: white; border-color: var(--primary); }
 
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s; position: relative; }
-        .card:hover { transform: translateY(-5px); }
-        .card-img { height: 160px; background: #333; position: relative; background-size: cover; background-position: center; }
-        .card-img i { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.2); font-size: 2.5rem; }
-        .card-body { padding: 15px; }
-        .card-title { font-size: 1.1rem; font-weight: bold; margin: 0; color: #333; }
-        .card-cat { color: var(--primary); font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .card-info { color: #666; font-size: 0.85rem; margin-top: 8px; display: flex; gap: 15px; }
-        .card-info i { color: #999; margin-right: 5px; }
-        .badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; z-index: 10; }
-        .clima-badge { position: absolute; top: 10px; right: 10px; background: var(--accent); color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; z-index: 10; }
-        #loader { text-align: center; display: none; padding: 20px; color: var(--primary); }
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        
+        header { 
+            background: white; padding: 20px 40px; display: flex; justify-content: space-between; 
+            align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 10;
+        }
+        .search-bar { 
+            background: #eee; border-radius: 10px; padding: 10px 20px; display: flex; 
+            align-items: center; gap: 10px; width: 400px; 
+        }
+        .search-bar input { background: none; border: none; outline: none; width: 100%; }
+
+        .content-body { padding: 40px; }
+        .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer; position: relative; }
+        .card:hover { transform: translateY(-10px); }
+        .card-img { height: 180px; background-size: cover; background-position: center; }
+        .card-body { padding: 20px; }
+        
+        /* Estilo Destino Card Mejorado */
+        .destinos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .destino-card { 
+            background: white; padding: 30px; border-radius: 20px; text-align: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 2px solid transparent; transition: 0.3s;
+        }
+        .destino-card:hover { border-color: var(--primary); transform: scale(1.02); }
+        .destino-icon { font-size: 3rem; color: #ddd; margin-bottom: 20px; transition: 0.3s; }
+        .destino-card:hover .destino-icon { color: var(--primary); transform: rotate(10deg); }
+        .btn-ver { margin-top: 15px; background: #eee; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .modal { background: white; width: 95%; max-width: 450px; border-radius: 25px; overflow: hidden; }
+        #loader { text-align: center; display: none; padding: 50px; color: var(--primary); }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>TURISMO CAQUETÁ</h1>
-    <p>Explora la Ventana Turística del Piedemonte</p>
-</header>
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <h2>CAQUETÁ</h2>
+        <small style="color:var(--primary)">VISTA TOTAL</small>
+    </div>
+    <div class="nav-menu">
+        <div class="nav-item active" onclick="showView('inicio', this)"><i class="fas fa-home"></i> Inicio</div>
+        <div class="nav-item" onclick="showView('explorar', this)"><i class="fas fa-compass"></i> Explorar Sitios</div>
+        <div class="nav-item" onclick="showView('destinos', this)"><i class="fas fa-map"></i> Todos los Municipios</div>
+        <div class="nav-item" onclick="showView('favoritos', this)"><i class="fas fa-heart" style="color:#e91e63"></i> Mis Favoritos</div>
+    </div>
+</nav>
 
-<div class="search-container">
-    <i class="fas fa-search" style="color: #999;"></i>
-    <input type="text" id="searchInput" placeholder="Busca por municipio..." oninput="debounceSearch()">
+<div class="main-content">
+    <header>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Buscar sitio..." oninput="debounceSearch()">
+        </div>
+        <div style="width:40px; height:40px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center;">T</div>
+    </header>
+
+    <div class="content-body">
+        <div id="view-inicio">
+            <div class="section-title"><i class="fas fa-star" style="color:var(--accent)"></i> Resumen del Departamento</div>
+            <div style="background:linear-gradient(45deg, #1b5e20, #0d47a1); padding:50px; border-radius:25px; color:white;">
+                <h2>Tu aventura en la Amazonía comienza aquí</h2>
+                <p>Nuestra ontología cuenta con información de todos los municipios del Caquetá.</p>
+                <button onclick="document.querySelector('.nav-item:nth-child(3)').click()" style="padding:12px 30px; border-radius:10px; border:none; background:white; color:var(--primary); font-weight:bold; cursor:pointer;">Ver Municipios</button>
+            </div>
+        </div>
+
+        <div id="view-explorar" style="display:none">
+            <div class="section-title"><i class="fas fa-list"></i> Catálogo Completo</div>
+            <div class="gallery" id="galeria"></div>
+        </div>
+
+        <div id="view-destinos" style="display:none">
+            <div class="section-title"><i class="fas fa-map-marked-alt"></i> Municipios (Destinos)</div>
+            <div class="destinos-grid" id="destinosGaleria"></div>
+        </div>
+
+        <div id="view-favoritos" style="display:none">
+            <div class="section-title"><i class="fas fa-heart" style="color:#e91e63"></i> Guardados</div>
+            <div class="gallery" id="favGaleria"></div>
+        </div>
+
+        <div id="loader"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+    </div>
 </div>
 
-<div class="filter-container">
-    <div class="filter-chip active" onclick="setFilter('', this)">Ver Todo</div>
-    <div class="filter-chip" onclick="setFilter('Cascada', this)"><i class="fas fa-water"></i> Cascadas</div>
-    <div class="filter-chip" onclick="setFilter('Caminata', this)"><i class="fas fa-hiking"></i> Caminatas</div>
-    <div class="filter-chip" onclick="setFilter('Alojamiento', this)"><i class="fas fa-hotel"></i> Hospedaje</div>
-    <div class="filter-chip" onclick="setFilter('Extremo', this)"><i class="fas fa-bolt"></i> Deporte Extremo</div>
+<div id="modalOverlay" class="modal-overlay" onclick="if(event.target == this) closeModal()">
+    <div class="modal">
+        <div id="modalImg" style="height:220px; background-size:cover; background-position:center; position:relative;">
+            <button style="position:absolute; top:15px; right:15px; background:white; border:none; width:35px; height:35px; border-radius:50%; cursor:pointer;" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div style="padding:25px;">
+            <span id="modalCat" style="color:var(--primary); font-size:0.8rem; font-weight:800; text-transform:uppercase;"></span>
+            <h2 id="modalTitle" style="margin:5px 0 15px;"></h2>
+            <div style="display:grid; gap:8px; color:#666; font-size:0.9rem;">
+                <div><i class="fas fa-map-marker-alt"></i> <span id="modalMun"></span></div>
+                <div><i class="fas fa-sun"></i> Clima: <span id="modalClima"></span></div>
+                <div><i class="fas fa-hiking"></i> Dificultad: <span id="modalDif"></span></div>
+            </div>
+            <a id="btnWS" href="#" target="_blank" style="margin-top:20px; background:#25d366; color:white; display:block; text-align:center; padding:12px; border-radius:10px; text-decoration:none; font-weight:bold;">CONTACTAR</a>
+        </div>
+    </div>
 </div>
-
-<div id="loader"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
-<div class="gallery" id="galeria"></div>
 
 <script>
-    let currentCategory = '';
+    let currentView = 'inicio';
     let searchTimer;
-    let abortController = null;
+    let favoritos = JSON.parse(localStorage.getItem('favs_caqueta')) || [];
 
-    const IMAGENES = {
-        'Cascada': 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&q=80',
-        'Caminata': 'https://images.unsplash.com/photo-1551632432-c7d419d0a4fb?w=400&q=80',
-        'Alojamiento': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80',
-        'Default': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&q=80'
-    };
-
-    function setFilter(cat, element) {
-        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    function showView(viewId, element) {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         element.classList.add('active');
-        currentCategory = cat;
+        document.getElementById('view-inicio').style.display = 'none';
+        document.getElementById('view-explorar').style.display = 'none';
+        document.getElementById('view-destinos').style.display = 'none';
+        document.getElementById('view-favoritos').style.display = 'none';
+        document.getElementById('view-' + viewId).style.display = 'block';
+        currentView = viewId;
+        if(viewId === 'explorar' || viewId === 'favoritos') cargarDatos();
+        if(viewId === 'destinos') cargarMunicipios();
+    }
+
+    async function cargarMunicipios() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+        const res = await fetch('/municipios');
+        const data = await res.json();
+        loader.style.display = 'none';
+        const gal = document.getElementById('destinosGaleria');
+        gal.innerHTML = '';
+        data.forEach(m => {
+            gal.innerHTML += `
+                <div class="destino-card">
+                    <div class="destino-icon"><i class="fas fa-landmark"></i></div>
+                    <div style="font-weight:bold; font-size:1.2rem; color:#222;">${m.nombre}</div>
+                    <div style="color:var(--primary); font-weight:bold; margin-top:5px;">${m.total_actividades} Actividades</div>
+                    <div style="font-size:0.8rem; color:#888; margin-top:5px;"><i class="fas fa-cloud-sun"></i> Clima ${m.clima}</div>
+                    <button class="btn-ver" onclick="verMunicipio('${m.nombre}')">Ver Actividades</button>
+                </div>
+            `;
+        });
+    }
+
+    function verMunicipio(nombre) {
+        document.getElementById('searchInput').value = nombre;
+        document.querySelector('.nav-item:nth-child(2)').click();
         cargarDatos();
     }
 
@@ -85,64 +181,45 @@
 
     async function cargarDatos() {
         const val = document.getElementById('searchInput').value;
-        const galeria = document.getElementById('galeria');
+        const target = currentView === 'favoritos' ? 'favGaleria' : 'galeria';
+        const gal = document.getElementById(target);
         const loader = document.getElementById('loader');
-
-        if (abortController) abortController.abort();
-        abortController = new AbortController();
-
         loader.style.display = 'block';
-        
-        try {
-            const url = `/actividades?municipio=${encodeURIComponent(val)}&categoria=${currentCategory}`;
-            const res = await fetch(url, { signal: abortController.signal });
-            const data = await res.json();
-            
-            loader.style.display = 'none';
-            let htmlBuffer = "";
-
-            data.forEach(item => {
-                // Imagen por categoría
-                let imgUrl = IMAGENES.Default;
-                if(item.categoria.includes('Cascada')) imgUrl = IMAGENES.Cascada;
-                else if(item.categoria.includes('Caminata')) imgUrl = IMAGENES.Caminata;
-                else if(item.categoria.includes('Alojamiento')) imgUrl = IMAGENES.Alojamiento;
-
-                // Icono por categoría
-                let icono = 'fa-mountain';
-                if(item.categoria.includes('Cascada')) icono = 'fa-water';
-                else if(item.categoria.includes('Caminata')) icono = 'fa-hiking';
-                else if(item.categoria.includes('Alojamiento')) icono = 'fa-bed';
-
-                let climaIcono = item.clima.includes('Cálido') ? 'fa-sun' : 'fa-cloud-sun';
-
-                htmlBuffer += `
-                    <div class="card">
-                        <span class="badge">${item.dificultad}</span>
-                        <span class="clima-badge"><i class="fas ${climaIcono}"></i> ${item.clima}</span>
-                        <div class="card-img" style="background-image: url('${imgUrl}')">
-                            <i class="fas ${icono}"></i>
-                        </div>
-                        <div class="card-body">
-                            <span class="card-cat">${item.categoria}</span>
-                            <div class="card-title">${item.id.replace(/_/g, ' ')}</div>
-                            <div class="card-info">
-                                <span><i class="fas fa-map-marker-alt"></i> ${item.municipio}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            galeria.innerHTML = htmlBuffer || '<div style="grid-column: 1/-1; text-align: center;">No se encontraron resultados</div>';
-        } catch (e) {
-            if (e.name !== 'AbortError') {
-                loader.style.display = 'none';
-                console.error("Error cargando datos:", e);
-            }
-        }
+        const res = await fetch(`/actividades?municipio=${val}`);
+        let data = await res.json();
+        if(currentView === 'favoritos') data = data.filter(i => favoritos.includes(i.id));
+        loader.style.display = 'none';
+        gal.innerHTML = '';
+        data.forEach(item => {
+            const isFav = favoritos.includes(item.id);
+            const img = item.categoria.includes('Cascada') ? 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400' : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400';
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => openModal(item, img);
+            card.innerHTML = `
+                <div class="card-img" style="background-image: url('${img}')"></div>
+                <div class="card-body">
+                    <div class="card-cat">${item.categoria}</div>
+                    <div class="card-title">${item.id.replace(/_/g, ' ')}</div>
+                    <div style="font-size:0.8rem; color:#888;"><i class="fas fa-map-marker-alt"></i> ${item.municipio}</div>
+                </div>
+            `;
+            gal.appendChild(card);
+        });
     }
 
-    cargarDatos();
+    function openModal(item, img) {
+        document.getElementById('modalImg').style.backgroundImage = `url('${img}')`;
+        document.getElementById('modalTitle').innerText = item.id.replace(/_/g, ' ');
+        document.getElementById('modalCat').innerText = item.categoria;
+        document.getElementById('modalMun').innerText = item.municipio;
+        document.getElementById('modalClima').innerText = item.clima;
+        document.getElementById('modalDif').innerText = item.dificultad;
+        document.getElementById('btnWS').href = `https://wa.me/573110000000?text=Info sobre ${item.id}`;
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+    showView('inicio', document.querySelector('.nav-item.active'));
 </script>
 
 </body>

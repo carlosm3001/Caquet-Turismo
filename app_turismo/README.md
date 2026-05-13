@@ -1,12 +1,25 @@
-# Informe: App y API de Turismo
-Contiene el código fuente de la aplicación web y el motor de consultas SPARQL.
+# Informe Técnico: Aplicación y API de Turismo
 
-## Contenido:
-- **api.py**: Servidor Flask que conecta la ontología con la web.
-- **consulta.py**: Script de prueba para ejecutar consultas SPARQL rápidas desde la terminal.
-- **/templates/index.html**: La interfaz visual moderna de la aplicación para el usuario.
+Este directorio contiene la lógica de negocio y la interfaz de usuario.
 
-## Cómo ejecutar:
-1. Abrir terminal en `app_turismo/`.
-2. Ejecutar `python api.py`.
-3. Navegar a `http://127.0.0.1:5000/`.
+## Componentes Principales:
+
+### 1. `api.py` (Servidor Flask)
+- **Carga de Datos:** Importa la ontología usando `rdflib.Graph()`.
+- **Rutas API:**
+  - `GET /actividades`: Realiza una consulta SPARQL con filtros opcionales de municipio y categoría.
+  - `GET /municipios`: Utiliza una consulta con `UNION` para encontrar todos los lugares geográficos en la ontología.
+- **Optimización:** Utiliza `threaded=True` para manejar múltiples peticiones sin bloquearse.
+
+### 2. `templates/index.html` (Single Page App)
+- **Tecnologías:** HTML5, CSS3 (Vanilla), JavaScript (ES6).
+- **Librerías Externas:** FontAwesome para iconos.
+- **Funcionalidades Clave:**
+  - **Buscador con Debounce:** Espera 300ms antes de disparar la búsqueda para optimizar recursos.
+  - **AbortController:** Cancela peticiones pendientes si el usuario escribe muy rápido.
+  - **LocalStorage:** Guarda el array de favoritos localmente en el dispositivo del usuario.
+  - **Geolocalización Indirecta:** Genera URLs de búsqueda de Google Maps basadas en los nombres de los municipios.
+
+## Notas de Desarrollo:
+- La conexión con la ontología es relativa: `../ontologia/CLASE1.rdf`.
+- Los estilos están diseñados para ser responsivos (móviles y PC).

@@ -2,7 +2,7 @@ import rdflib
 
 g = rdflib.Graph()
 print("Cargando datos del Caquetá...")
-g.parse("CLASE1.rdf", format="xml")
+g.parse("../ontologia/CLASE1.rdf", format="xml")
 
 # Consulta para ver el Tipo de Actividad y la Dificultad
 query = """
