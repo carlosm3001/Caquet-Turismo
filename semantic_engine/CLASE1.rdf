@@ -223,16 +223,21 @@
 
     <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alpha -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alpha">
-        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_La_Novia">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
-        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
         <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
-        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
-        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
-        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
         <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Hotel_Caqueta_Real">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+        <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_El_Danubio">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
         <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
     </owl:NamedIndividual>
     
@@ -240,17 +245,10 @@
 
     <!-- http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alphazap -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alphazap">
-        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#TurismoExtremo"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Finca_Turistica_La_Esmeralda">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Alojamiento"/>
         <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#ElDoncello"/>
-        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
-        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
-        <untitled-ontology-3:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#BelÃ©nDeLosAndaquÃ­es"/>
-        <untitled-ontology-3:nivelDificultad>Alto</untitled-ontology-3:nivelDificultad>
         <untitled-ontology-3:nivelDificultad>Bajo</untitled-ontology-3:nivelDificultad>
-        <untitled-ontology-3:nivelDificultad>Medio</untitled-ontology-3:nivelDificultad>
     </owl:NamedIndividual>
     
 
