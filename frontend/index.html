@@ -140,6 +140,10 @@
         document.getElementById('googleSection').classList.toggle('hidden', isLogin);
     }
 
+    function toggleLogin(show) { document.getElementById('loginOverlay').classList.toggle('hidden', !show); }
+    function logout() { localStorage.removeItem('access_token'); sessionStorage.clear(); window.location.href = "/"; }
+    function loginWithGoogle() { window.location.href = `${API}/auth/google`; }
+
     async function authAction() {
         const isLogin = document.getElementById('authTitle').innerText === 'Bienvenido';
         const endpoint = isLogin ? 'login' : 'register';

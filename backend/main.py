@@ -53,7 +53,7 @@ if os.getenv("GOOGLE_CLIENT_ID"):
 import json
 
 # --- PERSISTENCIA DE USUARIOS ---
-USERS_FILE = "users.json"
+USERS_FILE = "/tmp/users.json" if os.getenv("VERCEL") else "users.json"
 def load_users():
     if os.path.exists(USERS_FILE):
         with open(USERS_FILE, "r") as f: return json.load(f)
