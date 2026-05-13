@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse, RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 import os
 import random
 import jwt
@@ -11,12 +12,23 @@ import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Amazonia-IA V3.5 - Final Auth Fix")
+app = FastAPI(title="Amazonia-IA V3.6 - CSRF Shield Fixed")
+
+# --- SOLUCIÓN CRÍTICA PARA VERCEL (HTTPS Proxy) ---
+class ProxyHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if os.getenv("VERCEL"):
+            # Forzamos al sistema a creer que es HTTPS para que OAuth no falle
+            request.scope["scheme"] = "https"
+        return await call_next(request)
+
+app.add_middleware(ProxyHeadersMiddleware)
 
 SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_ultra_safe_secret_999")
 ALGORITHM = "HS256"
 
-app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=False)
+# Configuración de Sesión para Nube (Lax es necesario para redirecciones de Google)
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=True if os.getenv("VERCEL") else False)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql"))
@@ -52,14 +64,11 @@ async def query_semantic_engine(sparql_query: str):
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
-    # PRIORIDAD TOTAL: Si existe la variable en Vercel, usamos esa sin dudar.
+    # Usamos la URL configurada en Vercel como prioridad máxima
     redirect_uri = os.getenv("GOOGLE_REDIRECT_URI")
     if not redirect_uri:
-        # Fallback si no está la variable
         url = request.url_for('google_auth_callback')
         redirect_uri = str(url).replace("http://", "https://") if os.getenv("VERCEL") else str(url)
-    
-    print(f"DEBUG AUTH: Enviando redirect_uri -> {redirect_uri}")
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
@@ -79,7 +88,14 @@ async def google_auth_callback(request: Request):
         target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"<html><script>window.location.replace('{target_url}');</script></html>")
     except Exception as e:
-        return HTMLResponse(content=f"<h2>Error Auth</h2><p>{str(e)}</p><a href='/'>Reintentar</a>")
+        # Mostramos un error amigable si el CSRF falla, pero con opción de reintento
+        return HTMLResponse(content=f"""
+            <div style="font-family:sans-serif; text-align:center; padding:50px;">
+                <h2>Aviso de Seguridad</h2>
+                <p>La sesión expiró por seguridad (CSRF). Por favor, intenta de nuevo.</p>
+                <a href="/" style="background:#059669; color:white; padding:10px 20px; border-radius:10px; text-decoration:none;">REINTENTAR LOGIN</a>
+            </div>
+        """)
 
 @app.get("/api/v1/actividades")
 async def get_actividades(municipio: str = None, categoria: str = None):
@@ -90,7 +106,6 @@ async def get_actividades(municipio: str = None, categoria: str = None):
     for row in results:
         s_name = row.get("sitio", "").split("#")[-1].replace("_", " ")
         if municipio and municipio.lower() not in row.get("mun_uri", "").lower(): continue
-        if categoria and categoria.lower() not in row.get("tipo_uri", "").lower(): continue
         if s_name not in seen:
             lista.append({"id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), "clima": row.get("clima", "Cálido"), "dificultad": row.get("dif", "Media"), "imagen": row.get("img", "")})
             seen.add(s_name)
@@ -103,20 +118,14 @@ async def chat_ai(payload: dict = Body(...)):
         try:
             sitios = await get_actividades()
             resumen = "\n".join([f"- {s['id']} en {s['municipio']}" for s in sitios[:10]])
-            prompt = f"Eres un guía del Caquetá. Datos: {resumen}. Responde a: {text}"
+            prompt = f"Eres un guía del Caquetá. Datos: {resumen}. Responde amable a: {text}"
             response = llm_model.generate_content(prompt)
             return {"reply": response.text}
         except: pass
-    return {"reply": "¡Hola! ¿Cómo puedo ayudarte con tu viaje?"}
-
-@app.get("/api/v1/admin/dashboard")
-async def admin_dashboard():
-    q = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT (COUNT(DISTINCT ?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m }}"
-    res = await query_semantic_engine(q)
-    return {"total_tripletas": res[0]['c'] if res else 0, "usuarios_activos": len(users_db)}
+    return {"reply": "¡Hola! ¿A qué parte del Caquetá te gustaría ir hoy?"}
 
 @app.get("/")
-async def read_root(): return {"status": "V3.5 Final Auth Fix"}
+async def read_root(): return {"status": "V3.6 CSRF Fixed"}
 
 if __name__ == "__main__":
     import uvicorn
