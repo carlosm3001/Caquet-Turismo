@@ -25,7 +25,7 @@ BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontolo
 SECRET_KEY = "caqueta_secret_key_123"
 ALGORITHM = "HS256"
 
-# Configuración de sesión robusta para local (Paso 6.1)
+# Configuración de sesión robusta para local
 app.add_middleware(SessionMiddleware, secret_key="session_secret_xyz_789", same_site="lax", https_only=False)
 
 app.add_middleware(
@@ -105,7 +105,6 @@ async def google_login(request: Request):
 @app.get("/api/v1/auth/google/callback")
 async def google_auth_callback(request: Request):
     try:
-        # 1. Intentar obtener el token de Google
         token = await oauth.google.authorize_access_token(request)
         user_info = token.get('userinfo')
         if not user_info:
@@ -113,7 +112,6 @@ async def google_auth_callback(request: Request):
         
         email = user_info['email']
         if email not in users_db:
-            # Registro automático
             users_db[email] = {
                 "password": str(random.randint(100000, 999999)),
                 "role": "turista",
@@ -179,53 +177,68 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         })
     return lista
 
-# --- IA CON MEMORIA DE CONTEXTO ---
+# --- IA CON MEMORIA DE CONTEXTO (VERSIÓN HUMANIZADA FINAL) ---
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     text = payload.get("message", "").lower()
     user_id = payload.get("email", "default")
     
-    if user_id not in chat_context: chat_context[user_id] = {"mun": None, "cat": None}
+    if user_id not in chat_context: 
+        chat_context[user_id] = {"mun": None, "cat": None, "last_results": []}
+    
     ctx = chat_context[user_id]
-
-    # Detección de municipios y categorías
+    saludos = ["¡Hola! Qué gusto saludarte.", "¡Claro que sí!", "Excelente pregunta.", "Bienvenido a la consulta semántica."]
+    
     muns = ["florencia", "morelia", "doncello", "belen", "san vicente", "puerto rico"]
-    cats = ["cascada", "caminata", "senderismo", "extremo", "hotel", "reserva"]
+    cats_map = {
+        "cascada": ["cascada", "chorro", "quebrada"],
+        "hotel": ["hospedaje", "hotel", "dormir", "alojamiento"],
+        "caminata": ["caminata", "senderismo", "senderos"],
+        "extremo": ["extremo", "deporte", "aventura"]
+    }
     
     for m in muns:
         if m in text: ctx["mun"] = m
-    for c in cats:
-        if c in text: ctx["cat"] = c
+    for official_cat, aliases in cats_map.items():
+        for alias in aliases:
+            if alias in text: ctx["cat"] = official_cat
 
-    # 1. CASO: Pregunta por CANTIDAD (¿Cuántos...?)
-    if "cuántos" in text or "cuantos" in text or "cantidad" in text:
-        q_count = f"SELECT (COUNT(?s) as ?c) WHERE {{ ?s <{BASE_PREFIX}ubicadaEn> ?m . FILTER(CONTAINS(LCASE(STR(?m)), '{ctx['mun'] or ''}')) }}"
-        res = await query_semantic_engine(q_count)
-        count = res[0]['c'] if res else "0"
-        return {"reply": f"En mi base de datos RDF tengo registrados **{count} sitios** en {ctx['mun'] or 'el departamento'}. ¿Quieres ver la lista?"}
+    # 1. CASO: Pedir MÁS INFORMACIÓN
+    if any(phrase in text for phrase in ["más información", "cuéntame más", "detalle", "mas informacion", "hablame mas"]):
+        if ctx["last_results"]:
+            sitio = random.choice(ctx["last_results"])
+            return {"reply": f"¡Por supuesto! Hablemos de **{sitio['id']}**. Es un lugar maravilloso ubicado en {sitio['municipio']}. El clima allí es **{sitio['clima']}** y tiene una dificultad de acceso **{sitio['dificultad']}**. ¿Te gustaría saber algo más?"}
+        return {"reply": "Claro, pero primero dime de qué lugar te gustaría saber más o elige un municipio para empezar."}
 
-    # 2. CASO: Pregunta por CLIMA
-    if "clima" in text or "temperatura" in text or "clima" in text:
-        if not ctx["mun"]: return {"reply": "¿De qué municipio te gustaría saber el clima?"}
+    # 2. CASO: Pregunta por CANTIDAD
+    if any(word in text for word in ["cuántos", "cuantos", "cantidad", "muchos"]):
+        results = await get_actividades(municipio=ctx["mun"])
+        count = len(results)
+        return {"reply": f"¡Interesante! He consultado la ontología y he encontrado **{count} sitios** en {ctx['mun'] or 'todo el departamento'}. ¿Te gustaría que filtremos por cascadas o por hospedaje?"}
+
+    # 3. CASO: Pregunta por CLIMA
+    if "clima" in text or "temperatura" in text:
+        if not ctx["mun"]: return {"reply": "Me encantaría decirte, pero ¿de qué municipio quieres saber el clima?"}
         q_clima = f"SELECT ?clima WHERE {{ ?m <{BASE_PREFIX}clima> ?clima . FILTER(CONTAINS(LCASE(STR(?m)), '{ctx['mun']}')) }} LIMIT 1"
         res = await query_semantic_engine(q_clima)
-        clima = res[0]['clima'] if res else "Tropical"
-        return {"reply": f"El clima en {ctx['mun'].capitalize()} es predominantemente **{clima}**. Es ideal para actividades de {ctx['cat'] or 'naturaleza'}."}
+        clima = res[0]['clima'] if res else "Cálido Tropical"
+        return {"reply": f"El clima en {ctx['mun'].capitalize()} es **{clima}**. ¡Es un tiempo perfecto para salir a explorar hoy! ¿Buscas algún sitio en especial?"}
 
-    # 3. CASO: Búsqueda general de actividades
+    # 4. CASO: Búsqueda general o seguimiento
     results = await get_actividades(municipio=ctx["mun"], categoria=ctx["cat"])
+    ctx["last_results"] = results 
+
     if not results:
-        return {"reply": "Aún no tengo registros específicos para esa búsqueda. ¿Quieres probar con otro municipio del Caquetá?"}
+        return {"reply": f"Vaya, mi base de datos RDF todavía no tiene esa combinación exacta en {ctx['mun'] or 'el Caquetá'}. ¿Qué tal si probamos buscando solo en el municipio?"}
 
     if ctx["mun"] and ctx["cat"]:
-        reply = f"¡Buena elección! En {ctx['mun'].capitalize()} encontré {len(results)} opciones de {ctx['cat']}. El sitio **{results[0]['id']}** es muy popular."
-    elif ctx["mun"]:
-        reply = f"He encontrado {len(results)} destinos en {ctx['mun'].capitalize()}. ¿Buscas algo como cascadas o prefieres hospedaje?"
-    else:
-        rec = random.choice(results)
-        reply = f"Caquetá tiene {len(results)} maravillas semánticas. Te sugiero empezar por **{rec['id']}** en {rec['municipio']}. ¿Te cuento más?"
+        return {"reply": f"¡Qué buena elección! Para {ctx['cat']} en {ctx['mun'].capitalize()} encontré {len(results)} opciones increíbles. Te recomiendo mucho visitar **{results[0]['id']}**. ¿Quieres que te cuente los detalles de este sitio?"}
     
-    return {"reply": reply, "data": results}
+    if ctx["mun"]:
+        return {"reply": f"En {ctx['mun'].capitalize()} hay {len(results)} lugares esperando por ti en mi ontología. ¿Prefieres que te muestre las cascadas de la zona o estás buscando un buen hotel?"}
+
+    rec = random.choice(results) if results else {"id": "Caquetá", "municipio": "nuestra región"}
+    return {"reply": f"{random.choice(saludos)} El Caquetá tiene muchos tesoros por descubrir. Por ejemplo, puedes visitar **{rec.get('id')}** en {rec.get('municipio')}. ¿Te interesa algún municipio en particular?"}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
@@ -237,7 +250,6 @@ async def admin_dashboard():
     res2_raw = await query_semantic_engine(q2)
     res2 = {row["t"].split("#")[-1]: int(row["c"]) for row in res2_raw}
     
-    # Para el total de tripletas, pedimos un status al motor
     async with httpx.AsyncClient() as client:
         try:
             status_resp = await client.get(SEMANTIC_ENGINE_URL.replace("/sparql", "/status"))
