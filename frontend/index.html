@@ -11,9 +11,10 @@
         body { font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
         .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .hero-gradient { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; }
-        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(6, 78, 59, 0.15); }
         .animate-fade-in { animation: fadeIn 1s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .text-gradient { background: linear-gradient(to right, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body class="bg-[#fafafa] text-slate-900 overflow-x-hidden">
@@ -27,30 +28,31 @@
             <input type="email" id="email" placeholder="Email" value="admin@gmail.com" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none">
             <input type="password" id="pass" placeholder="Password" value="admin" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none">
             <button onclick="auth('login')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-xl transition-all">INGRESAR</button>
-            <div class="py-2 text-xs font-bold text-slate-300">O TAMBIÉN</div>
-            <button onclick="loginWithGoogle()" class="w-full py-4 bg-white border border-slate-200 text-slate-600 font-bold rounded-2xl flex items-center justify-center gap-3"><img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5"> Google</button>
-            <button onclick="toggleLogin(false)" class="text-slate-400 text-xs font-bold uppercase tracking-widest mt-4">Cerrar</button>
+            <div class="py-2 text-xs font-bold text-slate-300 uppercase tracking-widest">O con tu cuenta</div>
+            <button onclick="loginWithGoogle()" class="w-full py-4 bg-white border border-slate-200 text-slate-600 font-bold rounded-2xl flex items-center justify-center gap-3"><img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5"> Google Login</button>
+            <button onclick="toggleLogin(false)" class="text-slate-400 text-xs font-bold uppercase tracking-widest mt-6 hover:text-emerald-600 transition-colors">Tal vez luego</button>
         </div>
     </div>
 </div>
 
-<!-- NAVBAR -->
+<!-- NAVBAR SUPERIOR -->
 <nav class="fixed top-0 left-0 right-0 h-24 glass-nav z-[1000] px-10 flex items-center justify-between">
-    <div class="flex items-center gap-2 cursor-pointer" onclick="showView('inicio')">
-        <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-leaf"></i></div>
+    <div class="flex items-center gap-3 cursor-pointer" onclick="showView('inicio')">
+        <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-200"><i class="fas fa-leaf text-xl"></i></div>
         <span class="text-2xl font-black tracking-tighter text-emerald-950 uppercase">Caquetá <span class="text-emerald-500">Bio</span></span>
     </div>
-    <div id="topNav" class="hidden md:flex items-center gap-8 font-bold text-sm text-slate-500 uppercase tracking-widest">
-        <button onclick="showView('inicio')" class="hover:text-emerald-600 transition-colors">Inicio</button>
-        <button onclick="showView('explorar')" class="hover:text-emerald-600 transition-colors">Explorar</button>
+    <div id="topNav" class="hidden md:flex items-center gap-10 font-bold text-xs text-slate-400 uppercase tracking-[0.2em]">
+        <button onclick="showView('inicio')" class="hover:text-emerald-600 transition-colors active:text-emerald-600">Inicio</button>
+        <button onclick="showView('explorar')" class="hover:text-emerald-600 transition-colors">Destinos</button>
         <button onclick="showView('municipios')" class="hover:text-emerald-600 transition-colors">Estadísticas</button>
-        <div id="adminLink" class="hidden"><button onclick="showView('gestion')" class="hover:text-emerald-600 transition-colors">Administrar</button></div>
+        <div id="adminLink" class="hidden"><button onclick="showView('gestion')" class="hover:text-emerald-600 transition-colors">Panel Admin</button></div>
     </div>
     <div class="flex items-center gap-4">
-        <div id="userBtn" onclick="toggleLogin(true)" class="px-6 py-3 bg-emerald-600 text-white rounded-full text-xs font-black cursor-pointer hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 uppercase tracking-widest">Iniciar Sesión</div>
-        <div id="userInfo" class="hidden flex items-center gap-3">
-            <span id="userName" class="text-xs font-bold text-slate-600"></span>
-            <div onclick="logout()" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 cursor-pointer hover:bg-red-50 hover:text-red-400 transition-all"><i class="fas fa-power-off"></i></div>
+        <div id="userBtn" onclick="toggleLogin(true)" class="px-8 py-3 bg-emerald-600 text-white rounded-full text-[10px] font-black cursor-pointer hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-100 uppercase tracking-[0.15em]">Acceder</div>
+        <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-50 p-2 pr-6 rounded-full border border-slate-100">
+            <div id="userAvatar" class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold">?</div>
+            <span id="userName" class="text-xs font-black text-emerald-900 uppercase"></span>
+            <div onclick="logout()" class="text-slate-300 cursor-pointer hover:text-red-500 transition-all ml-2"><i class="fas fa-sign-out-alt"></i></div>
         </div>
     </div>
 </nav>
@@ -61,16 +63,23 @@
 <!-- CHAT IA -->
 <div id="chatWidget" class="fixed bottom-32 right-8 w-96 h-[550px] bg-white rounded-[3rem] shadow-2xl border border-slate-100 hidden flex-col overflow-hidden z-[4000]">
     <div class="p-8 bg-emerald-600 text-white">
-        <h4 class="font-black text-xl tracking-tighter">Amazonia-IA</h4>
-        <p class="text-[10px] opacity-70 font-bold uppercase tracking-widest">Guía Semántico Experto</p>
+        <div class="flex justify-between items-center">
+            <div>
+                <h4 class="font-black text-2xl tracking-tighter">Amazonia-IA</h4>
+                <p class="text-[10px] opacity-70 font-bold uppercase tracking-widest">Guía Semántico Experto</p>
+            </div>
+            <button onclick="toggleChat()" class="opacity-50 hover:opacity-100"><i class="fas fa-times text-xl"></i></button>
+        </div>
     </div>
-    <div id="chatMsgs" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/50"></div>
+    <div id="chatMsgs" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/50">
+        <div class="flex justify-start"><div class="bg-white p-5 rounded-[2rem] rounded-tl-none text-sm border border-slate-100 shadow-sm text-slate-600 italic">¡Hola! Soy tu asistente inteligente. Pregúntame sobre el clima o sitios del Caquetá.</div></div>
+    </div>
     <div class="p-6 bg-white border-t flex gap-3">
-        <input type="text" id="chatIn" placeholder="¿Dónde quieres ir hoy?" class="flex-1 px-4 py-4 bg-slate-100 rounded-2xl outline-none text-sm">
-        <button onclick="sendChat()" class="w-14 h-14 bg-emerald-600 text-white rounded-2xl shadow-lg flex items-center justify-center"><i class="fas fa-paper-plane"></i></button>
+        <input type="text" id="chatIn" placeholder="¿Dónde quieres ir hoy?" class="flex-1 px-5 py-4 bg-slate-100 rounded-2xl outline-none text-sm focus:ring-2 focus:ring-emerald-500 transition-all">
+        <button onclick="sendChat()" class="w-14 h-14 bg-emerald-600 text-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-105 transition-all"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
-<button id="chatBtn" onclick="toggleChat()" class="fixed bottom-8 right-8 w-20 h-20 bg-emerald-950 text-white rounded-3xl shadow-2xl hidden items-center justify-center text-3xl z-[4000] hover:scale-110 transition-all"><i class="fas fa-comment-dots text-emerald-400"></i></button>
+<button id="chatBtn" onclick="toggleChat()" class="fixed bottom-8 right-8 w-20 h-20 bg-emerald-950 text-white rounded-[2rem] shadow-2xl hidden items-center justify-center text-3xl z-[4000] hover:scale-110 transition-all"><i class="fas fa-comment-dots text-emerald-400"></i></button>
 
 <script>
     const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? "http://localhost:8001/api/v1" : "/api/v1";
@@ -91,7 +100,8 @@
         if(!user) return;
         document.getElementById('userBtn').classList.add('hidden');
         document.getElementById('userInfo').classList.remove('hidden');
-        document.getElementById('userName').innerText = user.name;
+        document.getElementById('userName').innerText = user.name.split(' ')[0];
+        document.getElementById('userAvatar').innerText = user.name.charAt(0);
         document.getElementById('chatBtn').style.display = 'flex';
         if(user.role==='admin') document.getElementById('adminLink').classList.remove('hidden');
     }
@@ -110,45 +120,77 @@
         const container = document.getElementById('mainContainer');
         if(view==='inicio') {
             container.innerHTML = `
-                <section class="hero-gradient h-[70vh] flex items-center justify-center text-center px-6">
-                    <div class="animate-fade-in max-w-4xl">
-                        <span class="text-emerald-400 font-black text-xs tracking-[0.3em] uppercase mb-4 block">Tesoro Escondido de Colombia</span>
-                        <h1 class="text-white text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6">EL CAQUETÁ <br/>TE ESPERA</h1>
-                        <p class="text-white/80 text-xl font-light max-w-2xl mx-auto mb-10 leading-relaxed">Explora la puerta de oro de la Amazonía. Un ecosistema único de cascadas, selva y biodiversidad infinita.</p>
-                        <div class="flex gap-4 justify-center">
-                            <button onclick="showView('explorar')" class="bg-emerald-500 hover:bg-emerald-400 text-white px-10 py-5 rounded-2xl font-black transition-all shadow-2xl">DESCUBRIR DESTINOS</button>
-                            <button onclick="document.getElementById('fauna').scrollIntoView()" class="bg-white/10 backdrop-blur hover:bg-white/20 text-white px-10 py-5 rounded-2xl font-black transition-all">CONOCER FAUNA</button>
+                <!-- HERO SECTION -->
+                <section class="hero-gradient h-[80vh] flex items-center justify-center text-center px-6 relative">
+                    <div class="animate-fade-in max-w-5xl z-10">
+                        <span class="text-emerald-400 font-black text-xs tracking-[0.5em] uppercase mb-6 block bg-emerald-950/30 w-fit mx-auto px-4 py-2 rounded-lg backdrop-blur-sm">Corazón de la Amazonía</span>
+                        <h1 class="text-white text-7xl md:text-[10rem] font-black tracking-tighter leading-[0.8] mb-8 drop-shadow-2xl">CAQUETÁ <br/><span class="text-emerald-500 font-light italic">ES VIDA</span></h1>
+                        <p class="text-white/90 text-2xl font-light max-w-3xl mx-auto mb-12 leading-relaxed drop-shadow-lg">Explora un paraíso oculto de cascadas cristalinas, selva virgen y la mayor biodiversidad del mundo.</p>
+                        <div class="flex gap-6 justify-center">
+                            <button onclick="showView('explorar')" class="bg-emerald-500 hover:bg-emerald-400 text-white px-12 py-5 rounded-[2rem] font-black transition-all shadow-2xl hover:scale-105 uppercase tracking-widest text-xs">Descubrir Destinos</button>
+                            <button onclick="document.getElementById('fauna').scrollIntoView({behavior:'smooth'})" class="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white px-12 py-5 rounded-[2rem] font-black transition-all uppercase tracking-widest text-xs border border-white/20">Galería Natural</button>
                         </div>
                     </div>
                 </section>
                 
-                <section id="fauna" class="py-24 px-10 max-w-7xl mx-auto">
-                    <div class="flex justify-between items-end mb-16">
-                        <div>
-                            <h2 class="text-4xl font-black text-emerald-950 tracking-tighter">Sinfonía Amazónica</h2>
-                            <p class="text-slate-400 font-medium uppercase tracking-widest text-[10px] mt-2">Nuestra Biodiversidad</p>
+                <!-- FAUNA SECTION -->
+                <section id="fauna" class="py-32 px-10 max-w-7xl mx-auto">
+                    <div class="text-center mb-24">
+                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter mb-4 italic">Guardianes de la Selva</h2>
+                        <div class="h-2 w-24 bg-emerald-500 mx-auto rounded-full"></div>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mt-6">Fauna Exótica del Caquetá</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                        <!-- JAGUAR -->
+                        <div class="card-hover group relative rounded-[4rem] overflow-hidden h-[600px] shadow-2xl transition-all border-8 border-white">
+                            <img src="https://images.unsplash.com/photo-1590420485404-f86d22b8ab18?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/20 to-transparent p-12 flex flex-col justify-end">
+                                <span class="text-emerald-400 font-black text-[10px] tracking-widest uppercase mb-2">Felino Real</span>
+                                <h3 class="text-white text-4xl font-black mb-4 tracking-tighter">El Jaguar</h3>
+                                <p class="text-white/70 text-sm leading-relaxed font-light">El tercer felino más grande del mundo habita en nuestras selvas, siendo el símbolo supremo de la conservación amazónica.</p>
+                            </div>
+                        </div>
+                        <!-- GUACAMAYAS -->
+                        <div class="card-hover group relative rounded-[4rem] overflow-hidden h-[600px] shadow-2xl transition-all border-8 border-white">
+                            <img src="https://images.unsplash.com/photo-1550853024-fae8cd4be47f?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/20 to-transparent p-12 flex flex-col justify-end">
+                                <span class="text-emerald-400 font-black text-[10px] tracking-widest uppercase mb-2">Aves Sagradas</span>
+                                <h3 class="text-white text-4xl font-black mb-4 tracking-tighter">Guacamayas</h3>
+                                <p class="text-white/70 text-sm leading-relaxed font-light">Los cielos del Caquetá se pintan de rojo, azul y amarillo con estas majestuosas aves que simbolizan la libertad de la Amazonía.</p>
+                            </div>
+                        </div>
+                        <!-- DELFIN -->
+                        <div class="card-hover group relative rounded-[4rem] overflow-hidden h-[600px] shadow-2xl transition-all border-8 border-white">
+                            <img src="https://images.pexels.com/photos/29026330/pexels-photo-29026330.jpeg?auto=compress&cs=tinysrgb&w=800" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/20 to-transparent p-12 flex flex-col justify-end">
+                                <span class="text-emerald-400 font-black text-[10px] tracking-widest uppercase mb-2">Espíritu del Río</span>
+                                <h3 class="text-white text-4xl font-black mb-4 tracking-tighter">Delfín Rosado</h3>
+                                <p class="text-white/70 text-sm leading-relaxed font-light">Una leyenda viviente que nada en nuestros ríos. Un encuentro mágico que solo podrás vivir en las aguas del sur colombiano.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="card-hover group relative rounded-[3rem] overflow-hidden h-[500px] shadow-2xl transition-all">
-                            <img src="https://images.unsplash.com/photo-1541033073546-210df2155709?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent p-10 flex flex-col justify-end">
-                                <h3 class="text-white text-3xl font-black mb-2">El Jaguar</h3>
-                                <p class="text-white/60 text-sm leading-relaxed">El guardián de la selva. Símbolo de poder y misticismo en el corazón del Caquetá.</p>
+                </section>
+
+                <!-- INFO SECTION -->
+                <section class="bg-emerald-900 py-32 px-10 text-white overflow-hidden relative">
+                    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
+                        <div class="flex-1">
+                            <h2 class="text-6xl font-black tracking-tighter mb-8 italic">Puerta de Oro de la <span class="text-emerald-400">Amazonía</span></h2>
+                            <p class="text-xl font-light leading-relaxed mb-10 opacity-80 text-justify">Caquetá es un departamento donde el agua es el protagonista. Con cientos de cascadas inexploradas y una cultura resiliente, ofrecemos una experiencia de turismo sostenible que respeta la vida y conecta el alma con la tierra.</p>
+                            <div class="grid grid-cols-2 gap-8">
+                                <div class="bg-white/5 p-6 rounded-3xl backdrop-blur-sm border border-white/10 text-center">
+                                    <h4 class="text-4xl font-black text-emerald-400">100+</h4>
+                                    <p class="text-[10px] uppercase font-bold tracking-widest opacity-50">Cascadas Mapeadas</p>
+                                </div>
+                                <div class="bg-white/5 p-6 rounded-3xl backdrop-blur-sm border border-white/10 text-center">
+                                    <h4 class="text-4xl font-black text-emerald-400">16</h4>
+                                    <p class="text-[10px] uppercase font-bold tracking-widest opacity-50">Municipios Verdes</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-hover group relative rounded-[3rem] overflow-hidden h-[500px] shadow-2xl transition-all">
-                            <img src="https://images.unsplash.com/photo-1552728089-57bdde30ec3d?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent p-10 flex flex-col justify-end">
-                                <h3 class="text-white text-3xl font-black mb-2">Guacamayas</h3>
-                                <p class="text-white/60 text-sm leading-relaxed">Colores vibrantes que cruzan el cielo de Florencia y San Vicente del Caguán.</p>
-                            </div>
-                        </div>
-                        <div class="card-hover group relative rounded-[3rem] overflow-hidden h-[500px] shadow-2xl transition-all">
-                            <img src="https://images.unsplash.com/photo-1581404172403-92f7c00e6205?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent p-10 flex flex-col justify-end">
-                                <h3 class="text-white text-3xl font-black mb-2">Delfín Rosado</h3>
-                                <p class="text-white/60 text-sm leading-relaxed">Leyenda viva de nuestros ríos. Un encuentro espiritual en las aguas amazónicas.</p>
+                        <div class="flex-1 relative">
+                            <div class="w-full h-[500px] rounded-[4rem] overflow-hidden shadow-2xl rotate-3">
+                                <img src="https://images.unsplash.com/photo-1549468057-5b7fa1a41d7a?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover">
                             </div>
                         </div>
                     </div>
@@ -158,19 +200,25 @@
             const res = await fetch(`${API}/actividades`);
             const data = await res.json();
             container.innerHTML = `
-                <div class="px-10 py-16 max-w-7xl mx-auto">
-                    <h2 class="text-5xl font-black text-emerald-950 tracking-tighter mb-12 italic">Catálogo de Maravillas</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="px-10 py-24 max-w-7xl mx-auto animate-fade-in">
+                    <div class="flex justify-between items-center mb-16">
+                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Destinos Mágicos</h2>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Resultados</p>
+                            <p class="text-3xl font-black text-emerald-600 tracking-tighter">${data.length} Sitios</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                         ${data.map(d => `
-                        <div onclick="requireAuth()" class="group bg-white rounded-[3rem] overflow-hidden shadow-xl hover:-translate-y-4 transition-all cursor-pointer">
-                            <div class="h-64 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700" style="background-image: url('${d.imagen}')"></div>
-                            <div class="p-8">
-                                <div class="flex justify-between items-start">
-                                    <div><p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">${d.categoria}</p><h3 class="text-2xl font-black text-slate-800">${d.id}</h3></div>
-                                    <div class="text-right"><p class="text-[10px] font-bold text-slate-300 uppercase">Municipio</p><p class="text-xs font-black text-slate-500">${d.municipio}</p></div>
-                                </div>
-                                <div class="mt-8 pt-6 border-t border-slate-50 flex justify-between items-center font-bold text-[10px] text-slate-400">
-                                    <span>🌡️ ${d.clima}</span><span>⛰️ ${d.dificultad}</span>
+                        <div onclick="requireAuth()" class="group bg-white rounded-[4rem] overflow-hidden shadow-2xl hover:-translate-y-4 transition-all cursor-pointer border border-slate-100">
+                            <div class="h-72 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000" style="background-image: url('${d.imagen}')"></div>
+                            <div class="p-10">
+                                <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-full inline-block mb-4">${d.categoria}</span>
+                                <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-2">${d.id}</h3>
+                                <p class="text-slate-400 text-sm mb-8 flex items-center gap-2 font-medium italic"><i class="fas fa-map-marker-alt text-emerald-500"></i> ${d.municipio}</p>
+                                <div class="flex justify-between items-center border-t border-slate-50 pt-8">
+                                    <div class="flex flex-col"><span class="text-[9px] uppercase font-bold text-slate-300 tracking-widest">Clima</span><span class="text-xs font-black text-slate-600">${d.clima}</span></div>
+                                    <div class="flex flex-col text-right"><span class="text-[9px] uppercase font-bold text-slate-300 tracking-widest">Riesgo</span><span class="text-xs font-black text-emerald-600">${d.dificultad}</span></div>
                                 </div>
                             </div>
                         </div>`).join('')}
@@ -182,12 +230,19 @@
             const res = await fetch(`${API}/admin/dashboard`);
             const data = await res.json();
             container.innerHTML = `
-                <div class="px-10 py-16 max-w-7xl mx-auto">
-                    <h2 class="text-4xl font-black mb-12 tracking-tighter italic">Salud de la Ontología</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        <div class="bg-emerald-900 p-10 rounded-[3rem] text-white shadow-2xl">
-                            <p class="text-xs font-bold opacity-50 uppercase tracking-widest mb-4">Conocimiento Total</p>
-                            <h4 class="text-6xl font-black tracking-tighter">${data.total_tripletas} <span class="text-xl opacity-50">Tripletas</span></h4>
+                <div class="px-10 py-24 max-w-7xl mx-auto animate-fade-in">
+                    <h2 class="text-5xl font-black mb-16 tracking-tighter italic">Ecosistema de Datos</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-emerald-950 p-12 rounded-[4rem] text-white shadow-2xl relative overflow-hidden">
+                            <div class="absolute -right-10 -top-10 text-white/5 text-[15rem] font-black rotate-12"><i class="fas fa-database"></i></div>
+                            <p class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-6">Conocimiento Semántico</p>
+                            <h4 class="text-7xl font-black tracking-tighter mb-2">${data.total_tripletas}</h4>
+                            <p class="text-xl opacity-50 font-light italic">Tripletas OWL</p>
+                        </div>
+                        <div class="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-50">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Usuarios Activos</p>
+                            <h4 class="text-7xl font-black tracking-tighter text-emerald-900">${data.usuarios_activos}</h4>
+                            <p class="text-xl opacity-50 font-light italic text-slate-400">Exploradores</p>
                         </div>
                     </div>
                 </div>`;
@@ -195,36 +250,49 @@
         else if(view==='gestion') {
             if(!user || user.role!=='admin') return requireAuth();
             container.innerHTML = `
-                <div class="px-10 py-16 max-w-2xl mx-auto">
-                    <h2 class="text-4xl font-black mb-8 tracking-tighter italic text-center">Nuevo Registro Semántico</h2>
-                    <div class="bg-white p-12 rounded-[3.5rem] shadow-2xl space-y-8">
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase ml-4">Nombre del Sitio</label><input id="lName" class="w-full p-5 bg-slate-50 border-none rounded-2xl mt-2 outline-none focus:ring-2 focus:ring-emerald-500"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[10px] font-bold text-slate-400 uppercase ml-4">Municipio</label><select id="lMun" class="w-full p-5 bg-slate-50 border-none rounded-2xl mt-2 outline-none"><option value="Florencia">Florencia</option><option value="Morelia">Morelia</option><option value="ElDoncello">El Doncello</option></select></div>
-                            <div><label class="text-[10px] font-bold text-slate-400 uppercase ml-4">Categoría</label><select id="lCat" class="w-full p-5 bg-slate-50 border-none rounded-2xl mt-2 outline-none"><option value="Cascada">Cascada</option><option value="Alojamiento">Alojamiento</option><option value="CaminataEcologica">Caminata Ecológica</option></select></div>
+                <div class="px-10 py-24 max-w-3xl mx-auto animate-fade-in">
+                    <h2 class="text-5xl font-black mb-12 tracking-tighter italic text-center text-emerald-950">Alimentar la Ontología</h2>
+                    <div class="bg-white p-16 rounded-[4rem] shadow-2xl space-y-10 border border-slate-50">
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-6">Identificador Único</label>
+                            <input id="lName" placeholder="Ej: Cascada Las Gachas" class="w-full p-6 bg-slate-50 border-none rounded-[2rem] outline-none focus:ring-2 focus:ring-emerald-500 text-lg font-bold transition-all">
                         </div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase ml-4">URL Imagen</label><input id="lImg" class="w-full p-5 bg-slate-50 border-none rounded-2xl mt-2 outline-none"></div>
-                        <button onclick="saveLugar()" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl shadow-2xl hover:scale-105 transition-all uppercase tracking-widest">Sincronizar con RDF Nube</button>
+                        <div class="grid grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <label class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-6">Municipio</label>
+                                <select id="lMun" class="w-full p-6 bg-slate-50 border-none rounded-[2rem] outline-none font-bold text-slate-600"><option value="Florencia">Florencia</option><option value="Morelia">Morelia</option><option value="ElDoncello">El Doncello</option><option value="Belen">Belén</option></select>
+                            </div>
+                            <div class="space-y-4">
+                                <label class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-6">Clase Semántica</label>
+                                <select id="lCat" class="w-full p-6 bg-slate-50 border-none rounded-[2rem] outline-none font-bold text-slate-600"><option value="Cascada">Cascada</option><option value="Alojamiento">Alojamiento</option><option value="CaminataEcologica">Caminata Ecológica</option><option value="TurismoExtremo">Turismo Extremo</option></select>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-6">URL Multimedia</label>
+                            <input id="lImg" placeholder="https://unsplash.com/..." class="w-full p-6 bg-slate-50 border-none rounded-[2rem] outline-none font-medium transition-all">
+                        </div>
+                        <button onclick="saveLugar()" class="w-full py-7 bg-emerald-950 text-emerald-400 font-black rounded-[2.5rem] shadow-2xl hover:scale-105 transition-all uppercase tracking-[0.3em] text-xs">Sincronizar RDF Store</button>
                     </div>
                 </div>`;
         }
+        window.scrollTo(0,0);
     }
 
-    function requireAuth() { if(!user) { toggleLogin(true); alert("🔐 Área exclusiva para exploradores registrados."); } }
+    function requireAuth() { if(!user) { toggleLogin(true); } }
     
     async function saveLugar() {
         const body = { id: document.getElementById('lName').value, categoria: document.getElementById('lCat').value, municipio: document.getElementById('lMun').value, imagen: document.getElementById('lImg').value || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=400" };
         const res = await fetch(`${API}/actividades`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
-        if(res.ok) { alert("¡Sincronizado!"); showView('explorar'); }
+        if(res.ok) { alert("¡Éxito! Ontología actualizada físicamente en la nube."); showView('explorar'); }
     }
 
     function toggleChat() { if(!user) return requireAuth(); const w = document.getElementById('chatWidget'); w.classList.toggle('hidden'); w.classList.toggle('flex'); }
     async function sendChat() {
         const input = document.getElementById('chatIn'); if(!input.value) return;
-        const msgs = document.getElementById('chatMsgs'); msgs.innerHTML += `<div class="flex justify-end"><div class="bg-emerald-950 text-white p-5 rounded-[2rem] rounded-tr-none text-sm shadow-xl">${input.value}</div></div>`;
+        const msgs = document.getElementById('chatMsgs'); msgs.innerHTML += `<div class="flex justify-end animate-fade-in"><div class="bg-emerald-950 text-white p-5 rounded-[2rem] rounded-tr-none text-sm shadow-xl font-medium">${input.value}</div></div>`;
         const res = await fetch(`${API}/chat`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message: input.value, email: user.email}) });
         const data = await res.json();
-        input.value = ''; msgs.innerHTML += `<div class="flex justify-start animate-fade-in"><div class="bg-white p-5 rounded-[2rem] rounded-tl-none text-sm border border-slate-100 shadow-xl"><b>IA:</b> ${data.reply}</div></div>`;
+        input.value = ''; msgs.innerHTML += `<div class="flex justify-start animate-fade-in"><div class="bg-white p-5 rounded-[2rem] rounded-tl-none text-sm border border-slate-100 shadow-xl text-emerald-900 font-bold"><b>IA:</b> ${data.reply}</div></div>`;
         msgs.scrollTop = msgs.scrollHeight;
     }
 </script>
