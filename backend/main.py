@@ -54,10 +54,36 @@ if os.getenv("GOOGLE_CLIENT_ID"):
         client_kwargs={'scope': 'openid email profile'}
     )
 
-# --- PERSISTENCIA SIMPLIFICADA ---
+# --- PERSISTENCIA SEMÁNTICA DE USUARIOS ---
 users_db = {
     "admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador Principal"}
 }
+
+async def sync_users_from_ontology():
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    SELECT ?email ?name ?role ?pass
+    WHERE {{
+      ?u rdf:type :Usuario .
+      ?u :userEmail ?email .
+      ?u :userName ?name .
+      ?u :userRole ?role .
+      OPTIONAL {{ ?u :userPassword ?pass }}
+    }}
+    """
+    results = await query_semantic_engine(query)
+    for row in results:
+        email = str(row["email"])
+        users_db[email] = {
+            "name": str(row["name"]),
+            "role": str(row["role"]),
+            "password": str(row.get("pass", "google_auth"))
+        }
+
+@app.on_event("startup")
+async def startup_event():
+    await sync_users_from_ontology()
+
 chat_context = {}
 
 class LoginRequest(BaseModel):
@@ -102,6 +128,18 @@ def create_token(data: dict):
 
 @app.post("/api/v1/register")
 async def register(data: RegisterRequest):
+    safe_email = data.email.replace("@", "_at_").replace(".", "_")
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    INSERT DATA {{
+      :User_{safe_email} rdf:type :Usuario ;
+                         :userEmail "{data.email}" ;
+                         :userName "{data.name}" ;
+                         :userRole "turista" ;
+                         :userPassword "{data.password}" .
+    }}
+    """
+    await query_semantic_engine(query)
     users_db[data.email] = {"password": data.password, "role": "turista", "name": data.name}
     token = create_token({"email": data.email, "name": data.name, "role": "turista"})
     return {"token": token}
@@ -218,7 +256,7 @@ async def post_actividad(act: ActivityCreate):
 
 @app.get("/api/v1/admin/users")
 async def get_admin_users():
-    # Retorna lista de usuarios (sin passwords por seguridad)
+    await sync_users_from_ontology()
     return [{"email": email, "name": info["name"], "role": info["role"]} for email, info in users_db.items()]
 
 @app.get("/api/v1/admin/user-activities/{email}")

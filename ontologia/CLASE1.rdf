@@ -3,6 +3,19 @@
    xmlns:ns1="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rio_Bodoquero">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Balneario Río Bodoquero</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
+    <ns1:nivelDificultad>Baja</ns1:nivelDificultad>
+    <ns1:tipoActividad>Acuática</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</ns1:precio>
+    <ns1:descripcion>Tradicional balneario natural de aguas frescas.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Portal_del_Fragua">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -29,10 +42,6 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua">
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Tropical Húmedo</ns1:clima>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_El_Danubio">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -46,26 +55,8 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rio_Bodoquero">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
-    <ns1:nombreActividad>Balneario Río Bodoquero</ns1:nombreActividad>
-    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
-    <ns1:nivelDificultad>Baja</ns1:nivelDificultad>
-    <ns1:tipoActividad>Acuática</ns1:tipoActividad>
-    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</ns1:precio>
-    <ns1:descripcion>Tradicional balneario natural de aguas frescas.</ns1:descripcion>
-    <ns1:imagenURL>https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
-    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
-    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Tropical Húmedo</ns1:clima>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Tropical Húmedo</ns1:clima>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tipoActividad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Las_Dalias">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
@@ -80,10 +71,38 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tipoActividad">
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#userName">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Admin">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario"/>
+    <ns1:userEmail>admin@gmail.com</ns1:userEmail>
+    <ns1:userName>Administrador Principal</ns1:userName>
+    <ns1:userRole>admin</ns1:userRole>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nivelDificultad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#userRole">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#userEmail">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
 </rdf:RDF>
