@@ -141,6 +141,43 @@
         return await res.json();
     }
 
+    function toggleAuthMode() {
+        const isLogin = document.getElementById('authTitle').innerText === 'Bienvenido';
+        document.getElementById('authTitle').innerText = isLogin ? 'Crear Cuenta' : 'Bienvenido';
+        document.getElementById('authDesc').innerText = isLogin ? 'Únete a nuestra comunidad' : 'Inicia sesión para explorar';
+        document.getElementById('authBtn').innerText = isLogin ? 'REGISTRARME' : 'INGRESAR';
+        document.getElementById('toggleAuthMode').innerText = isLogin ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate';
+        document.getElementById('regName').classList.toggle('hidden', !isLogin);
+        document.getElementById('googleSection').classList.toggle('hidden', isLogin);
+    }
+
+    async function authAction() {
+        const isLogin = document.getElementById('authTitle').innerText === 'Bienvenido';
+        const endpoint = isLogin ? 'login' : 'register';
+        const body = { 
+            email: document.getElementById('email').value, 
+            password: document.getElementById('pass').value 
+        };
+        if (!isLogin) body.name = document.getElementById('regName').value;
+
+        try {
+            const res = await fetch(`${API}/${endpoint}`, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(body) 
+            });
+            const data = await res.json();
+            if (res.ok) { 
+                localStorage.setItem('access_token', data.token); 
+                location.reload(); 
+            } else {
+                alert(data.detail || "Error en la autenticación");
+            }
+        } catch (e) {
+            alert("Error de conexión con el servidor");
+        }
+    }
+
     function toggleLogin(show) { document.getElementById('loginOverlay').classList.toggle('hidden', !show); }
     function logout() { localStorage.removeItem('access_token'); location.href = "/"; }
     function loginWithGoogle() { location.href = `${API}/auth/google`; }
