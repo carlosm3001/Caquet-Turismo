@@ -194,13 +194,17 @@ async def get_actividades(municipio: str = None, categoria: str = None, dificult
 
 @app.post("/api/v1/actividades")
 async def post_actividad(act: ActivityCreate):
+    # Sanitizar ID para SPARQL (reemplazar espacios por guiones bajos)
+    safe_id = act.id.replace(" ", "_")
+    safe_mun = act.municipio.replace(" ", "_")
+    
     query = f"""
     PREFIX : <{BASE_PREFIX}>
     INSERT DATA {{
-      :{act.id} rdf:type :Actividad ;
+      :{safe_id} rdf:type :Actividad ;
                 :nombreActividad "{act.nombre}" ;
                 :tipoActividad "{act.categoria}" ;
-                :ubicadaEn :{act.municipio} ;
+                :ubicadaEn :{safe_mun} ;
                 :precio {act.precio} ;
                 :imagenURL "{act.imagen}" ;
                 :nivelDificultad "Media" ;
@@ -210,7 +214,17 @@ async def post_actividad(act: ActivityCreate):
     }}
     """
     await query_semantic_engine(query)
-    return {"status": "success", "id": act.id}
+    return {"status": "success", "id": safe_id}
+
+@app.get("/api/v1/admin/users")
+async def get_admin_users():
+    # Retorna lista de usuarios (sin passwords por seguridad)
+    return [{"email": email, "name": info["name"], "role": info["role"]} for email, info in users_db.items()]
+
+@app.get("/api/v1/admin/user-activities/{email}")
+async def get_user_activities(email: str):
+    # Reutilizamos la lógica de mis-reservas para el administrador
+    return await get_mis_reservas(email)
 
 @app.get("/api/v1/stats")
 async def get_semantic_stats():
