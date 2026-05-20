@@ -1,0 +1,44 @@
+services:
+  # --- FRONTEND: SPA Nginx ---
+  frontend:
+    build: ./frontend
+    container_name: frontend-turismo-v8
+    ports:
+      - "80:80"
+    networks:
+      - turistico-net
+    depends_on:
+      - backend-api
+    restart: always
+
+  # --- BACKEND API: FastAPI ---
+  backend-api:
+    build: ./backend
+    container_name: backend-api-turismo-v8
+    ports:
+      - "8001:8001"
+    env_file: .env
+    environment:
+      - SEMANTIC_ENGINE_URL=http://semantic-engine:3030/sparql
+    networks:
+      - turistico-net
+    depends_on:
+      - semantic-engine
+    restart: always
+
+  # --- SEMANTIC ENGINE & RDF-STORE ---
+  # Gestiona la lógica SPARQL y la persistencia de la ontología en RAM/Disco
+  semantic-engine:
+    build: ./semantic_engine
+    container_name: semantic-engine-turismo-v8
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./data/ontologia:/data/ontologia
+    networks:
+      - turistico-net
+    restart: always
+
+networks:
+  turistico-net:
+    driver: bridge

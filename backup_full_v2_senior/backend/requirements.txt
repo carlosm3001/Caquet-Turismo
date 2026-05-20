@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+authlib
+starlette
+pyjwt
+httpx
+cryptography
+itsdangerous
+google-generativeai
