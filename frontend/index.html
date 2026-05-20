@@ -52,6 +52,7 @@
     <div id="topNav" class="hidden md:flex items-center gap-10 font-bold text-[10px] text-slate-400 uppercase tracking-[0.25em]">
         <button onclick="showView('inicio')" class="hover:text-emerald-600 transition-colors">Inicio</button>
         <button onclick="showView('explorar')" class="hover:text-emerald-600 transition-colors">Destinos</button>
+        <button onclick="showView('perfil')" id="profileLink" class="hidden hover:text-emerald-600 transition-colors">Mis Reservas</button>
         <button onclick="showView('municipios')" class="hover:text-emerald-600 transition-colors">Estadísticas</button>
         <div id="adminLink" class="hidden"><button onclick="showView('gestion')" class="hover:text-emerald-600 transition-colors">Panel Admin</button></div>
     </div>
@@ -242,6 +243,7 @@
         if(!user) return;
         document.getElementById('userBtn').classList.add('hidden');
         document.getElementById('userInfo').classList.remove('hidden');
+        document.getElementById('profileLink').classList.remove('hidden');
         document.getElementById('userName').innerText = user.name.split(' ')[0];
         document.getElementById('userAvatar').innerText = user.name.charAt(0);
         document.getElementById('chatBtn').style.display = 'flex';
@@ -378,6 +380,62 @@
             } catch(e) { 
                 grid.innerHTML = `<div class="col-span-3 text-center py-40"><p class="text-emerald-950 font-black">Error cargando datos. Por favor, recarga.</p></div>`; 
             }
+        }
+        else if(view==='perfil') {
+            if(!user) return requireAuth();
+            container.innerHTML = `
+                <div class="px-10 py-20 max-w-5xl mx-auto animate-fade-in">
+                    <div class="mb-16">
+                        <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Área Personal</span>
+                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Mis Reservas</h2>
+                        <p class="text-slate-400 font-medium mt-4">Gestiona tus próximos viajes al paraíso.</p>
+                    </div>
+                    <div id="reservasGrid" class="grid grid-cols-1 gap-8">
+                        <div class="flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-600"></div></div>
+                    </div>
+                </div>`;
+            
+            try {
+                const res = await fetch(`${API}/mis-reservas?email=${user.email}`);
+                const data = await res.json();
+                const grid = document.getElementById('reservasGrid');
+                
+                if(data.length === 0) {
+                    grid.innerHTML = `<div class="bg-white p-20 rounded-[4rem] text-center border border-dashed border-slate-200">
+                        <i class="fas fa-calendar-times text-4xl text-slate-200 mb-6"></i>
+                        <p class="text-slate-400 font-bold">Aún no tienes reservas programadas.</p>
+                        <button onclick="showView('explorar')" class="mt-8 text-emerald-600 font-black text-[10px] uppercase tracking-widest">Explorar destinos ahora</button>
+                    </div>`;
+                    return;
+                }
+
+                grid.innerHTML = data.map(r => `
+                    <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50 flex flex-col md:flex-row justify-between items-center gap-8">
+                        <div class="flex items-center gap-8">
+                            <div class="w-20 h-20 bg-emerald-50 rounded-3xl flex items-center justify-center text-emerald-600 text-2xl"><i class="fas fa-map-marked-alt"></i></div>
+                            <div>
+                                <h3 class="text-2xl font-black text-slate-800 tracking-tighter">${r.lugar}</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reserva #${r.id.split('_')[1]}</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-10">
+                            <div>
+                                <p class="text-[8px] font-black text-slate-300 uppercase mb-1">Fecha</p>
+                                <p class="text-sm font-bold text-slate-600">${r.fecha}</p>
+                            </div>
+                            <div>
+                                <p class="text-[8px] font-black text-slate-300 uppercase mb-1">Detalles</p>
+                                <p class="text-sm font-bold text-slate-600">${r.personas} Pers / ${r.dias} Días</p>
+                            </div>
+                            <div>
+                                <p class="text-[8px] font-black text-slate-300 uppercase mb-1">Total Pagado</p>
+                                <p class="text-sm font-black text-emerald-600">$${new Intl.NumberFormat().format(r.precio_total)}</p>
+                            </div>
+                        </div>
+                        <button class="px-8 py-4 bg-slate-50 text-slate-400 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-red-50 hover:text-red-500 transition-all">Cancelar</button>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
         }
         else if(view==='municipios') {
             if(!user) return requireAuth();

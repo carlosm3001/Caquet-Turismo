@@ -242,6 +242,43 @@ async def post_reserva(res: ReservaRequest):
     results = await query_semantic_engine(query)
     return {"status": "success", "id": res_id}
 
+@app.get("/api/v1/mis-reservas")
+async def get_mis_reservas(email: str):
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT ?reserva ?fecha ?personas ?dias ?lugar_id ?nombre_lugar ?precio_base
+    WHERE {{
+      ?reserva rdf:type :Reserva .
+      ?reserva :usuarioReserva "{email}" .
+      ?reserva :fechaInicio ?fecha .
+      ?reserva :cantidadPersonas ?personas .
+      ?reserva :cantidadDias ?dias .
+      ?reserva :lugarReservado ?lugar_id .
+      OPTIONAL {{ 
+        BIND(URI(CONCAT("{BASE_PREFIX}", ?lugar_id)) AS ?lugar_uri)
+        ?lugar_uri :nombreActividad ?nombre_lugar .
+        ?lugar_uri :precio ?precio_base .
+      }}
+    }}
+    """
+    results = await query_semantic_engine(query)
+    lista = []
+    for row in results:
+        precio_base = int(row.get("precio_base", 0))
+        dias = int(row.get("dias", 1))
+        total = precio_base * dias
+        
+        lista.append({
+            "id": row.get("reserva", "").split("#")[-1],
+            "fecha": row.get("fecha"),
+            "personas": row.get("personas"),
+            "dias": dias,
+            "lugar": row.get("nombre_lugar") or row.get("lugar_id", "Lugar Desconocido"),
+            "precio_total": total
+        })
+    return lista
+
 @app.get("/", response_class=HTMLResponse)
 async def root():
     index_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "index.html")
