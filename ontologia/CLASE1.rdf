@@ -2,101 +2,88 @@
 <rdf:RDF
    xmlns:ns1="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 >
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Portal_del_Fragua">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Portal del Fragua</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua"/>
+    <ns1:nivelDificultad>Alta</ns1:nivelDificultad>
+    <ns1:tipoActividad>Senderismo</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80000</ns1:precio>
+    <ns1:descripcion>Majestuosa formación rocosa, puerta a la serranía de los Churumbelos.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_La_Novia">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Cascada La Novia</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+    <ns1:nivelDificultad>Media</ns1:nivelDificultad>
+    <ns1:tipoActividad>Acuática</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15000</ns1:precio>
+    <ns1:descripcion>Impresionante caída de agua rodeada de selva primaria.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1540206395-6880f94933af?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_El_Danubio">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
     <ns1:nombreActividad>Reserva Natural El Danubio</ns1:nombreActividad>
     <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
     <ns1:nivelDificultad>Media</ns1:nivelDificultad>
+    <ns1:tipoActividad>Acuática</ns1:tipoActividad>
     <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45000</ns1:precio>
-    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
-    <ns1:reservaURL>https://wa.me/573123456789</ns1:reservaURL>
-    <ns1:descripcion>Un santuario de aguas cristalinas color turquesa. Ofrece senderismo selvático y avistamiento de aves exóticas.</ns1:descripcion>
-    <ns1:horario>Sábados y Domingos - 8:00 AM a 4:00 PM</ns1:horario>
+    <ns1:descripcion>Aguas cristalinas color turquesa y senderismo de conservación.</ns1:descripcion>
     <ns1:imagenURL>https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Cálido Húmedo</ns1:clima>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rio_Bodoquero">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
-    <ns1:nombreActividad>Balneario Rio Bodoquero</ns1:nombreActividad>
+    <ns1:nombreActividad>Balneario Río Bodoquero</ns1:nombreActividad>
     <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia"/>
     <ns1:nivelDificultad>Baja</ns1:nivelDificultad>
+    <ns1:tipoActividad>Acuática</ns1:tipoActividad>
     <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</ns1:precio>
-    <ns1:disponibilidad>Acceso Libre</ns1:disponibilidad>
-    <ns1:reservaURL>N/A</ns1:reservaURL>
-    <ns1:descripcion>El balneario más tradicional del Caquetá. Aguas refrescantes y zonas de camping.</ns1:descripcion>
-    <ns1:horario>Acceso libre - Recomendado de 9:00 AM a 6:00 PM</ns1:horario>
+    <ns1:descripcion>Tradicional balneario natural de aguas frescas.</ns1:descripcion>
     <ns1:imagenURL>https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Portal_del_Fragua">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
-    <ns1:nombreActividad>Portal del Fragua</ns1:nombreActividad>
-    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua"/>
-    <ns1:nivelDificultad>Alta</ns1:nivelDificultad>
-    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80000</ns1:precio>
-    <ns1:disponibilidad>Bajo Reserva</ns1:disponibilidad>
-    <ns1:reservaURL>https://wa.me/573123456781</ns1:reservaURL>
-    <ns1:descripcion>Puerta de entrada a la Serranía de los Churumbelos. Experiencia extrema de rafting y exploración.</ns1:descripcion>
-    <ns1:horario>Previa reserva - Mínimo 4 personas</ns1:horario>
-    <ns1:imagenURL>https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Las_Dalias">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#CaminataEcologica"/>
-    <ns1:nombreActividad>Canyon de las Dalias</ns1:nombreActividad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Cañón de las Dalias</ns1:nombreActividad>
     <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
-    <ns1:nivelDificultad>Media</ns1:nivelDificultad>
+    <ns1:nivelDificultad>Baja</ns1:nivelDificultad>
+    <ns1:tipoActividad>Senderismo</ns1:tipoActividad>
     <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25000</ns1:precio>
-    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
-    <ns1:reservaURL>https://wa.me/573123456782</ns1:reservaURL>
-    <ns1:descripcion>Caminata por el lecho de un cañón natural con paredes de piedra milenarias. Una experiencia mística.</ns1:descripcion>
-    <ns1:horario>Fines de semana - Salidas guiadas a las 9:00 AM</ns1:horario>
+    <ns1:descripcion>Caminata por el lecho de un cañón natural milenario.</ns1:descripcion>
     <ns1:imagenURL>https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Cálido Húmedo</ns1:clima>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Cálido Húmedo</ns1:clima>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#lugarReservado">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#imagenURL">
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tipoActividad">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">URL de la imagen representativa</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nivelDificultad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
 </rdf:RDF>

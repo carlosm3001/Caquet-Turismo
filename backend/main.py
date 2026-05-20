@@ -130,24 +130,25 @@ async def google_auth_callback(request: Request):
         return RedirectResponse(url="/?error=auth_failed")
 
 @app.get("/api/v1/actividades")
-async def get_actividades(municipio: str = None, categoria: str = None):
+async def get_actividades(municipio: str = None, categoria: str = None, dificultad: str = None):
     query = f"""
     PREFIX : <{BASE_PREFIX}>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?precio ?disp ?reserva ?desc ?horario ?img
+    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?tipo_act ?precio ?disp ?desc ?horario ?img
     WHERE {{
+      ?sitio rdf:type :Actividad .
       ?sitio :ubicadaEn ?mun_uri .
-      ?sitio rdf:type ?tipo_uri .
-      FILTER(?tipo_uri != <http://www.w3.org/2002/07/owl#NamedIndividual> && ?tipo_uri != <http://www.w3.org/2002/07/owl#Class>)
       OPTIONAL {{ ?sitio :nombreActividad ?nombre . }}
       OPTIONAL {{ ?mun_uri :clima ?clima . }}
       OPTIONAL {{ ?sitio :nivelDificultad ?dif . }}
+      OPTIONAL {{ ?sitio :tipoActividad ?tipo_act . }}
       OPTIONAL {{ ?sitio :precio ?precio . }}
       OPTIONAL {{ ?sitio :disponibilidad ?disp . }}
-      OPTIONAL {{ ?sitio :reservaURL ?reserva . }}
       OPTIONAL {{ ?sitio :descripcion ?desc . }}
       OPTIONAL {{ ?sitio :horario ?horario . }}
       OPTIONAL {{ ?sitio :imagenURL ?img . }}
+      BIND(STR(?nombre) AS ?nameStr)
+      FILTER(?nameStr != "None" && ?nameStr != "")
     }}
     """
     results = await query_semantic_engine(query)
@@ -158,55 +159,50 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         s_id = s_uri.split("#")[-1]
         if s_id in seen: continue
         
-        m_uri = row.get("mun_uri", "")
-        m_name = m_uri.split("#")[-1].replace("_", " ")
-        t_uri = row.get("tipo_uri", "")
-        t_name = t_uri.split("#")[-1]
+        m_name = row.get("mun_uri", "").split("#")[-1].replace("_", " ")
+        t_act = row.get("tipo_act", "General")
+        dif = row.get("dif", "Media")
         
-        # VALIDACIÓN CRÍTICA: Solo añadir si tiene un nombre real
-        raw_name = row.get("nombre")
-        if not raw_name or str(raw_name) == "None" or str(raw_name).strip() == "":
-            continue # Omitir este destino si no tiene nombre
-            
-        # Filtros existentes
+        # Filtros Dinámicos
         if municipio and municipio.lower() not in m_name.lower(): continue
-        if categoria and categoria.lower() not in t_name.lower(): continue
+        if dificultad and dificultad.lower() != dif.lower(): continue
+        if categoria and categoria.lower() not in t_act.lower(): continue
         
-        # Limpieza de valores para el resto de campos
-        clima_val = row.get("clima")
-        if not clima_val or clima_val == "None": clima_val = "Cálido Húmedo"
-        
-        dif_val = row.get("dif")
-        if not dif_val or dif_val == "None": dif_val = "Media"
-        
-        precio_val = row.get("precio")
-        try:
-            if not precio_val or precio_val == "None": precio_val = 0
-            else: precio_val = int(precio_val)
-        except: precio_val = 0
-            
-        disp_val = row.get("disp")
-        if not disp_val or disp_val == "None": disp_val = "Disponible"
-        
-        res_val = row.get("reserva")
-        if not res_val or res_val == "None" or res_val == "#": res_val = "https://wa.me/573000000000"
-
         lista.append({
-            "id": raw_name,
+            "id": row.get("nombre"),
             "real_id": s_id,
-            "categoria": t_name,
+            "categoria": t_act,
             "municipio": m_name,
-            "clima": clima_val,
-            "dificultad": dif_val,
-            "precio": precio_val,
-            "disponibilidad": disp_val,
-            "reserva": res_val,
-            "descripcion": row.get("desc") or "Explora la belleza natural inigualable de este destino en el Caquetá.",
-            "horario": row.get("horario") or "Sujeto a disponibilidad y condiciones climáticas.",
-            "imagen": row.get("img") or "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80&w=800"
+            "clima": row.get("clima") or "Tropical",
+            "dificultad": dif,
+            "precio": int(row.get("precio", 0)),
+            "disponibilidad": row.get("disp") or "Disponible",
+            "descripcion": row.get("desc"),
+            "horario": row.get("horario"),
+            "imagen": row.get("img")
         })
         seen.add(s_id)
     return lista
+
+@app.get("/api/v1/stats")
+async def get_semantic_stats():
+    # 1. Total de atractivos
+    q1 = f"PREFIX : <{BASE_PREFIX}> SELECT (COUNT(?s) as ?count) WHERE {{ ?s rdf:type :Actividad }}"
+    # 2. Atractivos por Municipio
+    q2 = f"PREFIX : <{BASE_PREFIX}> SELECT ?mun (COUNT(?s) as ?count) WHERE {{ ?s :ubicadaEn ?m . BIND(STRAFTER(STR(?m), '#') as ?mun) }} GROUP BY ?mun"
+    # 3. Distribución por Dificultad
+    q3 = f"PREFIX : <{BASE_PREFIX}> SELECT ?dif (COUNT(?s) as ?count) WHERE {{ ?s :nivelDificultad ?dif }} GROUP BY ?dif"
+    
+    r1 = await query_semantic_engine(q1)
+    r2 = await query_semantic_engine(q2)
+    r3 = await query_semantic_engine(q3)
+    
+    return {
+        "total_atractivos": int(r1[0]["count"]) if r1 else 0,
+        "por_municipio": {row["mun"].replace("_", " "): int(row["count"]) for row in r2},
+        "por_dificultad": {row["dif"]: int(row["count"]) for row in r3},
+        "grafo_status": "Vívido - Web Semántica 1.1"
+    }
 
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
