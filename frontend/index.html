@@ -256,6 +256,56 @@
             const data = await fetchData(`mis-reservas?email=${user.email}`);
             document.getElementById('reservasGrid').innerHTML = data.length === 0 ? '<p>No hay reservas.</p>' : data.map(r => `<div class="bg-white p-10 rounded-[3rem] shadow-xl flex justify-between items-center"><div><h3 class="text-2xl font-black">${r.lugar}</h3><p class="text-xs text-slate-400">${r.fecha}</p></div><div class="text-emerald-600 font-black">$${new Intl.NumberFormat().format(r.precio_total)}</div><button onclick="cancelReserva('${r.id}')" class="text-red-400 font-bold uppercase text-[9px]">Cancelar</button></div>`).join('');
         }
+        else if(view==='gestion') {
+            if(!user || user.role!=='admin') return showView('inicio');
+            container.innerHTML = `
+                <div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in">
+                    <div class="mb-16">
+                        <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Control de Mando</span>
+                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Panel Admin</h2>
+                    </div>
+                    <div id="adminDashboard" class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+                        <div class="md:col-span-4 flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div class="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-50">
+                            <h3 class="text-3xl font-black text-emerald-900 mb-8 italic">Nueva Entrada RDF</h3>
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input id="lId" placeholder="ID (Ej: Cascada_Azul)" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
+                                    <input id="lName" placeholder="Nombre Público" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <select id="lMun" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500"><option value="Florencia">Florencia</option><option value="Morelia">Morelia</option><option value="San_Jose_del_Fragua">San José del Fragua</option></select>
+                                    <select id="lCat" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500"><option value="Acuática">Acuática</option><option value="Senderismo">Senderismo</option></select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input id="lPrice" type="number" placeholder="Precio" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
+                                    <input id="lImg" placeholder="Imagen URL" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
+                                </div>
+                                <button onclick="saveLugar()" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl shadow-xl uppercase text-[10px]">Publicar en Ontología</button>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 p-12 rounded-[4rem] text-white shadow-2xl relative overflow-hidden">
+                            <h3 class="text-3xl font-black mb-8 italic relative z-10">Últimas Reservas</h3>
+                            <div id="adminLog" class="space-y-4 relative z-10"></div>
+                        </div>
+                    </div>
+                </div>`;
+            const stats = await fetchData('admin/full-stats');
+            document.getElementById('adminDashboard').innerHTML = `
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Ingresos</p><h4 class="text-2xl font-black text-emerald-600">$${new Intl.NumberFormat().format(stats.kpis.ingresos_proyectados)}</h4></div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Reservas</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.total_reservas}</h4></div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Comunidad</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.usuarios_activos}</h4></div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Atractivos</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.puntos_interes}</h4></div>`;
+            document.getElementById('adminLog').innerHTML = stats.ultimas_reservas.map(r => `<div class="p-4 bg-white/5 rounded-2xl flex justify-between"><span class="text-xs font-bold">${r.user}</span><span class="text-xs text-emerald-400">${r.fecha}</span></div>`).join('');
+        }
+    }
+
+    async function saveLugar() {
+        const body = { id: document.getElementById('lId').value, nombre: document.getElementById('lName').value, categoria: document.getElementById('lCat').value, municipio: document.getElementById('lMun').value, precio: parseInt(document.getElementById('lPrice').value), imagen: document.getElementById('lImg').value };
+        const res = await fetch(`${API}/actividades`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+        if(res.ok) { alert("¡Publicado!"); showView('gestion'); }
     }
 
     function openDetail(id) {

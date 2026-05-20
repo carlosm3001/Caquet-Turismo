@@ -77,6 +77,14 @@ class ReservaRequest(BaseModel):
     user_email: str
     user_name: str
 
+class ActivityCreate(BaseModel):
+    id: str
+    nombre: str
+    categoria: str
+    municipio: str
+    precio: int
+    imagen: str
+
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
@@ -184,6 +192,26 @@ async def get_actividades(municipio: str = None, categoria: str = None, dificult
         seen.add(s_id)
     return lista
 
+@app.post("/api/v1/actividades")
+async def post_actividad(act: ActivityCreate):
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    INSERT DATA {{
+      :{act.id} rdf:type :Actividad ;
+                :nombreActividad "{act.nombre}" ;
+                :tipoActividad "{act.categoria}" ;
+                :ubicadaEn :{act.municipio} ;
+                :precio {act.precio} ;
+                :imagenURL "{act.imagen}" ;
+                :nivelDificultad "Media" ;
+                :disponibilidad "Disponible" ;
+                :descripcion "Nuevo destino explorado en el Caquetá." ;
+                :horario "8:00 AM - 5:00 PM" .
+    }}
+    """
+    await query_semantic_engine(query)
+    return {"status": "success", "id": act.id}
+
 @app.get("/api/v1/stats")
 async def get_semantic_stats():
     # 1. Total de atractivos
@@ -202,6 +230,48 @@ async def get_semantic_stats():
         "por_municipio": {row["mun"].replace("_", " "): int(row["count"]) for row in r2},
         "por_dificultad": {row["dif"]: int(row["count"]) for row in r3},
         "grafo_status": "Vívido - Web Semántica 1.1"
+    }
+
+@app.get("/api/v1/admin/full-stats")
+async def get_admin_full_stats():
+    # 1. Todas las reservas con detalles de lugar y precio para métricas financieras
+    q_reservas = f"""
+    PREFIX : <{BASE_PREFIX}>
+    SELECT ?reserva ?user ?fecha ?personas ?dias ?precio_base
+    WHERE {{
+      ?reserva rdf:type :Reserva .
+      ?reserva :usuarioReserva ?user .
+      ?reserva :fechaInicio ?fecha .
+      ?reserva :cantidadPersonas ?personas .
+      ?reserva :cantidadDias ?dias .
+      ?reserva :lugarReservado ?lugar_uri .
+      OPTIONAL {{ ?lugar_uri :precio ?precio_base }}
+    }}
+    """
+    res_data = await query_semantic_engine(q_reservas)
+    
+    total_ingresos = 0
+    for r in res_data:
+        p_base = int(r.get("precio_base", 0))
+        dias = int(r.get("dias", 1))
+        total_ingresos += (p_base * dias)
+
+    # 2. Conteo de Actividades por tipo
+    q_tipos = f"PREFIX : <{BASE_PREFIX}> SELECT ?tipo (COUNT(?s) as ?count) WHERE {{ ?s rdf:type :Actividad . ?s :tipoActividad ?tipo }} GROUP BY ?tipo"
+    tipos_data = await query_semantic_engine(q_tipos)
+
+    return {
+        "kpis": {
+            "total_reservas": len(res_data),
+            "ingresos_proyectados": total_ingresos,
+            "usuarios_activos": len(users_db),
+            "puntos_interes": int((await query_semantic_engine(f"PREFIX : <{BASE_PREFIX}> SELECT (COUNT(?s) as ?c) WHERE {{ ?s rdf:type :Actividad }}"))[0]["c"])
+        },
+        "distribucion_actividad": {row["tipo"]: int(row["count"]) for row in tipos_data},
+        "ultimas_reservas": [
+            {"id": r["reserva"].split("#")[-1], "user": r["user"], "fecha": r["fecha"]} 
+            for r in res_data[-5:] # Últimas 5
+        ]
     }
 
 @app.post("/api/v1/chat")
