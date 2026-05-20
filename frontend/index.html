@@ -110,8 +110,28 @@
                     </div>
                 </div>
 
-                <div class="pt-8 border-t border-slate-50 flex gap-4">
-                    <a id="detailReserva" href="#" target="_blank" class="flex-1 text-center py-6 bg-emerald-950 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl hover:bg-emerald-800 transition-colors shadow-2xl shadow-emerald-950/20">Confirmar Reserva vía WhatsApp</a>
+                <div id="bookingSection" class="pt-8 border-t border-slate-50 space-y-6 hidden">
+                    <h3 class="text-xl font-black text-emerald-950 tracking-tighter uppercase">Formulario de Reserva</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Fecha de Inicio</label>
+                            <input type="date" id="bookFecha" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-xs">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Nro de Personas</label>
+                            <input type="number" id="bookPers" value="1" min="1" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-xs">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Días de Estancia</label>
+                            <input type="number" id="bookDias" value="1" min="1" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-xs">
+                        </div>
+                    </div>
+                    <button onclick="confirmBooking()" class="w-full py-6 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200">CONFIRMAR RESERVA DIRECTA</button>
+                    <button onclick="toggleBookingForm(false)" class="w-full py-2 text-slate-300 text-[8px] font-black uppercase tracking-widest">Cancelar</button>
+                </div>
+
+                <div id="initialActions" class="pt-8 border-t border-slate-50 flex gap-4">
+                    <button onclick="toggleBookingForm(true)" class="flex-1 text-center py-6 bg-emerald-950 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl hover:bg-emerald-800 transition-colors shadow-2xl shadow-emerald-950/20">Reservar Ahora</button>
                 </div>
             </div>
         </div>
@@ -161,6 +181,41 @@
     function closeDetail() {
         document.getElementById('detailModal').classList.add('hidden');
         document.body.style.overflow = 'auto';
+    }
+
+    function toggleBookingForm(show) {
+        if(show && !user) return requireAuth();
+        document.getElementById('bookingSection').classList.toggle('hidden', !show);
+        document.getElementById('initialActions').classList.toggle('hidden', show);
+    }
+
+    async function confirmBooking() {
+        const d = actividadesCache.find(a => a.id === document.getElementById('detailTitle').innerText);
+        if(!d || !user) return;
+
+        const body = {
+            lugar_id: d.real_id,
+            fecha_inicio: document.getElementById('bookFecha').value,
+            personas: parseInt(document.getElementById('bookPers').value),
+            dias: parseInt(document.getElementById('bookDias').value),
+            user_email: user.email,
+            user_name: user.name
+        };
+
+        if(!body.fecha_inicio) { alert("Por favor selecciona una fecha"); return; }
+
+        try {
+            const res = await fetch(`${API}/reservas`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            if(res.ok) {
+                alert("¡Reserva confirmada con éxito! Te esperamos en el Caquetá.");
+                closeDetail();
+                toggleBookingForm(false);
+            }
+        } catch(e) { alert("Error al procesar la reserva"); }
     }
 
     function toggleLogin(show) { document.getElementById('loginOverlay').classList.toggle('hidden', !show); }

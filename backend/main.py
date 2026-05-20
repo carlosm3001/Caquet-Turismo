@@ -69,6 +69,14 @@ class RegisterRequest(BaseModel):
     password: str
     name: str
 
+class ReservaRequest(BaseModel):
+    lugar_id: str
+    fecha_inicio: str
+    personas: int
+    dias: int
+    user_email: str
+    user_name: str
+
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
@@ -210,6 +218,25 @@ async def admin_dashboard():
         "total_usuarios": len(users_db),
         "status_motor": "online"
     }
+
+@app.post("/api/v1/reservas")
+async def post_reserva(res: ReservaRequest):
+    res_id = f"Reserva_{int(datetime.utcnow().timestamp())}"
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    INSERT DATA {{
+      :{res_id} rdf:type :Reserva ;
+                :fechaInicio "{res.fecha_inicio}" ;
+                :cantidadPersonas {res.personas} ;
+                :cantidadDias {res.dias} ;
+                :usuarioReserva "{res.user_email}" ;
+                :lugarReservado "{res.lugar_id}" .
+    }}
+    """
+    results = await query_semantic_engine(query)
+    return {"status": "success", "id": res_id}
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
