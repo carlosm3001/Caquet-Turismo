@@ -279,6 +279,15 @@ async def get_mis_reservas(email: str):
         })
     return lista
 
+@app.delete("/api/v1/reservas/{reserva_id}")
+async def delete_reserva(reserva_id: str):
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    DELETE WHERE {{ :{reserva_id} ?p ?o }}
+    """
+    await query_semantic_engine(query)
+    return {"status": "success", "message": "Reserva cancelada"}
+
 @app.get("/", response_class=HTMLResponse)
 async def root():
     index_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "index.html")
