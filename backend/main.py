@@ -134,7 +134,7 @@ async def get_actividades(municipio: str = None, categoria: str = None):
     query = f"""
     PREFIX : <{BASE_PREFIX}>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?precio ?disp ?reserva ?desc ?horario
+    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?precio ?disp ?reserva ?desc ?horario ?img
     WHERE {{
       ?sitio :ubicadaEn ?mun_uri .
       ?sitio rdf:type ?tipo_uri .
@@ -147,6 +147,7 @@ async def get_actividades(municipio: str = None, categoria: str = None):
       OPTIONAL {{ ?sitio :reservaURL ?reserva . }}
       OPTIONAL {{ ?sitio :descripcion ?desc . }}
       OPTIONAL {{ ?sitio :horario ?horario . }}
+      OPTIONAL {{ ?sitio :imagenURL ?img . }}
     }}
     """
     results = await query_semantic_engine(query)
@@ -201,7 +202,8 @@ async def get_actividades(municipio: str = None, categoria: str = None):
             "disponibilidad": disp_val,
             "reserva": res_val,
             "descripcion": row.get("desc") or "Explora la belleza natural inigualable de este destino en el Caquetá.",
-            "horario": row.get("horario") or "Sujeto a disponibilidad y condiciones climáticas."
+            "horario": row.get("horario") or "Sujeto a disponibilidad y condiciones climáticas.",
+            "imagen": row.get("img") or "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80&w=800"
         })
         seen.add(s_id)
     return lista

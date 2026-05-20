@@ -168,7 +168,7 @@
         // Reset del formulario de reserva por si estaba abierto
         toggleBookingForm(false);
         
-        document.getElementById('detailImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800')`;
+        document.getElementById('detailImg').style.backgroundImage = `url('${d.imagen}')`;
         document.getElementById('detailCat').innerText = d.categoria;
         document.getElementById('detailTitle').innerText = d.id;
         document.getElementById('detailDesc').innerText = d.descripcion;
@@ -375,7 +375,7 @@
 
                 const grid = document.getElementById('destinosGrid');
                 grid.innerHTML = data.map(d => {
-                    const imgUrl = 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=600';
+                    const imgUrl = d.imagen;
                     const precio = parseFloat(d.precio) || 0;
                     const precioTxt = precio === 0 ? 'Acceso Libre' : `$${new Intl.NumberFormat().format(precio)}`;
                     const disp = d.disponibilidad || 'Disponible';
