@@ -162,11 +162,16 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         t_uri = row.get("tipo_uri", "")
         t_name = t_uri.split("#")[-1]
         
-        # Filtros
+        # VALIDACIÓN CRÍTICA: Solo añadir si tiene un nombre real
+        raw_name = row.get("nombre")
+        if not raw_name or str(raw_name) == "None" or str(raw_name).strip() == "":
+            continue # Omitir este destino si no tiene nombre
+            
+        # Filtros existentes
         if municipio and municipio.lower() not in m_name.lower(): continue
         if categoria and categoria.lower() not in t_name.lower(): continue
         
-        # Limpieza de valores None o strings 'None'
+        # Limpieza de valores para el resto de campos
         clima_val = row.get("clima")
         if not clima_val or clima_val == "None": clima_val = "Cálido Húmedo"
         
@@ -186,7 +191,7 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         if not res_val or res_val == "None" or res_val == "#": res_val = "https://wa.me/573000000000"
 
         lista.append({
-            "id": row.get("nombre") or s_id.replace("_", " "),
+            "id": raw_name,
             "real_id": s_id,
             "categoria": t_name,
             "municipio": m_name,
