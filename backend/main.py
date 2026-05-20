@@ -219,6 +219,10 @@ async def admin_dashboard():
         "status_motor": "online"
     }
 
+@app.get("/api/v1/status")
+async def get_status():
+    return {"status": "online", "timestamp": datetime.utcnow().isoformat()}
+
 @app.post("/api/v1/reservas")
 async def post_reserva(res: ReservaRequest):
     res_id = f"Reserva_{int(datetime.utcnow().timestamp())}"
