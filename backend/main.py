@@ -74,11 +74,15 @@ async def sync_users_from_ontology():
     results = await query_semantic_engine(query)
     for row in results:
         email = str(row["email"])
-        users_db[email] = {
-            "name": str(row["name"]),
-            "role": str(row["role"]),
-            "password": str(row.get("pass", "google_auth"))
-        }
+        p_val = str(row.get("pass")) if row.get("pass") else None
+        
+        # Solo actualizamos si no existe o si el valor de la ontología es real
+        if email not in users_db or (p_val and p_val != "None"):
+            users_db[email] = {
+                "name": str(row["name"]),
+                "role": str(row["role"]),
+                "password": p_val if (p_val and p_val != "None") else "google_auth"
+            }
 
 @app.on_event("startup")
 async def startup_event():
