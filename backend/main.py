@@ -156,15 +156,34 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         if municipio and municipio.lower() not in m_name.lower(): continue
         if categoria and categoria.lower() not in t_name.lower(): continue
         
+        # Limpieza de valores None o strings 'None'
+        clima_val = row.get("clima")
+        if not clima_val or clima_val == "None": clima_val = "Cálido Húmedo"
+        
+        dif_val = row.get("dif")
+        if not dif_val or dif_val == "None": dif_val = "Media"
+        
+        precio_val = row.get("precio")
+        try:
+            if not precio_val or precio_val == "None": precio_val = 0
+            else: precio_val = int(precio_val)
+        except: precio_val = 0
+            
+        disp_val = row.get("disp")
+        if not disp_val or disp_val == "None": disp_val = "Disponible"
+        
+        res_val = row.get("reserva")
+        if not res_val or res_val == "None" or res_val == "#": res_val = "https://wa.me/573000000000" # WhatsApp genérico
+
         lista.append({
             "id": row.get("nombre") or s_id.replace("_", " "),
             "categoria": t_name,
             "municipio": m_name,
-            "clima": row.get("clima", "Cálido"),
-            "dificultad": row.get("dif", "Media"),
-            "precio": row.get("precio", "Consultar"),
-            "disponibilidad": row.get("disp", "Disponible"),
-            "reserva": row.get("reserva", "#")
+            "clima": clima_val,
+            "dificultad": dif_val,
+            "precio": precio_val,
+            "disponibilidad": disp_val,
+            "reserva": res_val
         })
         seen.add(s_id)
     return lista
