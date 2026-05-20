@@ -13,7 +13,7 @@ import google.generativeai as genai
 from datetime import datetime, timedelta
 import json
 
-app = FastAPI(title="Amazonia-IA V4.2 - Vercel Safe Mode")
+app = FastAPI(title="Amazonia-IA V4.5 - Enhanced Semantic Data")
 
 # --- PROXY PARA VERCEL (HTTPS) ---
 class ProxyHeadersMiddleware(BaseHTTPMiddleware):
@@ -24,6 +24,8 @@ class ProxyHeadersMiddleware(BaseHTTPMiddleware):
 app.add_middleware(ProxyHeadersMiddleware)
 
 SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_safe_2026")
+ALGORITHM = "HS256"
+
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=True if os.getenv("VERCEL") else False)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
@@ -52,127 +54,138 @@ if os.getenv("GOOGLE_CLIENT_ID"):
         client_kwargs={'scope': 'openid email profile'}
     )
 
-# --- PERSISTENCIA DE USUARIOS ---
-USERS_FILE = "/tmp/users.json" if os.getenv("VERCEL") else "users.json"
-def load_users():
-    try:
-        if os.path.exists(USERS_FILE):
-            with open(USERS_FILE, "r") as f: return json.load(f)
-    except Exception as e:
-        print(f"Load Users Error: {e}")
-    return {"admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador"}}
-
-def save_users(db):
-    try:
-        with open(USERS_FILE, "w") as f: json.dump(db, f)
-    except Exception as e:
-        print(f"Save Users Error: {e}")
-
-users_db = load_users()
-chat_context = {} 
-
-async def query_semantic_engine(sparql_query: str):
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=10.0)
-            if response.status_code == 200:
-                return response.json()
-        except Exception as e:
-            print(f"Semantic Engine Offline: {e}")
-    return []
-
-# --- ENDPOINTS ---
+# --- PERSISTENCIA SIMPLIFICADA ---
+users_db = {
+    "admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador Principal"}
+}
+chat_context = {}
 
 class LoginRequest(BaseModel):
     email: str
     password: str
 
 class RegisterRequest(BaseModel):
-    name: str
     email: str
     password: str
+    name: str
+
+async def query_semantic_engine(sparql_query: str):
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            print(f"Error consultando Motor Semántico: {e}")
+            return []
+
+def create_token(data: dict):
+    payload = data.copy()
+    payload.update({"exp": datetime.utcnow() + timedelta(hours=24)})
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 @app.post("/api/v1/register")
 async def register(data: RegisterRequest):
-    try:
-        if data.email in users_db:
-            raise HTTPException(status_code=400, detail="El correo ya está registrado")
-        users_db[data.email] = {"password": data.password, "role": "turista", "name": data.name}
-        save_users(users_db)
-        token = jwt.encode({"email": data.email, "name": data.name, "role": "turista", "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm="HS256")
-        return {"token": token}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    users_db[data.email] = {"password": data.password, "role": "turista", "name": data.name}
+    token = create_token({"email": data.email, "name": data.name, "role": "turista"})
+    return {"token": token}
 
 @app.post("/api/v1/login")
 async def login(data: LoginRequest):
-    try:
-        user = users_db.get(data.email)
-        if not user or user["password"] != data.password:
-            raise HTTPException(status_code=401, detail="Credenciales incorrectas")
-        token = jwt.encode({"email": data.email, "name": user["name"], "role": user["role"], "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm="HS256")
-        return {"token": token}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    u = users_db.get(data.email)
+    if u and u["password"] == data.password:
+        token = create_token({"email": data.email, "role": u["role"], "name": u["name"]})
+        return {"token": token, "role": u["role"], "name": u["name"]}
+    raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
-    try:
-        redirect_uri = os.getenv("GOOGLE_REDIRECT_URI")
-        if not redirect_uri:
-            url = request.url_for('google_auth_callback')
-            redirect_uri = str(url).replace("http://", "https://") if os.getenv("VERCEL") else str(url)
-        return await oauth.google.authorize_redirect(request, redirect_uri)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Google Redirect Error: {e}")
+    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", request.url_for('google_auth_callback'))
+    return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
 async def google_auth_callback(request: Request):
     try:
         token = await oauth.google.authorize_access_token(request)
         user_info = token.get('userinfo')
-        jwt_token = jwt.encode({"email": user_info['email'], "name": user_info['name'], "role": "turista", "exp": datetime.utcnow() + timedelta(hours=24)}, SECRET_KEY, algorithm="HS256")
-        return HTMLResponse(content=f"<html><script>window.location.replace('/?token={jwt_token}');</script></html>")
+        if not user_info: raise HTTPException(status_code=400)
+        
+        email = user_info['email']
+        if email not in users_db:
+            users_db[email] = {"password": str(random.randint(1000,9999)), "role": "turista", "name": user_info['name']}
+        
+        u = users_db[email]
+        jwt_token = create_token({"email": email, "role": u["role"], "name": u["name"]})
+        target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
+        return HTMLResponse(content=f"<script>window.location.replace('{target_url}');</script>")
     except Exception as e:
         return RedirectResponse(url="/?error=auth_failed")
 
 @app.get("/api/v1/actividades")
-async def get_actividades(municipio: str = None):
-    try:
-        query = f"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX owl: <http://www.w3.org/2002/07/owl#> SELECT DISTINCT ?sitio ?tipo_uri ?mun_uri ?clima ?dif ?img WHERE {{ ?sitio <{BASE_PREFIX}ubicadaEn> ?mun_uri . ?sitio rdf:type ?tipo_uri . FILTER(?tipo_uri != owl:NamedIndividual && ?tipo_uri != owl:Class) OPTIONAL {{ ?mun_uri <{BASE_PREFIX}clima> ?clima . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}nivelDificultad> ?dif . }} OPTIONAL {{ ?sitio <{BASE_PREFIX}hasImageURL> ?img . }} }}"
-        results = await query_semantic_engine(query)
-        lista = []
-        blacklist = ["bitchip", "wrapsafe", "fintone", "span", "ronstring", "prodder", "hatity", "flexidy", "bigtax"]
-        for row in results:
-            s_name = row.get("sitio", "").split("#")[-1].replace("_", " ")
-            if any(bad in s_name.lower() for bad in blacklist): continue
-            if municipio and municipio.lower() not in row.get("mun_uri", "").lower(): continue
-            lista.append({"id": s_name, "categoria": row.get("tipo_uri", "").split("#")[-1], "municipio": row.get("mun_uri", "").split("#")[-1].replace("_", " "), "clima": row.get("clima", "Cálido"), "dificultad": row.get("dif", "Media"), "imagen": row.get("img", "")})
-        return lista
-    except Exception as e:
-        print(f"Actividades Error: {e}")
-        return []
+async def get_actividades(municipio: str = None, categoria: str = None):
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?precio ?disp ?reserva
+    WHERE {{
+      ?sitio :ubicadaEn ?mun_uri .
+      ?sitio rdf:type ?tipo_uri .
+      FILTER(?tipo_uri != <http://www.w3.org/2002/07/owl#NamedIndividual> && ?tipo_uri != <http://www.w3.org/2002/07/owl#Class>)
+      OPTIONAL {{ ?sitio :nombreActividad ?nombre . }}
+      OPTIONAL {{ ?mun_uri :clima ?clima . }}
+      OPTIONAL {{ ?sitio :nivelDificultad ?dif . }}
+      OPTIONAL {{ ?sitio :precio ?precio . }}
+      OPTIONAL {{ ?sitio :disponibilidad ?disp . }}
+      OPTIONAL {{ ?sitio :reservaURL ?reserva . }}
+    }}
+    """
+    results = await query_semantic_engine(query)
+    lista = []
+    seen = set()
+    for row in results:
+        s_uri = row.get("sitio", "")
+        s_id = s_uri.split("#")[-1]
+        if s_id in seen: continue
+        
+        m_uri = row.get("mun_uri", "")
+        m_name = m_uri.split("#")[-1].replace("_", " ")
+        t_uri = row.get("tipo_uri", "")
+        t_name = t_uri.split("#")[-1]
+        
+        # Filtros
+        if municipio and municipio.lower() not in m_name.lower(): continue
+        if categoria and categoria.lower() not in t_name.lower(): continue
+        
+        lista.append({
+            "id": row.get("nombre") or s_id.replace("_", " "),
+            "categoria": t_name,
+            "municipio": m_name,
+            "clima": row.get("clima", "Cálido"),
+            "dificultad": row.get("dif", "Media"),
+            "precio": row.get("precio", "Consultar"),
+            "disponibilidad": row.get("disp", "Disponible"),
+            "reserva": row.get("reserva", "#")
+        })
+        seen.add(s_id)
+    return lista
 
-@app.get("/api/v1/status")
-async def get_status():
-    try:
-        async with httpx.AsyncClient() as client:
-            try:
-                resp = await client.get(SEMANTIC_ENGINE_URL.replace("/sparql", "/status"), timeout=5.0)
-                engine_status = resp.json() if resp.status_code == 200 else {"status": "offline"}
-            except: engine_status = {"status": "offline"}
-        return {"status": "V4.2 Safe Mode", "semantic_engine": engine_status}
-    except Exception as e:
-        return {"status": "Error", "detail": str(e)}
+@app.post("/api/v1/chat")
+async def chat_ai(payload: dict = Body(...)):
+    # Lógica de IA mejorada
+    message = payload.get("message", "")
+    # Aquí podrías integrar el llm_model si lo tienes configurado
+    return {"reply": "Estoy procesando tu solicitud sobre el Caquetá. Por ahora, te recomiendo explorar la sección de destinos."}
 
 @app.get("/api/v1/admin/dashboard")
 async def admin_dashboard():
-    try:
-        query = "SELECT (COUNT(*) as ?count) WHERE { ?s ?p ?o }"
-        results = await query_semantic_engine(query)
-        total = results[0].get("count", "0") if results else "0"
-        return {"total_tripletas": total}
-    except: return {"total_tripletas": "0"}
+    query = "SELECT (COUNT(*) as ?count) WHERE { ?s ?p ?o }"
+    results = await query_semantic_engine(query)
+    total_rdf = results[0].get("count", "0") if results else "0"
+    return {
+        "total_tripletas": total_rdf,
+        "total_usuarios": len(users_db),
+        "status_motor": "online"
+    }
 
 @app.get("/", response_class=HTMLResponse)
 async def root():

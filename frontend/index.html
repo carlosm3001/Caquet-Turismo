@@ -219,19 +219,47 @@
                 const data = await fetchData('actividades');
                 container.innerHTML = `
                     <div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in">
-                        <h2 class="text-5xl font-black text-emerald-950 tracking-tighter mb-16 italic">Ecosistema Turístico</h2>
+                        <div class="flex justify-between items-end mb-16">
+                            <div>
+                                <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Catálogo Semántico</span>
+                                <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Ecosistema Turístico</h2>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-slate-400 text-xs font-medium">Mostrando ${data.length} destinos encontrados</p>
+                            </div>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                             ${data.map(d => {
-                                const imgUrl = (!d.imagen || d.imagen === 'None' || d.imagen === '') ? 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=600' : d.imagen + '&w=600';
+                                const imgUrl = 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=600';
+                                const precioTxt = d.precio === '0' || d.precio === 0 ? 'Gratis' : `$${new Intl.NumberFormat().format(d.precio)}`;
+                                const dispColor = d.disponibilidad === 'Disponible' ? 'text-emerald-500' : 'text-orange-500';
+                                
                                 return `
-                                <div onclick="requireAuth()" class="group bg-white rounded-[4rem] overflow-hidden shadow-2xl hover:-translate-y-4 transition-all cursor-pointer border border-slate-50 relative">
-                                    <div class="h-80 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000" style="background-image: url('${imgUrl}')"></div>
+                                <div class="group bg-white rounded-[4rem] overflow-hidden shadow-2xl hover:-translate-y-4 transition-all border border-slate-50 relative">
+                                    <div class="h-64 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000 relative" style="background-image: url('${imgUrl}')">
+                                        <div class="absolute top-8 right-8 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-xl">
+                                            <p class="text-[10px] font-black text-emerald-950">${precioTxt}</p>
+                                        </div>
+                                    </div>
                                     <div class="p-10">
-                                        <p class="text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-2">${d.categoria}</p>
-                                        <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-4">${d.id}</h3>
-                                        <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 border-t border-slate-50 pt-8 mt-4">
-                                            <span><i class="fas fa-map-marker-alt text-emerald-500 mr-2"></i> ${d.municipio}</span>
-                                            <span><i class="fas fa-thermometer-half text-orange-400 mr-2"></i> ${d.clima.split(' ')[0]}</span>
+                                        <div class="flex justify-between items-center mb-4">
+                                            <p class="text-[9px] font-black text-emerald-600 uppercase tracking-widest">${d.categoria}</p>
+                                            <span class="text-[8px] font-black uppercase tracking-tighter ${dispColor} bg-slate-50 px-3 py-1 rounded-full border border-slate-100">${d.disponibilidad}</span>
+                                        </div>
+                                        <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-6">${d.id}</h3>
+                                        <div class="space-y-3 mb-8">
+                                            <div class="flex items-center text-[10px] font-bold text-slate-500">
+                                                <i class="fas fa-map-marker-alt text-emerald-500 w-6"></i>
+                                                <span>${d.municipio}</span>
+                                            </div>
+                                            <div class="flex items-center text-[10px] font-bold text-slate-500">
+                                                <i class="fas fa-mountain text-emerald-500 w-6"></i>
+                                                <span>Dificultad ${d.dificultad}</span>
+                                            </div>
+                                        </div>
+                                        <div class="pt-8 border-t border-slate-50 flex gap-4">
+                                            <a href="${d.reserva}" target="_blank" class="flex-1 text-center py-4 bg-emerald-950 text-white text-[9px] font-black uppercase tracking-widest rounded-2xl hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-950/20">Reservar Ahora</a>
+                                            <button onclick="requireAuth()" class="w-14 h-14 flex items-center justify-center border-2 border-slate-100 rounded-2xl text-slate-400 hover:text-emerald-500 hover:border-emerald-500 transition-all"><i class="far fa-heart"></i></button>
                                         </div>
                                     </div>
                                 </div>`;
