@@ -126,7 +126,7 @@ async def get_actividades(municipio: str = None, categoria: str = None):
     query = f"""
     PREFIX : <{BASE_PREFIX}>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?precio ?disp ?reserva
+    SELECT DISTINCT ?sitio ?nombre ?tipo_uri ?mun_uri ?clima ?dif ?precio ?disp ?reserva ?desc ?horario
     WHERE {{
       ?sitio :ubicadaEn ?mun_uri .
       ?sitio rdf:type ?tipo_uri .
@@ -137,6 +137,8 @@ async def get_actividades(municipio: str = None, categoria: str = None):
       OPTIONAL {{ ?sitio :precio ?precio . }}
       OPTIONAL {{ ?sitio :disponibilidad ?disp . }}
       OPTIONAL {{ ?sitio :reservaURL ?reserva . }}
+      OPTIONAL {{ ?sitio :descripcion ?desc . }}
+      OPTIONAL {{ ?sitio :horario ?horario . }}
     }}
     """
     results = await query_semantic_engine(query)
@@ -173,17 +175,20 @@ async def get_actividades(municipio: str = None, categoria: str = None):
         if not disp_val or disp_val == "None": disp_val = "Disponible"
         
         res_val = row.get("reserva")
-        if not res_val or res_val == "None" or res_val == "#": res_val = "https://wa.me/573000000000" # WhatsApp genérico
+        if not res_val or res_val == "None" or res_val == "#": res_val = "https://wa.me/573000000000"
 
         lista.append({
             "id": row.get("nombre") or s_id.replace("_", " "),
+            "real_id": s_id,
             "categoria": t_name,
             "municipio": m_name,
             "clima": clima_val,
             "dificultad": dif_val,
             "precio": precio_val,
             "disponibilidad": disp_val,
-            "reserva": res_val
+            "reserva": res_val,
+            "descripcion": row.get("desc") or "Explora la belleza natural inigualable de este destino en el Caquetá.",
+            "horario": row.get("horario") or "Sujeto a disponibilidad y condiciones climáticas."
         })
         seen.add(s_id)
     return lista

@@ -67,6 +67,57 @@
 
 <main id="mainContainer" class="pt-24 min-h-screen"></main>
 
+<!-- MODAL DE DETALLES -->
+<div id="detailModal" class="fixed inset-0 z-[6000] bg-emerald-950/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-[4rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-3xl relative animate-fade-in">
+        <button onclick="closeDetail()" class="absolute top-8 right-8 w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-red-500 transition-all z-10"><i class="fas fa-times"></i></button>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2">
+            <div id="detailImg" class="h-80 md:h-full bg-cover bg-center"></div>
+            <div class="p-12 md:p-16 space-y-8">
+                <div>
+                    <span id="detailCat" class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-2 block"></span>
+                    <h2 id="detailTitle" class="text-5xl font-black text-emerald-950 tracking-tighter leading-none italic"></h2>
+                </div>
+                
+                <p id="detailDesc" class="text-slate-500 leading-relaxed font-medium italic"></p>
+                
+                <div class="grid grid-cols-2 gap-6 pt-4">
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Precio</p>
+                        <p id="detailPrecio" class="text-xl font-black text-emerald-900"></p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Dificultad</p>
+                        <p id="detailDif" class="text-xl font-black text-emerald-900"></p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 text-sm font-bold text-slate-600">
+                        <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <p class="text-[8px] uppercase tracking-widest text-slate-400">Horarios / Duración</p>
+                            <span id="detailHorario"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm font-bold text-slate-600">
+                        <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600"><i class="fas fa-calendar-check"></i></div>
+                        <div>
+                            <p class="text-[8px] uppercase tracking-widest text-slate-400">Estado</p>
+                            <span id="detailDisp"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-slate-50 flex gap-4">
+                    <a id="detailReserva" href="#" target="_blank" class="flex-1 text-center py-6 bg-emerald-950 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl hover:bg-emerald-800 transition-colors shadow-2xl shadow-emerald-950/20">Confirmar Reserva vía WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="chatWidget" class="fixed bottom-32 right-8 w-96 h-[550px] bg-white rounded-[3rem] shadow-2xl border border-slate-100 hidden flex-col overflow-hidden z-[4000]">
     <div class="p-8 bg-emerald-600 text-white flex justify-between items-center">
         <div><h4 class="font-black text-2xl tracking-tighter">Amazonia-IA</h4><p class="text-[10px] opacity-70 font-bold uppercase tracking-widest">Guía Semántico Experto</p></div>
@@ -87,6 +138,30 @@
         ? "http://localhost:8001/api/v1" 
         : window.location.origin + "/api/v1";
     let user = null;
+    let actividadesCache = [];
+
+    function openDetail(id) {
+        const d = actividadesCache.find(a => a.real_id === id);
+        if(!d) return;
+        
+        document.getElementById('detailImg').style.backgroundImage = `url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800')`;
+        document.getElementById('detailCat').innerText = d.categoria;
+        document.getElementById('detailTitle').innerText = d.id;
+        document.getElementById('detailDesc').innerText = d.descripcion;
+        document.getElementById('detailPrecio').innerText = d.precio === 0 ? 'Gratis' : `$${new Intl.NumberFormat().format(d.precio)}`;
+        document.getElementById('detailDif').innerText = d.dificultad;
+        document.getElementById('detailHorario').innerText = d.horario;
+        document.getElementById('detailDisp').innerText = d.disponibilidad;
+        document.getElementById('detailReserva').href = d.reserva;
+        
+        document.getElementById('detailModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetail() {
+        document.getElementById('detailModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 
     function toggleLogin(show) { document.getElementById('loginOverlay').classList.toggle('hidden', !show); }
     function logout() { localStorage.removeItem('access_token'); sessionStorage.clear(); window.location.href = "/"; }
@@ -205,6 +280,7 @@
             
             try {
                 const data = await fetchData('actividades');
+                actividadesCache = data; // Guardar en caché local para el modal
                 const grid = document.getElementById('destinosGrid');
                 grid.innerHTML = data.map(d => {
                     const imgUrl = 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=600';
@@ -236,8 +312,8 @@
                                     <span>Dificultad ${d.dificultad}</span>
                                 </div>
                             </div>
-                            <div class="pt-8 border-t border-slate-50 flex gap-4">
-                                <a href="${d.reserva}" target="_blank" class="flex-1 text-center py-4 bg-emerald-950 text-white text-[9px] font-black uppercase tracking-widest rounded-2xl hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-950/20">Ver Fechas y Reservar</a>
+                            <div class="pt-8 border-t border-slate-50">
+                                <button onclick="openDetail('${d.real_id}')" class="w-full text-center py-4 bg-emerald-950 text-white text-[9px] font-black uppercase tracking-widest rounded-2xl hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-950/20">Ver Fechas y Detalles</button>
                             </div>
                         </div>
                     </div>`;
