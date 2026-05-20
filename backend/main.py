@@ -231,20 +231,19 @@ async def get_status():
 @app.post("/api/v1/reservas")
 async def post_reserva(res: ReservaRequest):
     res_id = f"Reserva_{int(datetime.utcnow().timestamp())}"
+    # Usamos la URI del lugar directamente para el vínculo semántico
     query = f"""
     PREFIX : <{BASE_PREFIX}>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     INSERT DATA {{
       :{res_id} rdf:type :Reserva ;
                 :fechaInicio "{res.fecha_inicio}" ;
                 :cantidadPersonas {res.personas} ;
                 :cantidadDias {res.dias} ;
                 :usuarioReserva "{res.user_email}" ;
-                :lugarReservado "{res.lugar_id}" .
+                :lugarReservado :{res.lugar_id} .
     }}
     """
-    results = await query_semantic_engine(query)
+    await query_semantic_engine(query)
     return {"status": "success", "id": res_id}
 
 @app.get("/api/v1/mis-reservas")
@@ -252,19 +251,16 @@ async def get_mis_reservas(email: str):
     query = f"""
     PREFIX : <{BASE_PREFIX}>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    SELECT ?reserva ?fecha ?personas ?dias ?lugar_id ?nombre_lugar ?precio_base
+    SELECT ?reserva ?fecha ?personas ?dias ?lugar_uri ?nombre_lugar ?precio_base
     WHERE {{
       ?reserva rdf:type :Reserva .
       ?reserva :usuarioReserva "{email}" .
       ?reserva :fechaInicio ?fecha .
       ?reserva :cantidadPersonas ?personas .
       ?reserva :cantidadDias ?dias .
-      ?reserva :lugarReservado ?lugar_id .
-      OPTIONAL {{ 
-        BIND(URI(CONCAT("{BASE_PREFIX}", ?lugar_id)) AS ?lugar_uri)
-        ?lugar_uri :nombreActividad ?nombre_lugar .
-        ?lugar_uri :precio ?precio_base .
-      }}
+      ?reserva :lugarReservado ?lugar_uri .
+      ?lugar_uri :nombreActividad ?nombre_lugar .
+      ?lugar_uri :precio ?precio_base .
     }}
     """
     results = await query_semantic_engine(query)
@@ -279,7 +275,7 @@ async def get_mis_reservas(email: str):
             "fecha": row.get("fecha"),
             "personas": row.get("personas"),
             "dias": dias,
-            "lugar": row.get("nombre_lugar") or row.get("lugar_id", "Lugar Desconocido"),
+            "lugar": row.get("nombre_lugar"),
             "precio_total": total
         })
     return lista
