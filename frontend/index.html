@@ -361,6 +361,7 @@
     function openDetail(id) {
         const d = actividadesCache.find(a => a.real_id === id);
         if(!d) return;
+        currentActivity = d; // Asignar destino actual globalmente
         toggleBookingForm(false);
         document.getElementById('detailImg').style.backgroundImage = `url('${d.imagen}')`;
         document.getElementById('detailCat').innerText = d.categoria;
@@ -372,15 +373,56 @@
         document.body.style.overflow = 'hidden';
     }
 
-    function closeDetail() { document.getElementById('detailModal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
-    function toggleBookingForm(show) { document.getElementById('bookingSection').classList.toggle('hidden', !show); document.getElementById('initialActions').classList.toggle('hidden', show); }
+    function closeDetail() { 
+        document.getElementById('detailModal').classList.add('hidden'); 
+        document.body.style.overflow = 'auto'; 
+        currentActivity = null; 
+    }
+    
+    function toggleBookingForm(show) { 
+        if(show && !user) return toggleLogin(true);
+        document.getElementById('bookingSection').classList.toggle('hidden', !show); 
+        document.getElementById('initialActions').classList.toggle('hidden', show); 
+    }
 
     async function confirmBooking() {
-        const d = actividadesCache.find(a => a.id === document.getElementById('detailTitle').innerText);
-        if(!d || !user) return;
-        const body = { lugar_id: d.real_id, fecha_inicio: document.getElementById('bookFecha').value, personas: parseInt(document.getElementById('bookPers').value), dias: parseInt(document.getElementById('bookDias').value), user_email: user.email, user_name: user.name };
-        const res = await fetch(`${API}/reservas`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
-        if(res.ok) { alert("¡Reserva confirmada!"); closeDetail(); showView('perfil'); }
+        if(!currentActivity || !user) {
+            console.error("Falta contexto: Activity:", currentActivity, "User:", user);
+            alert("Error: Debes iniciar sesión y seleccionar un destino.");
+            return;
+        }
+
+        const fecha = document.getElementById('bookFecha').value;
+        if(!fecha) { alert("Por favor selecciona una fecha."); return; }
+
+        const body = { 
+            lugar_id: currentActivity.real_id, 
+            fecha_inicio: fecha, 
+            personas: parseInt(document.getElementById('bookPers').value) || 1, 
+            dias: parseInt(document.getElementById('bookDias').value) || 1, 
+            user_email: user.email, 
+            user_name: user.name 
+        };
+
+        try {
+            const res = await fetch(`${API}/reservas`, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(body) 
+            });
+            
+            if(res.ok) { 
+                alert("¡Reserva confirmada con éxito! Te esperamos."); 
+                closeDetail(); 
+                showView('perfil'); 
+            } else {
+                const err = await res.json();
+                alert("Error del servidor: " + (err.detail || "No se pudo procesar la reserva"));
+            }
+        } catch(e) { 
+            console.error("Error confirmando reserva:", e);
+            alert("Error de conexión al confirmar reserva."); 
+        }
     }
 
     async function cancelReserva(id) {
