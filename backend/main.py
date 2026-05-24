@@ -12,25 +12,28 @@ import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
 import json
+from pydantic import BaseSettings, Field
+from .config import settings
 
 app = FastAPI(title="Amazonia-IA V4.5 - Enhanced Semantic Data")
 
 # --- PROXY PARA VERCEL (HTTPS) ---
 class ProxyHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if os.getenv("VERCEL"): request.scope["scheme"] = "https"
+        if settings.VERCEL:
+            request.scope["scheme"] = "https"
         return await call_next(request)
 
 app.add_middleware(ProxyHeadersMiddleware)
 
-SECRET_KEY = os.getenv("JWT_SECRET", "caqueta_safe_2026")
+SECRET_KEY = settings.JWT_SECRET
 ALGORITHM = "HS256"
 
-app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=True if os.getenv("VERCEL") else False)
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY, same_site="lax", https_only=settings.VERCEL)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
-SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", os.getenv("SEMANTIC_ENGINE_URL", "http://semantic-engine:3030/sparql"))
+SEMANTIC_ENGINE_URL = settings.SEMANTIC_ENGINE_URL
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 
 # --- IA GEMINI ---
@@ -45,11 +48,11 @@ if GEMINI_KEY:
 
 # --- CONFIGURACIÓN GOOGLE OAUTH ---
 oauth = OAuth()
-if os.getenv("GOOGLE_CLIENT_ID"):
+if settings.GOOGLE_CLIENT_ID:
     oauth.register(
         name='google',
-        client_id=os.getenv("GOOGLE_CLIENT_ID"), 
-        client_secret=os.getenv("GOOGLE_CLIENT_SECRET"), 
+        client_id=settings.GOOGLE_CLIENT_ID, 
+        client_secret=settings.GOOGLE_CLIENT_SECRET, 
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
         client_kwargs={'scope': 'openid email profile'}
     )
@@ -158,7 +161,7 @@ async def login(data: LoginRequest):
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
-    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", request.url_for('google_auth_callback'))
+    redirect_uri = settings.GOOGLE_REDIRECT_URI
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @app.get("/api/v1/auth/google/callback")
@@ -174,7 +177,7 @@ async def google_auth_callback(request: Request):
         
         u = users_db[email]
         jwt_token = create_token({"email": email, "role": u["role"], "name": u["name"]})
-        target_url = "/?token=" + jwt_token if os.getenv("VERCEL") else f"http://localhost/?token={jwt_token}"
+        target_url = "/?token=" + jwt_token if settings.VERCEL else f"http://localhost/?token={jwt_token}"
         return HTMLResponse(content=f"<script>window.location.replace('{target_url}');</script>")
     except Exception as e:
         return RedirectResponse(url="/?error=auth_failed")
