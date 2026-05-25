@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Query, Body, HTTPException, Request
+from fastapi import FastAPI, Body, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, RedirectResponse, HTMLResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
@@ -11,7 +11,6 @@ import jwt
 import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
-import json
 from config import settings
 
 app = FastAPI(title="Amazonia-IA V4.5 - Enhanced Semantic Data")
