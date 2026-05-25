@@ -25,13 +25,17 @@ except ImportError:
             GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
             GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
             GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "")
-            SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", os.getenv("SEMANTIC_ENGINE_URL", "http://localhost:3030/sparql"))
+            SEMANTIC_ENGINE_URL = os.getenv(
+                "PROD_SEMANTIC_ENGINE_URL",
+                os.getenv("SEMANTIC_ENGINE_URL", "http://localhost:3030/sparql"),
+            )
 
         settings = FallbackSettings()
 
 print(f"Iniciando Backend en Vercel: {settings.VERCEL}")
 
 app = FastAPI(title="Amazonia-IA V4.5 - Enhanced Semantic Data")
+
 
 # --- MIDDLEWARES ---
 @app.middleware("http")
@@ -43,6 +47,7 @@ async def log_requests(request: Request, call_next):
     except Exception as e:
         print(f"Error procesando request: {str(e)}")
         return HTMLResponse(content=f"Internal Server Error: {str(e)}", status_code=500)
+
 
 SECRET_KEY = settings.JWT_SECRET
 ALGORITHM = "HS256"
