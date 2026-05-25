@@ -199,12 +199,18 @@ async def login(data: LoginRequest):
 
 @app.get("/api/v1/auth/google")
 async def google_login(request: Request):
+    if not settings.GOOGLE_CLIENT_ID:
+        raise HTTPException(
+            status_code=501, detail="Google OAuth no está configurado en el servidor"
+        )
     redirect_uri = settings.GOOGLE_REDIRECT_URI
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
 @app.get("/api/v1/auth/google/callback")
 async def google_auth_callback(request: Request):
+    if not settings.GOOGLE_CLIENT_ID:
+        return RedirectResponse(url="/?error=oauth_not_configured")
     try:
         token = await oauth.google.authorize_access_token(request)
         user_info = token.get("userinfo")
