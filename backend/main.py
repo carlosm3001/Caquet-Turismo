@@ -31,11 +31,11 @@ except ImportError:
 
         settings = FallbackSettings()
 
-app = FastAPI(title="Amazonia-IA V4.5")
+app = FastAPI(title="Amazonia-IA V5.0")
 
 
 @app.middleware("http")
-async def log_requests(request: Request, call_next):
+async def safe_handler(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception as e:
@@ -58,14 +58,15 @@ app.add_middleware(
 SEMANTIC_ENGINE_URL = settings.SEMANTIC_ENGINE_URL
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 
-llm_model = None
+# --- CONFIGURACIÓN DE IA ROBUSTA ---
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 if GEMINI_KEY:
-    try:
-        genai.configure(api_key=GEMINI_KEY)
-        llm_model = genai.GenerativeModel("gemini-1.5-flash")
-    except Exception as e:
-        print(f"IA Error: {e}")
+    genai.configure(api_key=GEMINI_KEY)
+
+
+def get_model(model_name="gemini-1.5-flash"):
+    return genai.GenerativeModel(model_name)
+
 
 oauth = OAuth()
 if settings.GOOGLE_CLIENT_ID:
@@ -107,20 +108,20 @@ class ActivityCreate(BaseModel):
     imagen: str
 
 
-users_db = {"admin@gmail.com": {"password": "admin", "role": "admin", "name": "Admin"}}
+users_db = {
+    "admin@gmail.com": {"password": "admin", "role": "admin", "name": "Administrador"}
+}
 _users_synced = False
 
 
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(
+            res = await client.post(
                 SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0
             )
-            if response.status_code != 200:
-                return []
-            return response.json()
-        except Exception:
+            return res.json() if res.status_code == 200 else []
+        except:
             return []
 
 
@@ -207,7 +208,7 @@ async def google_auth_callback(request: Request):
         return HTMLResponse(
             content=f"<script>window.location.replace('{target_url}');</script>"
         )
-    except Exception:
+    except:
         return RedirectResponse(url="/?error=auth_failed")
 
 
@@ -239,22 +240,51 @@ async def get_actividades(
 
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
-    if not llm_model:
-        return {"reply": "IA no configurada."}
+    if not GEMINI_KEY:
+        return {
+            "reply": "¡Hola! Soy BioBot. Aún no tengo mi 'cerebro' configurado (falta API Key), pero te invito a explorar las maravillas del Caquetá manualmente."
+        }
+
     message = payload.get("message", "")
-    query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun ?precio WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun . OPTIONAL {{ ?s :precio ?precio }} }} LIMIT 10"
+    query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 10"
     raw_data = await query_semantic_engine(query_context)
     context_str = "Destinos: " + ", ".join(
         [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
     )
-    prompt = (
-        f"Eres BioBot, guía del Caquetá. Contexto: {context_str}. Pregunta: {message}"
-    )
-    try:
-        response = llm_model.generate_content(prompt)
-        return {"reply": response.text}
-    except Exception as e:
-        return {"reply": f"Error: {str(e)}"}
+
+    prompt = f"""
+    Eres BioBot, el guía local más apasionado del Caquetá, Colombia. 🌿✨
+    Tu misión es enamorar a los viajeros de nuestra tierra. Responde de forma cálida, humana y muy servicial.
+    
+    CONTEXTO REAL DE LA WEB:
+    {context_str}
+    
+    PREGUNTA DEL VIAJERO:
+    {message}
+    
+    INSTRUCCIONES:
+    - Responde como un humano, no menciones que eres una IA.
+    - Si te preguntan por cascadas o destinos, usa el contexto anterior de forma natural.
+    - Usa emojis como 🌴, 💦, 🦜 para darle vida a la charla.
+    - Mantén la respuesta concisa pero llena de energía.
+    """
+
+    for model_name in ["gemini-1.5-flash", "gemini-pro"]:
+        try:
+            model = get_model(model_name)
+            response = model.generate_content(prompt)
+            if response and response.text:
+                return {"reply": response.text}
+        except Exception as e:
+            if "404" not in str(e):
+                return {
+                    "reply": f"¡Hola! BioBot está un poco cansado. Error: {str(e)[:50]}"
+                }
+            continue
+
+    return {
+        "reply": "¡Hola! Por ahora tengo problemas para acceder a mi memoria de IA, pero te aseguro que el Caquetá tiene las mejores cascadas. ¡Explora nuestra sección de destinos!"
+    }
 
 
 @app.get("/api/v1/stats")
@@ -263,7 +293,7 @@ async def get_stats():
         "total_atractivos": 0,
         "por_municipio": {},
         "por_dificultad": {},
-        "grafo_status": "Online",
+        "grafo_status": "Vívido",
     }
 
 
