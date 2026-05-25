@@ -70,6 +70,10 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "❌ Error: VERCEL_TOKEN no está configurado en GitHub Secrets."
+            exit 1
+          fi
           vercel --prod --token $VERCEL_TOKEN --confirm
 
       # ---------- Clean up ----------
