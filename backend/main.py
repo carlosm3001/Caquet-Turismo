@@ -31,7 +31,7 @@ except ImportError:
 
         settings = FallbackSettings()
 
-app = FastAPI(title="Amazonia-IA V5.3")
+app = FastAPI(title="Amazonia-IA V5.5")
 
 
 @app.middleware("http")
@@ -231,44 +231,102 @@ async def get_actividades(
     return lista
 
 
+@app.post("/api/v1/actividades")
+async def post_actividad(act: ActivityCreate):
+    safe_id = act.id.replace(" ", "_")
+    safe_mun = act.municipio.replace(" ", "_")
+    query = f"PREFIX : <{BASE_PREFIX}> INSERT DATA {{ :{safe_id} rdf:type :Actividad ; :nombreActividad '{act.nombre}' ; :tipoActividad '{act.categoria}' ; :ubicadaEn :{safe_mun} ; :precio {act.precio} ; :imagenURL '{act.imagen}' . }}"
+    await query_semantic_engine(query)
+    return {"status": "success"}
+
+
+@app.get("/api/v1/admin/users")
+async def get_admin_users():
+    await sync_users_from_ontology()
+    return [
+        {"email": e, "name": i["name"], "role": i["role"]} for e, i in users_db.items()
+    ]
+
+
+@app.get("/api/v1/admin/full-stats")
+async def get_admin_full_stats():
+    q_res = f"PREFIX : <{BASE_PREFIX}> SELECT ?reserva ?user ?fecha ?personas ?dias ?precio_base WHERE {{ ?reserva rdf:type :Reserva . ?reserva :usuarioReserva ?user . ?reserva :fechaInicio ?fecha . ?reserva :cantidadPersonas ?personas . ?reserva :cantidadDias ?dias . ?reserva :lugarReservado ?lugar_uri . OPTIONAL {{ ?lugar_uri :precio ?precio_base }} }}"
+    res_data = await query_semantic_engine(q_res)
+    total_ingresos = sum(
+        int(r.get("precio_base", 0)) * int(r.get("dias", 1)) for r in res_data
+    )
+    q_tipo = f"PREFIX : <{BASE_PREFIX}> SELECT ?tipo (COUNT(?s) as ?c) WHERE {{ ?s rdf:type :Actividad . ?s :tipoActividad ?tipo }} GROUP BY ?tipo"
+    tipos = await query_semantic_engine(q_tipo)
+    return {
+        "kpis": {
+            "total_reservas": len(res_data),
+            "ingresos_proyectados": total_ingresos,
+            "usuarios_activos": len(users_db),
+            "puntos_interes": 0,
+        },
+        "distribucion_actividad": {row["tipo"]: int(row["c"]) for row in tipos},
+        "ultimas_reservas": [
+            {"id": r["reserva"].split("#")[-1], "user": r["user"], "fecha": r["fecha"]}
+            for r in res_data[-5:]
+        ],
+    }
+
+
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     if not GEMINI_KEY:
-        return {
-            "reply": "¡Hola! Soy BioBot. Configura mi API Key para que pueda guiarte por el Caquetá."
-        }
+        return {"reply": "¡Hola! BioBot necesita su API Key para guiarte."}
     message = payload.get("message", "")
     query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 8"
     raw_data = await query_semantic_engine(query_context)
     context_str = "Destinos: " + ", ".join(
         [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
     )
-    prompt = f"Eres BioBot, guía experto del Caquetá. Sé humano, cálido y usa emojis. Contexto: {context_str}. Viajero pregunta: {message}"
+    prompt = f"Eres BioBot, guía local del Caquetá. Sé humano y cálido. Contexto: {context_str}. Pregunta: {message}"
+    for m_name in ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]:
+        try:
+            model = genai.GenerativeModel(model_name=m_name)
+            response = model.generate_content(prompt)
+            if response and response.text:
+                return {"reply": response.text}
+        except Exception:
+            continue
+    return {
+        "reply": "¡Hola! Mis circuitos de IA descansan, ¡pero el Caquetá te espera! 🌴"
+    }
 
-    try:
-        # Auto-descubrimiento de modelos disponibles
-        models = [
-            m.name
-            for m in genai.list_models()
-            if "generateContent" in m.supported_generation_methods
-        ]
-        # Priorizar flash si existe, si no el primero disponible
-        best_model = next(
-            (m for m in models if "flash" in m), models[0] if models else None
-        )
 
-        if not best_model:
-            return {
-                "reply": "¡Hola! BioBot no encuentra modelos disponibles en este momento. ¡Explora la web mientras vuelvo!"
-            }
+@app.post("/api/v1/reservas")
+async def post_reserva(res: ReservaRequest):
+    res_id = f"Reserva_{int(datetime.utcnow().timestamp())}"
+    query = f"PREFIX : <{BASE_PREFIX}> INSERT DATA {{ :{res_id} rdf:type :Reserva ; :fechaInicio '{res.fecha_inicio}' ; :cantidadPersonas {res.personas} ; :cantidadDias {res.dias} ; :usuarioReserva '{res.user_email}' ; :lugarReservado :{res.lugar_id} . }}"
+    await query_semantic_engine(query)
+    return {"status": "success", "id": res_id}
 
-        model = genai.GenerativeModel(model_name=best_model)
-        response = model.generate_content(prompt)
-        return {"reply": response.text}
-    except Exception as e:
-        return {
-            "reply": f"¡Hola! BioBot tuvo un tropiezo técnico: {str(e)[:100]}. ¡Pero el Caquetá te espera! 🌴"
+
+@app.get("/api/v1/mis-reservas")
+async def get_mis_reservas(email: str):
+    query = f"PREFIX : <{BASE_PREFIX}> SELECT ?reserva ?fecha ?personas ?dias ?nombre_lugar ?precio_base WHERE {{ ?reserva rdf:type :Reserva . ?reserva :usuarioReserva '{email}' . ?reserva :fechaInicio ?fecha . ?reserva :cantidadPersonas ?personas . ?reserva :cantidadDias ?dias . ?reserva :lugarReservado ?lugar_uri . ?lugar_uri :nombreActividad ?nombre_lugar . ?lugar_uri :precio ?precio_base . }}"
+    results = await query_semantic_engine(query)
+    return [
+        {
+            "id": r["reserva"].split("#")[-1],
+            "fecha": r["fecha"],
+            "personas": r["personas"],
+            "dias": r["dias"],
+            "lugar": r["nombre_lugar"],
+            "precio_total": int(r["precio_base"]) * int(r["dias"]),
         }
+        for r in results
+    ]
+
+
+@app.delete("/api/v1/reservas/{reserva_id}")
+async def delete_reserva(reserva_id: str):
+    await query_semantic_engine(
+        f"PREFIX : <{BASE_PREFIX}> DELETE WHERE {{ :{reserva_id} ?p ?o }}"
+    )
+    return {"status": "success"}
 
 
 @app.get("/api/v1/stats")
