@@ -31,7 +31,7 @@ except ImportError:
 
         settings = FallbackSettings()
 
-app = FastAPI(title="Amazonia-IA V5.1")
+app = FastAPI(title="Amazonia-IA V5.2")
 
 
 @app.middleware("http")
@@ -44,7 +44,6 @@ async def safe_handler(request: Request, call_next):
 
 SECRET_KEY = settings.JWT_SECRET
 ALGORITHM = "HS256"
-
 app.add_middleware(
     SessionMiddleware,
     secret_key=SECRET_KEY,
@@ -236,26 +235,30 @@ async def get_actividades(
 async def chat_ai(payload: dict = Body(...)):
     if not GEMINI_KEY:
         return {
-            "reply": "¡Hola! Soy BioBot. Aún no tengo mi 'cerebro' configurado, ¡pero Caquetá te espera!"
+            "reply": "¡Hola! Soy BioBot. Configura mi cerebro con una API Key para que pueda ayudarte mejor."
         }
     message = payload.get("message", "")
     query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 10"
     raw_data = await query_semantic_engine(query_context)
-    context_str = "Destinos: " + ", ".join(
+    context_str = "Destinos Reales: " + ", ".join(
         [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
     )
-    prompt = f"Eres BioBot, el guía local del Caquetá. Sé humano y cálido. Contexto real: {context_str}. Viajero pregunta: {message}"
-    # Intentar modelos con nombres normalizados
-    for m_name in ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]:
+    prompt = f"Eres BioBot, guía local del Caquetá. Sé cálido y humano. Contexto: {context_str}. Viajero pregunta: {message}"
+
+    last_err = ""
+    # Ciclo de modelos: Intentar desde el más nuevo al más estable
+    for m_name in ["gemini-1.5-flash", "gemini-1.0-pro", "gemini-pro"]:
         try:
-            model = genai.GenerativeModel(model_name=m_name)
+            model = genai.GenerativeModel(m_name)
             response = model.generate_content(prompt)
             if response and response.text:
                 return {"reply": response.text}
-        except Exception:
+        except Exception as e:
+            last_err = str(e)
             continue
+
     return {
-        "reply": "¡Hola! Aquí BioBot. Mis circuitos de IA están en mantenimiento, pero el Caquetá está más vivo que nunca. ¡Explora los destinos en la web! 🌴"
+        "reply": f"¡Hola! BioBot tiene un problema técnico: {last_err[:100]}. Pero el Caquetá te espera con sus cascadas vivas. ¡Explora la web! 🌴"
     }
 
 
