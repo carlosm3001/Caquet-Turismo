@@ -489,12 +489,23 @@ async def chat_ai(payload: dict = Body(...)):
     """
 
     try:
+        print(f"BioBot procesando prompt: {prompt[:100]}...")
         response = llm_model.generate_content(prompt)
+
+        if not response or not hasattr(response, "text"):
+            print(f"Respuesta de Gemini inválida o vacía: {response}")
+            return {
+                "reply": "BioBot tuvo un problema al generar la respuesta. Por favor intenta con otra pregunta."
+            }
+
         return {"reply": response.text}
     except Exception as e:
-        print(f"Error en Gemini: {e}")
+        print(f"ERROR CRÍTICO EN GEMINI: {str(e)}")
+        import traceback
+
+        traceback.print_exc()
         return {
-            "reply": "Lo siento, tuve un problema procesando tu solicitud. Inténtalo de nuevo más tarde."
+            "reply": f"Error de comunicación con BioBot: {str(e)[:100]}. Asegúrate de que la API Key sea válida."
         }
 
 
