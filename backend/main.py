@@ -31,7 +31,7 @@ except ImportError:
 
         settings = FallbackSettings()
 
-app = FastAPI(title="Amazonia-IA V5.2")
+app = FastAPI(title="Amazonia-IA V5.3")
 
 
 @app.middleware("http")
@@ -235,31 +235,40 @@ async def get_actividades(
 async def chat_ai(payload: dict = Body(...)):
     if not GEMINI_KEY:
         return {
-            "reply": "¡Hola! Soy BioBot. Configura mi cerebro con una API Key para que pueda ayudarte mejor."
+            "reply": "¡Hola! Soy BioBot. Configura mi API Key para que pueda guiarte por el Caquetá."
         }
     message = payload.get("message", "")
-    query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 10"
+    query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 8"
     raw_data = await query_semantic_engine(query_context)
-    context_str = "Destinos Reales: " + ", ".join(
+    context_str = "Destinos: " + ", ".join(
         [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
     )
-    prompt = f"Eres BioBot, guía local del Caquetá. Sé cálido y humano. Contexto: {context_str}. Viajero pregunta: {message}"
+    prompt = f"Eres BioBot, guía experto del Caquetá. Sé humano, cálido y usa emojis. Contexto: {context_str}. Viajero pregunta: {message}"
 
-    last_err = ""
-    # Ciclo de modelos: Intentar desde el más nuevo al más estable
-    for m_name in ["gemini-1.5-flash", "gemini-1.0-pro", "gemini-pro"]:
-        try:
-            model = genai.GenerativeModel(m_name)
-            response = model.generate_content(prompt)
-            if response and response.text:
-                return {"reply": response.text}
-        except Exception as e:
-            last_err = str(e)
-            continue
+    try:
+        # Auto-descubrimiento de modelos disponibles
+        models = [
+            m.name
+            for m in genai.list_models()
+            if "generateContent" in m.supported_generation_methods
+        ]
+        # Priorizar flash si existe, si no el primero disponible
+        best_model = next(
+            (m for m in models if "flash" in m), models[0] if models else None
+        )
 
-    return {
-        "reply": f"¡Hola! BioBot tiene un problema técnico: {last_err[:100]}. Pero el Caquetá te espera con sus cascadas vivas. ¡Explora la web! 🌴"
-    }
+        if not best_model:
+            return {
+                "reply": "¡Hola! BioBot no encuentra modelos disponibles en este momento. ¡Explora la web mientras vuelvo!"
+            }
+
+        model = genai.GenerativeModel(model_name=best_model)
+        response = model.generate_content(prompt)
+        return {"reply": response.text}
+    except Exception as e:
+        return {
+            "reply": f"¡Hola! BioBot tuvo un tropiezo técnico: {str(e)[:100]}. ¡Pero el Caquetá te espera! 🌴"
+        }
 
 
 @app.get("/api/v1/stats")
