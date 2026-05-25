@@ -4,7 +4,6 @@ from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
 import os
 import random
 import jwt
