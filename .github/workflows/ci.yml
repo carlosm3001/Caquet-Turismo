@@ -60,7 +60,7 @@ jobs:
       - name: Install frontend dependencies (tailwindcss & autoprefixer)
         working-directory: ./frontend
         run: |
-          npm ci || true  # frontend is mostly static, ignore if no package.json
+          npm install
 
       # ---------- Docker multi‑stage build ----------
       - name: Set up Docker Buildx

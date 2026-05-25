@@ -1,0 +1,14 @@
+{
+  "name": "caqueta-turismo-frontend",
+  "version": "1.0.0",
+  "description": "SPA para el proyecto de turismo en Caquetá",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tailwindcss": "^3.0.0",
+    "autoprefixer": "^10.0.0"
+  }
+}
