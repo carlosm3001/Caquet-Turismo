@@ -440,11 +440,62 @@ async def get_admin_full_stats():
 
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
-    # Lógica de IA mejorada
-    # Aquí podrías integrar el llm_model si lo tienes configurado
-    return {
-        "reply": "Estoy procesando tu solicitud sobre el Caquetá. Por ahora, te recomiendo explorar la sección de destinos."
-    }
+    if not llm_model:
+        return {
+            "reply": "El motor de IA no está configurado (falta GEMINI_API_KEY). Por favor, contacta al administrador."
+        }
+
+    message = payload.get("message", "")
+    if not message:
+        raise HTTPException(status_code=400, detail="Mensaje vacío")
+
+    # 1. Obtener contexto de la ontología (Actividades y Municipios)
+    query_context = f"""
+    PREFIX : <{BASE_PREFIX}>
+    SELECT DISTINCT ?nombre ?mun ?precio ?desc ?dif
+    WHERE {{
+      ?s rdf:type :Actividad .
+      ?s :nombreActividad ?nombre .
+      ?s :ubicadaEn ?m .
+      ?m :nombreMunicipio ?mun .
+      OPTIONAL {{ ?s :precio ?precio }}
+      OPTIONAL {{ ?s :descripcion ?desc }}
+      OPTIONAL {{ ?s :nivelDificultad ?dif }}
+    }}
+    LIMIT 20
+    """
+    # Nota: Usamos una consulta simplificada para el contexto inicial
+    raw_data = await query_semantic_engine(query_context)
+
+    context_str = "Información actual de destinos en Caquetá:\n"
+    for item in raw_data:
+        context_str += f"- {item.get('nombre')}: Ubicado en {item.get('mun')}. Precio: ${item.get('precio') or '0'}. Dificultad: {item.get('dif') or 'Media'}. Descripción: {item.get('desc') or 'Sin descripción'}.\n"
+
+    # 2. Construir el Prompt para Gemini
+    prompt = f"""
+    Eres 'BioBot', el guía experto en turismo del departamento del Caquetá, Colombia. 
+    Tu personalidad es amable, entusiasta por la naturaleza y muy conocedora de la biodiversidad local.
+    
+    Usa la siguiente información real extraída de nuestra base de datos semántica para responder la pregunta del usuario. 
+    Si la información no está en el contexto, usa tu conocimiento general sobre el Caquetá pero aclara que es información sugerida.
+    
+    CONTEXTO SEMÁNTICO:
+    {context_str}
+    
+    PREGUNTA DEL USUARIO:
+    {message}
+    
+    RESPUESTA:
+    """
+
+    try:
+        response = llm_model.generate_content(prompt)
+        return {"reply": response.text}
+    except Exception as e:
+        print(f"Error en Gemini: {e}")
+        return {
+            "reply": "Lo siento, tuve un problema procesando tu solicitud. Inténtalo de nuevo más tarde."
+        }
 
 
 @app.get("/api/v1/admin/dashboard")

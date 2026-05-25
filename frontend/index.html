@@ -126,6 +126,33 @@
     </div>
 </div>
 
+<!-- CHAT FLOTANTE (BIOBOT) -->
+<div id="chatWidget" class="fixed bottom-8 right-8 z-[5000]">
+    <button onclick="toggleChat()" class="w-16 h-16 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all hover:bg-emerald-700">
+        <i class="fas fa-comment-dots text-2xl"></i>
+    </button>
+    
+    <div id="chatWindow" class="absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-[2rem] shadow-3xl border border-slate-100 flex flex-col overflow-hidden hidden animate-fade-in">
+        <div class="bg-emerald-950 p-6 text-white flex items-center gap-3">
+            <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center"><i class="fas fa-robot"></i></div>
+            <div>
+                <p class="text-xs font-black uppercase tracking-widest">BioBot</p>
+                <p class="text-[8px] text-emerald-400 font-bold uppercase">IA Amazónica Online</p>
+            </div>
+            <button onclick="toggleChat()" class="ml-auto text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chatMessages" class="flex-1 p-6 space-y-4 max-h-80 overflow-y-auto bg-slate-50">
+            <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100">
+                <p class="text-[10px] font-medium text-slate-600 italic">¡Hola! Soy BioBot. Pregúntame sobre destinos, cascadas o municipios del Caquetá. ¿A dónde quieres ir hoy?</p>
+            </div>
+        </div>
+        <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
+            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." class="flex-1 px-4 py-3 bg-slate-50 border-none rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+            <button onclick="sendChatMessage()" class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-paper-plane text-xs"></i></button>
+        </div>
+    </div>
+</div>
+
 <script>
     const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? "http://localhost:8001/api/v1" : window.location.origin + "/api/v1";
     let user = null;
@@ -242,6 +269,65 @@
                 </div>
             </div>`).join('');
     }
+
+    function toggleChat() {
+        document.getElementById('chatWindow').classList.toggle('hidden');
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const messages = document.getElementById('chatMessages');
+        const text = input.value.trim();
+        if(!text) return;
+
+        // Mostrar mensaje del usuario
+        messages.innerHTML += `
+            <div class="flex justify-end">
+                <div class="bg-emerald-600 text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-[80%]">
+                    <p class="text-[10px] font-bold">${text}</p>
+                </div>
+            </div>`;
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+
+        // Mostrar indicador de carga
+        const loadingId = 'loading-' + Date.now();
+        messages.innerHTML += `
+            <div id="${loadingId}" class="flex gap-2 items-center text-slate-400 italic">
+                <div class="w-8 h-8 bg-white rounded-xl flex items-center justify-center shadow-sm"><i class="fas fa-robot animate-pulse"></i></div>
+                <p class="text-[8px] font-black uppercase tracking-widest">BioBot está pensando...</p>
+            </div>`;
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+            const res = await fetch(`${API}/chat`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: text })
+            });
+            const data = await res.json();
+            
+            // Eliminar indicador de carga
+            document.getElementById(loadingId).remove();
+
+            // Mostrar respuesta de la IA
+            messages.innerHTML += `
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[90%]">
+                    <p class="text-[10px] font-medium text-slate-700 leading-relaxed">${data.reply}</p>
+                </div>`;
+            messages.scrollTop = messages.scrollHeight;
+        } catch (e) {
+            document.getElementById(loadingId).remove();
+            messages.innerHTML += `<p class="text-[8px] text-red-400 font-bold uppercase">Error de conexión con BioBot</p>`;
+        }
+    }
+
+    // Permitir enviar con Enter
+    document.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && document.activeElement.id === 'chatInput') {
+            sendChatMessage();
+        }
+    });
 
     async function showView(view) {
         const container = document.getElementById('mainContainer');
