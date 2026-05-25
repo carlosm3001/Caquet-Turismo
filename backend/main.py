@@ -229,7 +229,7 @@ async def google_auth_callback(request: Request):
         return HTMLResponse(
             content=f"<script>window.location.replace('{target_url}');</script>"
         )
-    except Exception as e:
+    except Exception:
         return RedirectResponse(url="/?error=auth_failed")
 
 
@@ -414,7 +414,6 @@ async def get_admin_full_stats():
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     # Lógica de IA mejorada
-    message = payload.get("message", "")
     # Aquí podrías integrar el llm_model si lo tienes configurado
     return {
         "reply": "Estoy procesando tu solicitud sobre el Caquetá. Por ahora, te recomiendo explorar la sección de destinos."
