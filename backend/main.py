@@ -11,20 +11,38 @@ import jwt
 import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
-from config import settings
+
+try:
+    from config import settings
+except ImportError:
+    try:
+        from .config import settings
+    except ImportError:
+        # Fallback manual si falla la importación del módulo config
+        class FallbackSettings:
+            JWT_SECRET = os.getenv("JWT_SECRET", "caqueta_safe_2026")
+            VERCEL = bool(os.getenv("VERCEL"))
+            GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+            GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
+            GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "")
+            SEMANTIC_ENGINE_URL = os.getenv("PROD_SEMANTIC_ENGINE_URL", os.getenv("SEMANTIC_ENGINE_URL", "http://localhost:3030/sparql"))
+
+        settings = FallbackSettings()
+
+print(f"Iniciando Backend en Vercel: {settings.VERCEL}")
 
 app = FastAPI(title="Amazonia-IA V4.5 - Enhanced Semantic Data")
 
-
-# --- PROXY PARA VERCEL (HTTPS) ---
-class ProxyHeadersMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        if settings.VERCEL:
-            request.scope["scheme"] = "https"
-        return await call_next(request)
-
-
-app.add_middleware(ProxyHeadersMiddleware)
+# --- MIDDLEWARES ---
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    print(f"Request: {request.method} {request.url.path}")
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        print(f"Error procesando request: {str(e)}")
+        return HTMLResponse(content=f"Internal Server Error: {str(e)}", status_code=500)
 
 SECRET_KEY = settings.JWT_SECRET
 ALGORITHM = "HS256"
