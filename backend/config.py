@@ -1,4 +1,8 @@
-from pydantic import BaseSettings, Field
+try:
+    from pydantic_settings import BaseSettings
+except ImportError:
+    from pydantic import BaseSettings
+from pydantic import Field
 import os
 
 class Settings(BaseSettings):

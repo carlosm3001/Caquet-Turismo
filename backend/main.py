@@ -12,8 +12,7 @@ import httpx
 import google.generativeai as genai
 from datetime import datetime, timedelta
 import json
-from pydantic import BaseSettings, Field
-from .config import settings
+from config import settings
 
 app = FastAPI(title="Amazonia-IA V4.5 - Enhanced Semantic Data")
 
@@ -121,11 +120,14 @@ class ActivityCreate(BaseModel):
 async def query_semantic_engine(sparql_query: str):
     async with httpx.AsyncClient() as client:
         try:
+            print(f"Consultando Motor Semántico en: {SEMANTIC_ENGINE_URL}")
             response = await client.post(SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0)
+            if response.status_code != 200:
+                print(f"Error del Motor Semántico: {response.status_code} - {response.text}")
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"Error consultando Motor Semántico: {e}")
+            print(f"Error de conexión con Motor Semántico ({SEMANTIC_ENGINE_URL}): {str(e)}")
             return []
 
 def create_token(data: dict):

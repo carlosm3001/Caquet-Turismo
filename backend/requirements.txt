@@ -7,3 +7,6 @@ httpx
 cryptography
 itsdangerous
 google-generativeai
+pydantic-settings
+python-multipart
+pytest

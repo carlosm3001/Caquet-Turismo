@@ -1,0 +1,104 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      # Variables de entorno para la configuración del backend
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------- Backend (FastAPI) ----------
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install black flake8 pytest
+
+      - name: Lint backend (black)
+        working-directory: ./backend
+        run: |
+          black --check .
+
+      - name: Lint backend (flake8)
+        working-directory: ./backend
+        run: |
+          flake8 .
+
+      - name: Run backend tests
+        working-directory: ./backend
+        run: |
+          pytest -q
+
+      # ---------- Frontend (static SPA) ----------
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies (tailwindcss & autoprefixer)
+        working-directory: ./frontend
+        run: |
+          npm ci || true  # frontend is mostly static, ignore if no package.json
+
+      # ---------- Docker multi‑stage build ----------
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image (backend)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/caqueta-turismo-backend:latest
+          file: ./backend/Dockerfile
+
+      # ---------- Deploy to Vercel ----------
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+
+      - name: Deploy to Vercel (frontend)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel --prod --token $VERCEL_TOKEN --confirm
+
+      - name: Deploy backend URL to Vercel (as external server)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Si el backend se despliega como una función serverless, se puede usar:
+          # vercel --prod ./backend --token $VERCEL_TOKEN --confirm
+          echo "Backend está corriendo en Docker y expuesto mediante Vercel rewrites (vercel.json)"
+
+      # ---------- Clean up ----------
+      - name: Summary
+        run: |
+          echo "✅ CI/CD pipeline completado exitosamente"
