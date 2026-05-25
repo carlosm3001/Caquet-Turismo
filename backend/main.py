@@ -275,25 +275,52 @@ async def get_admin_full_stats():
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     if not GEMINI_KEY:
-        return {"reply": "¡Hola! BioBot necesita su API Key para guiarte."}
+        return {
+            "reply": "¡Hola! Soy BioBot. Configura mi API Key para que pueda guiarte por el Caquetá."
+        }
     message = payload.get("message", "")
     query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 8"
     raw_data = await query_semantic_engine(query_context)
     context_str = "Destinos: " + ", ".join(
         [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
     )
-    prompt = f"Eres BioBot, guía local del Caquetá. Sé humano y cálido. Contexto: {context_str}. Pregunta: {message}"
-    for m_name in ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]:
-        try:
-            model = genai.GenerativeModel(model_name=m_name)
-            response = model.generate_content(prompt)
-            if response and response.text:
-                return {"reply": response.text}
-        except Exception:
-            continue
-    return {
-        "reply": "¡Hola! Mis circuitos de IA descansan, ¡pero el Caquetá te espera! 🌴"
-    }
+    prompt = f"""
+    Eres BioBot, el guía local más apasionado del Caquetá, Colombia. 🌿✨
+    Tu misión es enamorar a los viajeros de nuestra tierra. Responde de forma cálida, humana y muy servicial.
+    
+    CONTEXTO REAL DE LA WEB:
+    {context_str}
+    
+    PREGUNTA DEL VIAJERO:
+    {message}
+    
+    INSTRUCCIONES:
+    - Responde como un guía humano, no mencIONES que eres una IA.
+    - Usa emojis como 🌴, 💦, 🦜 para darle vida a la charla.
+    - Mantén la respuesta concisa pero llena de energía amazónica.
+    """
+
+    try:
+        # Auto-descubrimiento de modelos disponibles para evitar errores 404
+        available_models = [
+            m.name
+            for m in genai.list_models()
+            if "generateContent" in m.supported_generation_methods
+        ]
+        best_model = next(
+            (m for m in available_models if "flash" in m),
+            available_models[0] if available_models else "models/gemini-pro",
+        )
+
+        model = genai.GenerativeModel(model_name=best_model)
+        response = model.generate_content(prompt)
+        if response and response.text:
+            return {"reply": response.text}
+        return {"reply": "¡Hola! BioBot se quedó sin palabras. ¡Prueba de nuevo! 🦜"}
+    except Exception as e:
+        return {
+            "reply": f"¡Hola! BioBot tuvo un tropiezo técnico: {str(e)[:100]}. ¡Pero el Caquetá te espera! 🌴"
+        }
 
 
 @app.post("/api/v1/reservas")
