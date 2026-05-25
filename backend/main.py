@@ -31,7 +31,7 @@ except ImportError:
 
         settings = FallbackSettings()
 
-app = FastAPI(title="Amazonia-IA V5.0")
+app = FastAPI(title="Amazonia-IA V5.1")
 
 
 @app.middleware("http")
@@ -58,15 +58,9 @@ app.add_middleware(
 SEMANTIC_ENGINE_URL = settings.SEMANTIC_ENGINE_URL
 BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 
-# --- CONFIGURACIÓN DE IA ROBUSTA ---
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 if GEMINI_KEY:
     genai.configure(api_key=GEMINI_KEY)
-
-
-def get_model(model_name="gemini-1.5-flash"):
-    return genai.GenerativeModel(model_name)
-
 
 oauth = OAuth()
 if settings.GOOGLE_CLIENT_ID:
@@ -121,7 +115,7 @@ async def query_semantic_engine(sparql_query: str):
                 SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0
             )
             return res.json() if res.status_code == 200 else []
-        except:
+        except Exception:
             return []
 
 
@@ -208,7 +202,7 @@ async def google_auth_callback(request: Request):
         return HTMLResponse(
             content=f"<script>window.location.replace('{target_url}');</script>"
         )
-    except:
+    except Exception:
         return RedirectResponse(url="/?error=auth_failed")
 
 
@@ -242,48 +236,26 @@ async def get_actividades(
 async def chat_ai(payload: dict = Body(...)):
     if not GEMINI_KEY:
         return {
-            "reply": "¡Hola! Soy BioBot. Aún no tengo mi 'cerebro' configurado (falta API Key), pero te invito a explorar las maravillas del Caquetá manualmente."
+            "reply": "¡Hola! Soy BioBot. Aún no tengo mi 'cerebro' configurado, ¡pero Caquetá te espera!"
         }
-
     message = payload.get("message", "")
     query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 10"
     raw_data = await query_semantic_engine(query_context)
     context_str = "Destinos: " + ", ".join(
         [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
     )
-
-    prompt = f"""
-    Eres BioBot, el guía local más apasionado del Caquetá, Colombia. 🌿✨
-    Tu misión es enamorar a los viajeros de nuestra tierra. Responde de forma cálida, humana y muy servicial.
-    
-    CONTEXTO REAL DE LA WEB:
-    {context_str}
-    
-    PREGUNTA DEL VIAJERO:
-    {message}
-    
-    INSTRUCCIONES:
-    - Responde como un humano, no menciones que eres una IA.
-    - Si te preguntan por cascadas o destinos, usa el contexto anterior de forma natural.
-    - Usa emojis como 🌴, 💦, 🦜 para darle vida a la charla.
-    - Mantén la respuesta concisa pero llena de energía.
-    """
-
-    for model_name in ["gemini-1.5-flash", "gemini-pro"]:
+    prompt = f"Eres BioBot, el guía local del Caquetá. Sé humano y cálido. Contexto real: {context_str}. Viajero pregunta: {message}"
+    # Intentar modelos con nombres normalizados
+    for m_name in ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]:
         try:
-            model = get_model(model_name)
+            model = genai.GenerativeModel(model_name=m_name)
             response = model.generate_content(prompt)
             if response and response.text:
                 return {"reply": response.text}
-        except Exception as e:
-            if "404" not in str(e):
-                return {
-                    "reply": f"¡Hola! BioBot está un poco cansado. Error: {str(e)[:50]}"
-                }
+        except Exception:
             continue
-
     return {
-        "reply": "¡Hola! Por ahora tengo problemas para acceder a mi memoria de IA, pero te aseguro que el Caquetá tiene las mejores cascadas. ¡Explora nuestra sección de destinos!"
+        "reply": "¡Hola! Aquí BioBot. Mis circuitos de IA están en mantenimiento, pero el Caquetá está más vivo que nunca. ¡Explora los destinos en la web! 🌴"
     }
 
 
