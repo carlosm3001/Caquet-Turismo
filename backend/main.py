@@ -41,9 +41,7 @@ app.add_middleware(
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
 SEMANTIC_ENGINE_URL = settings.SEMANTIC_ENGINE_URL
-BASE_PREFIX = (
-    "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
-)
+BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
 
 # --- IA GEMINI ---
 llm_model = None
@@ -65,6 +63,7 @@ if settings.GOOGLE_CLIENT_ID:
         server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
         client_kwargs={"scope": "openid email profile"},
     )
+
 
 # --- MODELOS DE DATOS ---
 class LoginRequest(BaseModel):
