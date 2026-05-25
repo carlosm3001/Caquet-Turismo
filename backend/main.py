@@ -100,94 +100,9 @@ async def sync_users_from_ontology():
             }
 
 
-@app.on_event("startup")
-async def startup_event():
-    await sync_users_from_ontology()
-
-
-chat_context = {}
-
-
-class LoginRequest(BaseModel):
-    email: str
-    password: str
-
-
-class RegisterRequest(BaseModel):
-    email: str
-    password: str
-    name: str
-
-
-class ReservaRequest(BaseModel):
-    lugar_id: str
-    fecha_inicio: str
-    personas: int
-    dias: int
-    user_email: str
-    user_name: str
-
-
-class ActivityCreate(BaseModel):
-    id: str
-    nombre: str
-    categoria: str
-    municipio: str
-    precio: int
-    imagen: str
-
-
-async def query_semantic_engine(sparql_query: str):
-    async with httpx.AsyncClient() as client:
-        try:
-            print(f"Consultando Motor Semántico en: {SEMANTIC_ENGINE_URL}")
-            response = await client.post(
-                SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0
-            )
-            if response.status_code != 200:
-                print(
-                    f"Error del Motor Semántico: {response.status_code} - {response.text}"
-                )
-            response.raise_for_status()
-            return response.json()
-        except Exception as e:
-            print(
-                f"Error de conexión con Motor Semántico ({SEMANTIC_ENGINE_URL}): {str(e)}"
-            )
-            return []
-
-
-def create_token(data: dict):
-    payload = data.copy()
-    payload.update({"exp": datetime.utcnow() + timedelta(hours=24)})
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-
-
-@app.post("/api/v1/register")
-async def register(data: RegisterRequest):
-    safe_email = data.email.replace("@", "_at_").replace(".", "_")
-    query = f"""
-    PREFIX : <{BASE_PREFIX}>
-    INSERT DATA {{
-      :User_{safe_email} rdf:type :Usuario ;
-                         :userEmail "{data.email}" ;
-                         :userName "{data.name}" ;
-                         :userRole "turista" ;
-                         :userPassword "{data.password}" .
-    }}
-    """
-    await query_semantic_engine(query)
-    users_db[data.email] = {
-        "password": data.password,
-        "role": "turista",
-        "name": data.name,
-    }
-    token = create_token({"email": data.email, "name": data.name, "role": "turista"})
-    return {"token": token}
-
-
 @app.post("/api/v1/login")
 async def login(data: LoginRequest):
+    await sync_users_from_ontology()
     u = users_db.get(data.email)
     if u and u["password"] == data.password:
         token = create_token(
