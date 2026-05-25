@@ -41,7 +41,9 @@ app.add_middleware(
 
 # --- CONFIGURACIÓN DE SERVICIOS ---
 SEMANTIC_ENGINE_URL = settings.SEMANTIC_ENGINE_URL
-BASE_PREFIX = "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
+BASE_PREFIX = (
+    "http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
+)
 
 # --- IA GEMINI ---
 llm_model = None
@@ -64,6 +66,36 @@ if settings.GOOGLE_CLIENT_ID:
         client_kwargs={"scope": "openid email profile"},
     )
 
+# --- MODELOS DE DATOS ---
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    name: str
+
+
+class ReservaRequest(BaseModel):
+    lugar_id: str
+    fecha_inicio: str
+    personas: int
+    dias: int
+    user_email: str
+    user_name: str
+
+
+class ActivityCreate(BaseModel):
+    id: str
+    nombre: str
+    categoria: str
+    municipio: str
+    precio: int
+    imagen: str
+
+
 # --- PERSISTENCIA SEMÁNTICA DE USUARIOS ---
 users_db = {
     "admin@gmail.com": {
@@ -72,9 +104,33 @@ users_db = {
         "name": "Administrador Principal",
     }
 }
+_users_synced = False
+
+
+async def query_semantic_engine(sparql_query: str):
+    async with httpx.AsyncClient() as client:
+        try:
+            print(f"Consultando Motor Semántico en: {SEMANTIC_ENGINE_URL}")
+            response = await client.post(
+                SEMANTIC_ENGINE_URL, json={"query": sparql_query}, timeout=30.0
+            )
+            if response.status_code != 200:
+                print(
+                    f"Error del Motor Semántico: {response.status_code} - {response.text}"
+                )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            print(
+                f"Error de conexión con Motor Semántico ({SEMANTIC_ENGINE_URL}): {str(e)}"
+            )
+            return []
 
 
 async def sync_users_from_ontology():
+    global _users_synced
+    if _users_synced:
+        return
     query = f"""
     PREFIX : <{BASE_PREFIX}>
     SELECT ?email ?name ?role ?pass
@@ -91,13 +147,42 @@ async def sync_users_from_ontology():
         email = str(row["email"])
         p_val = str(row.get("pass")) if row.get("pass") else None
 
-        # Solo actualizamos si no existe o si el valor de la ontología es real
         if email not in users_db or (p_val and p_val != "None"):
             users_db[email] = {
                 "name": str(row["name"]),
                 "role": str(row["role"]),
                 "password": p_val if (p_val and p_val != "None") else "google_auth",
             }
+    _users_synced = True
+
+
+def create_token(data: dict):
+    payload = data.copy()
+    payload.update({"exp": datetime.utcnow() + timedelta(hours=24)})
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+
+@app.post("/api/v1/register")
+async def register(data: RegisterRequest):
+    safe_email = data.email.replace("@", "_at_").replace(".", "_")
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    INSERT DATA {{
+      :User_{safe_email} rdf:type :Usuario ;
+                         :userEmail "{data.email}" ;
+                         :userName "{data.name}" ;
+                         :userRole "turista" ;
+                         :userPassword "{data.password}" .
+    }}
+    """
+    await query_semantic_engine(query)
+    users_db[data.email] = {
+        "password": data.password,
+        "role": "turista",
+        "name": data.name,
+    }
+    token = create_token({"email": data.email, "name": data.name, "role": "turista"})
+    return {"token": token}
 
 
 @app.post("/api/v1/login")
