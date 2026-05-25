@@ -62,21 +62,7 @@ jobs:
         run: |
           npm install
 
-      # ---------- Deploy to Vercel ----------
-      - name: Install Vercel CLI
-        run: npm i -g vercel
-
-      - name: Deploy to Vercel (frontend & backend)
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "❌ Error: VERCEL_TOKEN no está configurado en GitHub Secrets."
-            exit 1
-          fi
-          vercel --prod --token $VERCEL_TOKEN --confirm
-
       # ---------- Clean up ----------
       - name: Summary
         run: |
-          echo "✅ CI/CD pipeline completado exitosamente"
+          echo "✅ Validación de calidad completada exitosamente. El código cumple con los estándares de estilo y pruebas."
