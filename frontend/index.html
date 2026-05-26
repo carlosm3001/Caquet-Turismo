@@ -6,909 +6,240 @@
     <title>Caquetá Bio • Inteligencia Amazónica</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
         .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .hero-gradient { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; }
-        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(6, 78, 59, 0.15); }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-[#fafafa] text-slate-900 overflow-x-hidden">
 
+<!-- AUTH OVERLAY -->
 <div id="loginOverlay" class="fixed inset-0 z-[7000] bg-emerald-950/90 backdrop-blur-xl flex items-center justify-center p-6 hidden">
-    <div class="bg-white rounded-[3rem] p-12 w-full max-w-md shadow-2xl text-center relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
-        <div id="authContent">
-            <h2 id="authTitle" class="text-4xl font-black text-emerald-900 mb-2 tracking-tighter">Bienvenido</h2>
-            <p id="authDesc" class="text-slate-400 mb-8 font-medium italic">Inicia sesión para explorar</p>
-            <div class="space-y-4">
-                <input type="text" id="regName" placeholder="Nombre Completo" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none hidden">
-                <input type="email" id="email" placeholder="Email" value="admin@gmail.com" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none">
-                <input type="password" id="pass" placeholder="Password" value="admin" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none">
-                <button id="authBtn" onclick="authAction()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-xl transition-all uppercase tracking-widest text-xs">INGRESAR</button>
-                <div id="googleSection">
-                    <div class="py-2 text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">O acceso rápido</div>
-                    <button onclick="loginWithGoogle()" class="w-full py-4 bg-white border border-slate-200 text-slate-600 font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-50 transition-all">
-                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5"> Google Login
-                    </button>
-                </div>
-                <div class="pt-6 border-t border-slate-50">
-                    <button id="toggleAuthMode" onclick="toggleAuthMode()" class="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:text-emerald-800 transition-colors">¿No tienes cuenta? Regístrate</button>
-                </div>
-                <button onclick="toggleLogin(false)" class="text-slate-300 text-[10px] font-bold uppercase tracking-widest mt-4 hover:text-red-400 transition-colors">Cerrar</button>
+    <div class="bg-white rounded-[3rem] p-12 w-full max-w-md shadow-2xl text-center">
+        <h2 id="authTitle" class="text-4xl font-black text-emerald-900 mb-2">Bienvenido</h2>
+        <p id="authDesc" class="text-slate-400 mb-8 italic">Inicia sesión para explorar</p>
+        <div class="space-y-4">
+            <input type="text" id="regName" placeholder="Nombre Completo" class="w-full p-4 bg-slate-50 rounded-2xl hidden outline-none focus:ring-2 focus:ring-emerald-500">
+            <input type="email" id="email" placeholder="Email" value="admin@gmail.com" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500">
+            <input type="password" id="pass" placeholder="Password" value="admin" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500">
+            <button onclick="authAction()" class="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase tracking-widest text-xs">Ingresar</button>
+            <div class="pt-6 border-t border-slate-50 flex flex-col gap-4">
+                <button onclick="toggleAuthMode()" id="toggleAuthMode" class="text-emerald-600 text-[10px] font-black uppercase">¿No tienes cuenta? Regístrate</button>
+                <button onclick="toggleLogin(false)" class="text-slate-300 text-[10px] font-bold uppercase">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- NAVBAR -->
 <nav class="fixed top-0 left-0 right-0 h-24 glass-nav z-[1000] px-10 flex items-center justify-between">
     <div class="flex items-center gap-3 cursor-pointer" onclick="showView('inicio')">
-        <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-200"><i class="fas fa-leaf text-xl"></i></div>
+        <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-leaf text-xl"></i></div>
         <span class="text-2xl font-black tracking-tighter text-emerald-950 uppercase">Caquetá <span class="text-emerald-500">Bio</span></span>
     </div>
-    <div id="topNav" class="hidden md:flex items-center gap-10 font-bold text-[10px] text-slate-400 uppercase tracking-[0.25em]">
-        <button onclick="showView('inicio')" class="hover:text-emerald-600 transition-colors">Inicio</button>
-        <button onclick="showView('explorar')" class="hover:text-emerald-600 transition-colors">Destinos</button>
-        <button onclick="showView('perfil')" id="profileLink" class="hidden hover:text-emerald-600 transition-colors">Mis Reservas</button>
-        <button onclick="showView('municipios')" class="hover:text-emerald-600 transition-colors">Estadísticas</button>
-        <div id="adminLink" class="hidden"><button onclick="showView('gestion')" class="hover:text-emerald-600 transition-colors">Panel Admin</button></div>
+    <div id="topNav" class="hidden md:flex gap-10 font-bold text-[10px] text-slate-400 uppercase tracking-[0.2em]">
+        <button onclick="showView('inicio')">Inicio</button>
+        <button onclick="showView('explorar')">Destinos</button>
+        <button id="profileLink" onclick="showView('perfil')" class="hidden">Reservas</button>
+        <button onclick="showView('municipios')">Estadísticas</button>
+        <button id="adminLink" onclick="showView('gestion')" class="hidden">Admin</button>
     </div>
     <div class="flex items-center gap-4">
-        <div id="userBtn" onclick="toggleLogin(true)" class="px-8 py-3 bg-emerald-600 text-white rounded-full text-[10px] font-black cursor-pointer hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-100 uppercase tracking-widest">Acceder</div>
-        <div id="userInfo" class="hidden flex items-center gap-4 bg-white/50 p-2 pr-6 rounded-full border border-slate-100 backdrop-blur-md">
-            <div id="userAvatar" class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold shadow-md shadow-emerald-100">?</div>
-            <span id="userName" class="text-[10px] font-black text-emerald-900 uppercase tracking-widest"></span>
-            <div onclick="logout()" class="text-slate-300 cursor-pointer hover:text-red-500 transition-all ml-2"><i class="fas fa-sign-out-alt"></i></div>
+        <div id="userBtn" onclick="toggleLogin(true)" class="px-8 py-3 bg-emerald-600 text-white rounded-full text-[10px] font-black cursor-pointer shadow-xl uppercase tracking-widest">Acceder</div>
+        <div id="userInfo" class="hidden flex items-center gap-4 bg-white/50 p-2 pr-6 rounded-full border border-slate-100">
+            <div id="userAvatar" class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold">?</div>
+            <span id="userNameText" class="text-[10px] font-black text-emerald-900 uppercase"></span>
+            <div onclick="logout()" class="text-slate-300 cursor-pointer hover:text-red-500"><i class="fas fa-sign-out-alt"></i></div>
         </div>
     </div>
 </nav>
 
 <main id="mainContainer" class="pt-24 min-h-screen"></main>
 
-<!-- MODAL DE DETALLES -->
+<!-- MODAL DETALLES -->
 <div id="detailModal" class="fixed inset-0 z-[6000] bg-emerald-950/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-[4rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-3xl relative animate-fade-in">
-        <button onclick="closeDetail()" class="absolute top-8 right-8 w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-red-500 transition-all z-10"><i class="fas fa-times"></i></button>
-        <div class="grid grid-cols-1 md:grid-cols-2">
-            <div id="detailImg" class="h-80 md:h-full bg-cover bg-center"></div>
-            <div class="p-12 md:p-16 space-y-8">
-                <div>
-                    <span id="detailCat" class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-2 block"></span>
-                    <h2 id="detailTitle" class="text-5xl font-black text-emerald-950 tracking-tighter leading-none italic"></h2>
+    <div class="bg-white rounded-[4rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto p-12 relative animate-fade-in">
+        <button onclick="closeDetail()" class="absolute top-8 right-8 text-slate-300 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+            <div id="detailImg" class="h-64 md:h-full bg-cover bg-center rounded-[3rem] shadow-xl"></div>
+            <div class="space-y-6 py-4">
+                <h2 id="detailTitle" class="text-5xl font-black text-slate-900 tracking-tighter italic"></h2>
+                <p id="detailDesc" class="text-slate-500 leading-relaxed italic"></p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-6 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-2">Precio p/p día</p><p id="detailPrecio" class="text-xl font-black text-emerald-900"></p></div>
+                    <div class="bg-slate-50 p-6 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-2">Dificultad</p><p id="detailDif" class="text-xl font-black text-emerald-900"></p></div>
                 </div>
-                <p id="detailDesc" class="text-slate-500 leading-relaxed font-medium italic"></p>
-                <div class="grid grid-cols-2 gap-6 pt-4">
-                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Precio</p>
-                        <p id="detailPrecio" class="text-xl font-black text-emerald-900"></p>
+                <div id="bookingSection" class="hidden border-t pt-8 space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1"><label class="text-[8px] font-black uppercase">Desde</label><input type="date" id="bookFechaIni" onchange="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold"></div>
+                        <div class="space-y-1"><label class="text-[8px] font-black uppercase">Hasta</label><input type="date" id="bookFechaFin" onchange="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold"></div>
                     </div>
-                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2">Dificultad</p>
-                        <p id="detailDif" class="text-xl font-black text-emerald-900"></p>
+                    <div class="bg-emerald-50 p-6 rounded-3xl flex justify-between items-center border border-emerald-100">
+                        <p class="text-xs font-black text-emerald-800 uppercase tracking-widest">Total Estimado</p>
+                        <p id="bookingTotal" class="text-3xl font-black text-emerald-900">$0</p>
                     </div>
+                    <button onclick="confirmBooking()" class="w-full py-6 bg-emerald-600 text-white font-black rounded-3xl shadow-2xl uppercase text-[10px] tracking-widest">Confirmar Reserva</button>
                 </div>
-                <div id="bookingSection" class="pt-8 border-t border-slate-50 space-y-6 hidden animate-fade-in">
-                    <h3 class="text-xl font-black text-emerald-950 tracking-tighter uppercase">Planifica tu Estancia</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Fecha Inicio</label>
-                            <input type="date" id="bookFechaIni" onchange="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Fecha Fin</label>
-                            <input type="date" id="bookFechaFin" onchange="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Personas</label>
-                            <input type="number" id="bookPers" value="1" min="1" oninput="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                        </div>
-                        <div class="bg-emerald-50 p-4 rounded-2xl flex flex-col justify-center border border-emerald-100">
-                            <p class="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-1 text-center">Total Proyectado</p>
-                            <p id="bookingTotal" class="text-2xl font-black text-emerald-900 text-center">$0</p>
-                        </div>
-                    </div>
-                    <button onclick="confirmBooking()" class="w-full py-6 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl shadow-xl hover:bg-emerald-700 transition-all">CONFIRMAR RESERVA</button>
-                    <button onclick="toggleBookingForm(false)" class="w-full py-2 text-slate-300 text-[8px] font-black uppercase hover:text-red-400 transition-colors">Cancelar</button>
-                </div>
-                <div id="initialActions" class="pt-8 border-t border-slate-50 flex gap-4">
-                    <button onclick="toggleBookingForm(true)" class="flex-1 py-6 bg-emerald-950 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl shadow-2xl">Reservar Ahora</button>
-                </div>
+                <button id="initialActions" onclick="toggleBookingForm(true)" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl shadow-xl uppercase text-[10px] tracking-widest">Reservar Ahora</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- MODAL DE COMUNIDAD (ADMIN) -->
-<div id="communityModal" class="fixed inset-0 z-[7000] bg-emerald-950/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-[4rem] max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-3xl p-12 relative animate-fade-in">
-        <button onclick="document.getElementById('communityModal').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button>
-        <h3 class="text-3xl font-black text-emerald-950 mb-8 italic">Comunidad Bio</h3>
-        <div id="usersList" class="space-y-4"></div>
-    </div>
-</div>
-
-<!-- MODAL DE ACTIVIDAD USUARIO (ADMIN) -->
-<div id="userActivityModal" class="fixed inset-0 z-[8000] bg-emerald-950/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-[4rem] max-w-xl w-full p-12 relative animate-fade-in">
-        <button onclick="document.getElementById('userActivityModal').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button>
-        <h3 id="uaTitle" class="text-2xl font-black text-emerald-950 mb-6 italic">Actividad de Usuario</h3>
-        <div id="uaContent" class="space-y-4 max-h-[50vh] overflow-y-auto"></div>
-    </div>
-</div>
-
-<!-- CHAT FLOTANTE (BIOBOT) -->
+<!-- CHAT BIOBOT -->
 <div id="chatWidget" class="fixed bottom-8 right-8 z-[5000]">
-    <button onclick="toggleChat()" class="w-16 h-16 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all hover:bg-emerald-700">
-        <i class="fas fa-comment-dots text-2xl"></i>
-    </button>
-    
-    <div id="chatWindow" class="absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-[2rem] shadow-3xl border border-slate-100 flex flex-col overflow-hidden hidden animate-fade-in">
-        <div class="bg-emerald-950 p-6 text-white flex items-center gap-3">
-            <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center"><i class="fas fa-robot"></i></div>
-            <div>
-                <p class="text-xs font-black uppercase tracking-widest">BioBot</p>
-                <p class="text-[8px] text-emerald-400 font-bold uppercase">IA Amazónica Online</p>
-            </div>
-            <button onclick="toggleChat()" class="ml-auto text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="chatMessages" class="flex-1 p-6 space-y-4 max-h-80 overflow-y-auto bg-slate-50">
-            <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100">
-                <p class="text-[10px] font-medium text-slate-600 italic">¡Hola! Soy BioBot. Pregúntame sobre destinos, cascadas o municipios del Caquetá. ¿A dónde quieres ir hoy?</p>
-            </div>
-        </div>
-        <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
-            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." class="flex-1 px-4 py-3 bg-slate-50 border-none rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-            <button onclick="sendChatMessage()" class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-paper-plane text-xs"></i></button>
-        </div>
+    <button onclick="toggleChat()" class="w-16 h-16 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all"><i class="fas fa-comment-dots text-2xl"></i></button>
+    <div id="chatWindow" class="absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-[2.5rem] shadow-3xl border border-slate-100 flex flex-col hidden overflow-hidden animate-fade-in">
+        <div class="bg-emerald-950 p-6 text-white flex items-center gap-3"><div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center"><i class="fas fa-robot"></i></div><p class="text-xs font-black uppercase tracking-widest">BioBot IA</p></div>
+        <div id="chatMessages" class="flex-1 p-6 space-y-4 max-h-80 overflow-y-auto bg-slate-50 text-[10px] italic text-slate-500">¡Hola! Soy BioBot. ¿En qué puedo ayudarte hoy?</div>
+        <div class="p-4 bg-white border-t flex gap-2"><input id="chatInput" placeholder="Preguntar..." class="flex-1 px-4 py-3 bg-slate-50 rounded-xl text-xs font-bold outline-none"><button onclick="sendChatMessage()" class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center"><i class="fas fa-paper-plane text-xs"></i></button></div>
     </div>
 </div>
 
 <script>
-    const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? "http://localhost:8001/api/v1" : window.location.origin + "/api/v1";
-    let user = null;
-    let actividadesCache = [];
-    let currentActivity = null;
-    let activeFilters = { municipio: 'Todos', dificultad: 'Todos', categoria: 'Todos' };
+    const API = (window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?"http://localhost:8001/api/v1":window.location.origin+"/api/v1";
+    let user=null, actividadesCache=[], currentActivity=null, activeFilters={municipio:'Todos',dificultad:'Todos',categoria:'Todos'};
 
-    // --- LÓGICA DE DROPDOWNS PERSONALIZADOS ---
-    function toggleDropdown(id) {
-        const dropdown = document.getElementById(id);
-        const allDropdowns = ['munDropdown', 'difDropdown', 'catDropdown'];
-        
-        // Cerrar otros dropdowns
-        allDropdowns.forEach(dId => {
-            if(dId !== id) document.getElementById(dId)?.classList.add('hidden');
-        });
-
-        if (dropdown) {
-            dropdown.classList.toggle('hidden');
-        }
-    }
-
-    function selectOption(attr, value, label, dropdownId) {
-        // Actualizar etiqueta visual
-        const labelId = attr.substring(0,3) + 'Selected';
-        const labelEl = document.getElementById(labelId);
-        if(labelEl) labelEl.innerText = label;
-
-        // Ejecutar filtro
-        filterByAttr(attr, value);
-
-        // Cerrar menú
-        toggleDropdown(dropdownId);
-    }
-
-    // Cerrar al hacer clic fuera
-    window.onclick = (event) => {
-        if (!event.target.closest('.relative')) {
-            ['munDropdown', 'difDropdown', 'catDropdown'].forEach(id => {
-                document.getElementById(id)?.classList.add('hidden');
-            });
-        }
-    };
-    // ------------------------------------------
-
-    window.onload = () => {
-        const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('access_token');
-        if (token) {
-            try {
-                user = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-                localStorage.setItem('access_token', token);
-                updateUI();
-            } catch(e) {}
-        }
+    window.onload=()=>{
+        const t=localStorage.getItem('access_token');
+        if(t){try{user=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));updateUI();}catch(e){localStorage.removeItem('access_token');}}
         showView('inicio');
     };
 
-    function updateUI() {
+    function updateUI(){
         if(!user) return;
         document.getElementById('userBtn').classList.add('hidden');
         document.getElementById('userInfo').classList.remove('hidden');
         document.getElementById('profileLink').classList.remove('hidden');
-        document.getElementById('userName').innerText = user.name.split(' ')[0];
-        document.getElementById('userAvatar').innerText = user.name.charAt(0);
+        document.getElementById('userNameText').innerText=user.name.split(' ')[0];
         if(user.role==='admin') document.getElementById('adminLink').classList.remove('hidden');
     }
 
-    async function fetchData(endpoint) {
-        const res = await fetch(`${API}/${endpoint}`);
-        return await res.json();
+    async function fetchData(e){const r=await fetch(`${API}/${e}`);return await r.json();}
+    function toggleLogin(s){document.getElementById('loginOverlay').classList.toggle('hidden',!s);}
+    function logout(){localStorage.removeItem('access_token');location.href="/";}
+    function toggleAuthMode(){
+        const t=document.getElementById('authTitle'), isL=t.innerText==='Bienvenido';
+        t.innerText=isL?'Crear Cuenta':'Bienvenido';
+        document.getElementById('regName').classList.toggle('hidden',!isL);
+        document.getElementById('toggleAuthMode').innerText=isL?'¿Ya tienes cuenta? Ingresa':'¿No tienes cuenta? Regístrate';
     }
 
-    function toggleAuthMode() {
-        const isLogin = document.getElementById('authTitle').innerText === 'Bienvenido';
-        document.getElementById('authTitle').innerText = isLogin ? 'Crear Cuenta' : 'Bienvenido';
-        document.getElementById('authDesc').innerText = isLogin ? 'Únete a nuestra comunidad' : 'Inicia sesión para explorar';
-        document.getElementById('authBtn').innerText = isLogin ? 'REGISTRARME' : 'INGRESAR';
-        document.getElementById('toggleAuthMode').innerText = isLogin ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate';
-        document.getElementById('regName').classList.toggle('hidden', !isLogin);
-        document.getElementById('googleSection').classList.toggle('hidden', isLogin);
+    async function authAction(){
+        const isL=document.getElementById('authTitle').innerText==='Bienvenido';
+        const b={email:document.getElementById('email').value,password:document.getElementById('pass').value};
+        if(!isL) b.name=document.getElementById('regName').value;
+        const r=await fetch(`${API}/${isL?'login':'register'}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+        const d=await r.json();
+        if(r.ok){localStorage.setItem('access_token',d.token);location.reload();}else alert(d.detail);
     }
 
-    async function authAction() {
-        const isLogin = document.getElementById('authTitle').innerText === 'Bienvenido';
-        const endpoint = isLogin ? 'login' : 'register';
-        const body = { 
-            email: document.getElementById('email').value, 
-            password: document.getElementById('pass').value 
-        };
-        if (!isLogin) body.name = document.getElementById('regName').value;
-
-        try {
-            const res = await fetch(`${API}/${endpoint}`, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify(body) 
-            });
-            const data = await res.json();
-            if (res.ok) { 
-                localStorage.setItem('access_token', data.token); 
-                location.reload(); 
-            } else {
-                alert(data.detail || "Error en la autenticación");
-            }
-        } catch (e) {
-            alert("Error de conexión con el servidor");
+    async function showView(v){
+        const c=document.getElementById('mainContainer');
+        if(v==='inicio'){
+            c.innerHTML=`<section class="hero-gradient h-[75vh] flex items-center justify-center text-center px-6"><div class="animate-fade-in"><h1 class="text-white text-7xl md:text-9xl font-black mb-8 tracking-tighter">CAQUETÁ <br/><span class="text-emerald-500 italic">ES VIDA</span></h1><button onclick="showView('explorar')" class="bg-emerald-500 text-white px-12 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-2xl">Explorar Destinos</button></div></section>`;
         }
-    }
-
-    function toggleLogin(show) { document.getElementById('loginOverlay').classList.toggle('hidden', !show); }
-    function logout() { localStorage.removeItem('access_token'); location.href = "/"; }
-    function loginWithGoogle() { location.href = `${API}/auth/google`; }
-
-    function filterByAttr(attr, value) {
-        activeFilters[attr] = value;
-        const buttons = document.querySelectorAll(`.${attr.substring(0,3)}-btn`);
-        
-        // Estilo inactivo refinado y proporcionado
-        buttons.forEach(b => {
-            b.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-bold uppercase transition-all hover:bg-white hover:border-emerald-300`;
-        });
-        
-        // Estilo activo refinado y proporcionado
-        event.target.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase shadow-md shadow-emerald-100 transition-all`;
-
-        const filtered = actividadesCache.filter(d => {
-            const mMun = activeFilters.municipio === 'Todos' || d.municipio === activeFilters.municipio;
-            const mDif = activeFilters.dificultad === 'Todos' || d.dificultad === activeFilters.dificultad;
-            const mCat = activeFilters.categoria === 'Todos' || d.categoria === activeFilters.categoria;
-            return mMun && mDif && mCat;
-        });
-        renderDestinos(filtered);
-    }
-
-    function renderDestinos(data) {
-        const grid = document.getElementById('destinosGrid');
-        if(data.length === 0) { grid.innerHTML = '<div class="col-span-3 py-20 text-center font-bold text-slate-400 italic">No se encontraron destinos con estos filtros.</div>'; return; }
-        grid.innerHTML = data.map(d => `
-            <div class="destino-card group bg-white rounded-[4rem] overflow-hidden shadow-2xl hover:-translate-y-4 transition-all border border-slate-50 relative">
-                <div class="h-64 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000 relative" style="background-image: url('${d.imagen}')">
-                    <div class="absolute top-8 right-8 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-xl">
-                        <p class="text-[10px] font-black text-emerald-950">${d.precio === 0 ? 'Acceso Libre' : '$' + new Intl.NumberFormat().format(d.precio)}</p>
-                    </div>
-                </div>
-                <div class="p-10">
-                    <div class="flex justify-between items-center mb-4">
-                        <p class="text-[9px] font-black text-emerald-600 uppercase tracking-widest">${d.categoria}</p>
-                        <span class="text-[8px] font-black uppercase tracking-tighter text-emerald-500 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">${d.disponibilidad}</span>
-                    </div>
-                    <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-6">${d.id}</h3>
-                    <div class="space-y-3 mb-8">
-                        <div class="flex items-center text-[10px] font-bold text-slate-500"><i class="fas fa-map-marker-alt text-emerald-500 w-6"></i><span>${d.municipio}</span></div>
-                        <div class="flex items-center text-[10px] font-bold text-slate-500"><i class="fas fa-mountain text-emerald-500 w-6"></i><span>Dificultad ${d.dificultad}</span></div>
-                    </div>
-                    <div class="pt-8 border-t border-slate-50">
-                        <button onclick="openDetail('${d.real_id}')" class="w-full py-4 bg-emerald-950 text-white text-[9px] font-black uppercase tracking-widest rounded-2xl shadow-lg">Ver Detalles</button>
-                    </div>
-                </div>
-            </div>`).join('');
-    }
-
-    function toggleChat() {
-        document.getElementById('chatWindow').classList.toggle('hidden');
-    }
-
-    async function sendChatMessage() {
-        const input = document.getElementById('chatInput');
-        const messages = document.getElementById('chatMessages');
-        const text = input.value.trim();
-        if(!text) return;
-
-        // Mostrar mensaje del usuario
-        messages.innerHTML += `
-            <div class="flex justify-end">
-                <div class="bg-emerald-600 text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-[80%]">
-                    <p class="text-[10px] font-bold">${text}</p>
-                </div>
-            </div>`;
-        input.value = '';
-        messages.scrollTop = messages.scrollHeight;
-
-        // Mostrar indicador de carga
-        const loadingId = 'loading-' + Date.now();
-        messages.innerHTML += `
-            <div id="${loadingId}" class="flex gap-2 items-center text-slate-400 italic">
-                <div class="w-8 h-8 bg-white rounded-xl flex items-center justify-center shadow-sm"><i class="fas fa-robot animate-pulse"></i></div>
-                <p class="text-[8px] font-black uppercase tracking-widest">BioBot está pensando...</p>
-            </div>`;
-        messages.scrollTop = messages.scrollHeight;
-
-        try {
-            const res = await fetch(`${API}/chat`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ message: text })
-            });
-            const data = await res.json();
-            
-            // Eliminar indicador de carga
-            document.getElementById(loadingId).remove();
-
-            // Mostrar respuesta de la IA
-            messages.innerHTML += `
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[90%]">
-                    <p class="text-[10px] font-medium text-slate-700 leading-relaxed">${data.reply}</p>
-                </div>`;
-            messages.scrollTop = messages.scrollHeight;
-        } catch (e) {
-            document.getElementById(loadingId).remove();
-            messages.innerHTML += `<p class="text-[8px] text-red-400 font-bold uppercase">Error de conexión con BioBot</p>`;
+        else if(v==='explorar'){
+            c.innerHTML=`<div class="px-6 md:px-10 py-20 max-w-7xl mx-auto"><h2 class="text-6xl font-black mb-12 italic tracking-tighter">Descubrir <span class="text-emerald-600">Caquetá</span></h2><div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div></div>`;
+            actividadesCache = await fetchData('actividades');
+            renderDestinos(actividadesCache);
         }
-    }
-
-    // Permitir enviar con Enter
-    document.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && document.activeElement.id === 'chatInput') {
-            sendChatMessage();
-        }
-    });
-
-    async function showView(view) {
-        const container = document.getElementById('mainContainer');
-        if(view==='inicio') {
-            container.innerHTML = `<section class="hero-gradient h-[75vh] flex items-center justify-center text-center px-6 relative"><div class="animate-fade-in max-w-5xl z-10"><span class="text-emerald-400 font-black text-[10px] tracking-[0.5em] uppercase mb-6 block bg-emerald-950/40 w-fit mx-auto px-6 py-2 rounded-full backdrop-blur-md border border-white/10">Amazonía Colombiana</span><h1 class="text-white text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-8 drop-shadow-2xl">CAQUETÁ <br/><span class="text-emerald-500 font-light italic">ES VIDA</span></h1><p class="text-white/90 text-xl md:text-2xl font-light max-w-3xl mx-auto mb-12">El paraíso inexplorado donde las cascadas susurran historias.</p><button onclick="showView('explorar')" class="bg-emerald-500 hover:bg-emerald-400 text-white px-12 py-5 rounded-2xl font-black transition-all shadow-2xl hover:scale-105 uppercase tracking-widest text-[10px]">Explorar Destinos</button></div></section>`;
-        }
-        else if(view==='explorar') {
-            container.innerHTML = `
-                <div class="px-6 md:px-10 py-20 max-w-7xl mx-auto animate-fade-in">
-                    <div class="mb-12">
-                        <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-3 text-center md:text-left">Catálogo Inteligente</h2>
-                        <h1 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter italic text-center md:text-left">Explorar <span class="text-emerald-600">Destinos</span></h1>
-                    </div>
-
-                    <!-- Panel de Custom Dropdowns Premium -->
-                    <div class="bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(6,78,59,0.08)] border border-slate-100 mb-16 p-4 md:p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            
-                            <!-- CUSTOM MUNICIPIO -->
-                            <div class="relative">
-                                <button onclick="toggleDropdown('munDropdown')" class="w-full group bg-slate-50/50 rounded-[2.5rem] p-6 text-left transition-all hover:bg-white hover:shadow-xl border border-transparent hover:border-emerald-100 flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform"><i class="fas fa-map-marked-alt"></i></div>
-                                        <div>
-                                            <p class="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Municipio</p>
-                                            <p id="munSelected" class="text-sm font-bold text-slate-800">Cualquier Municipio</p>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-chevron-down text-[10px] text-slate-300"></i>
-                                </button>
-                                <div id="munDropdown" class="absolute left-0 right-0 mt-3 bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-3xl border border-slate-100 z-[2000] overflow-hidden hidden animate-fade-in max-h-80 overflow-y-auto custom-scrollbar">
-                                    <div id="munOptions" class="p-3 space-y-1"></div>
-                                </div>
-                            </div>
-
-                            <!-- CUSTOM INTENSIDAD -->
-                            <div class="relative">
-                                <button onclick="toggleDropdown('difDropdown')" class="w-full group bg-slate-50/50 rounded-[2.5rem] p-6 text-left transition-all hover:bg-white hover:shadow-xl border border-transparent hover:border-emerald-100 flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform"><i class="fas fa-mountain"></i></div>
-                                        <div>
-                                            <p class="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Intensidad</p>
-                                            <p id="difSelected" class="text-sm font-bold text-slate-800">Todos los niveles</p>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-chevron-down text-[10px] text-slate-300"></i>
-                                </button>
-                                <div id="difDropdown" class="absolute left-0 right-0 mt-3 bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-3xl border border-slate-100 z-[2000] overflow-hidden hidden animate-fade-in">
-                                    <div class="p-3 space-y-1">
-                                        <button onclick="selectOption('dificultad', 'Todos', 'Todos los niveles', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Todos los niveles</button>
-                                        <button onclick="selectOption('dificultad', 'Baja', 'Nivel: Baja', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Nivel: Baja</button>
-                                        <button onclick="selectOption('dificultad', 'Media', 'Nivel: Media', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Nivel: Media</button>
-                                        <button onclick="selectOption('dificultad', 'Alta', 'Nivel: Alta', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Nivel: Alta</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CUSTOM EXPERIENCIA -->
-                            <div class="relative">
-                                <button onclick="toggleDropdown('catDropdown')" class="w-full group bg-slate-50/50 rounded-[2.5rem] p-6 text-left transition-all hover:bg-white hover:shadow-xl border border-transparent hover:border-emerald-100 flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><i class="fas fa-swimmer"></i></div>
-                                        <div>
-                                            <p class="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Experiencia</p>
-                                            <p id="catSelected" class="text-sm font-bold text-slate-800">Cualquier Experiencia</p>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-chevron-down text-[10px] text-slate-300"></i>
-                                </button>
-                                <div id="catDropdown" class="absolute left-0 right-0 mt-3 bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-3xl border border-slate-100 z-[2000] overflow-hidden hidden animate-fade-in max-h-80 overflow-y-auto custom-scrollbar">
-                                    <div id="catOptions" class="p-3 space-y-1"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Grid de Resultados -->
-                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                        <div class="col-span-full flex flex-col items-center justify-center py-40 space-y-8 text-center">
-                            <div class="relative">
-                                <div class="w-24 h-24 border-8 border-slate-100 border-t-emerald-600 rounded-full animate-spin"></div>
-                                <div class="absolute inset-0 flex items-center justify-center"><i class="fas fa-brain text-emerald-600 animate-pulse"></i></div>
-                            </div>
-                            <div>
-                                <p class="text-slate-400 font-black text-xs uppercase tracking-[0.4em] mb-2">Razonamiento Semántico</p>
-                                <p class="text-slate-300 text-[10px] font-bold">Consultando ontología RDFLib en puerto 3030...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            
-            const data = await fetchData('actividades');
-            actividadesCache = data;
-            
-            const municipios = ['Todos', ...new Set(data.map(d => d.municipio))];
-            const categorias = ['Todos', ...new Set(data.map(d => d.categoria))];
-            
-            document.getElementById('munOptions').innerHTML = municipios.map(m => `
-                <button onclick="selectOption('municipio', '${m}', '${m === 'Todos' ? 'Cualquier Municipio' : m}', 'munDropdown')" 
-                        class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">
-                    ${m === 'Todos' ? 'Cualquier Municipio' : m}
-                </button>`).join('');
-            
-            document.getElementById('catOptions').innerHTML = categorias.map(c => `
-                <button onclick="selectOption('categoria', '${c}', '${c === 'Todos' ? 'Cualquier Experiencia' : c}', 'catDropdown')" 
-                        class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">
-                    ${c === 'Todos' ? 'Cualquier Experiencia' : c}
-                </button>`).join('');
-            
-            renderDestinos(data);
-        }
-        else if(view==='municipios') {
-            container.innerHTML = `<div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in"><div class="mb-16 text-center"><span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Knowledge Grid</span><h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Inteligencia Semántica</h2></div><div id="statsDashboard" class="grid grid-cols-1 md:grid-cols-4 gap-8"><div class="md:col-span-4 flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div></div></div>`;
-            const stats = await fetchData('stats');
-            const dash = document.getElementById('statsDashboard');
-            let munHtml = Object.entries(stats.por_municipio).map(([m, count]) => `<div class="flex justify-between items-center text-xs font-bold border-b border-slate-50 pb-2"><span class="text-slate-500">${m}</span><span class="text-emerald-600">${count} sitios</span></div>`).join('');
-            let difHtml = Object.entries(stats.por_dificultad).map(([d, count]) => {
-                const perc = (count / stats.total_atractivos) * 100;
-                return `<div class="space-y-1"><div class="flex justify-between text-[8px] font-black uppercase text-slate-400"><span>${d}</span><span>${count}</span></div><div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-emerald-500" style="width: ${perc}%"></div></div></div>`;
-            }).join('');
-            dash.innerHTML = `<div class="bg-emerald-950 p-10 rounded-[3rem] text-white flex flex-col justify-between shadow-2xl relative overflow-hidden"><div class="absolute -right-10 -top-10 text-white/5 text-9xl font-black rotate-12"><i class="fas fa-database"></i></div><p class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Total Atractivos</p><h4 class="text-7xl font-black my-4">${stats.total_atractivos}</h4><p class="text-[10px] opacity-50 font-medium">Instancias en el grafo</p></div><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50 md:col-span-2"><h5 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Por Municipio</h5><div class="space-y-4">${munHtml}</div></div><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50"><h5 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Nivel de Desafío</h5><div class="space-y-6">${difHtml}</div></div><div class="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 md:col-span-4 flex items-center justify-between"><div><p class="text-sm font-black text-emerald-900 italic">${stats.grafo_status}</p></div></div>`;
-        }
-        else if(view==='perfil') {
+        else if(v==='perfil'){
             if(!user) return toggleLogin(true);
-            container.innerHTML = `
-                <div class="px-6 md:px-10 py-20 max-w-5xl mx-auto animate-fade-in">
-                    <div class="mb-16">
-                        <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-3">Tu Itinerario</h2>
-                        <h1 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter italic">Mis <span class="text-emerald-600">Reservas</span></h1>
-                    </div>
-                    <div id="reservasGrid" class="grid gap-10">
-                        <div class="flex justify-center py-20">
-                            <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-600"></div>
-                        </div>
-                    </div>
-                </div>`;
-            
-            const data = await fetchData(`mis-reservas?email=${user.email}`);
-            const grid = document.getElementById('reservasGrid');
-            
-            if(data.length === 0) {
-                grid.innerHTML = `
-                    <div class="bg-white p-20 rounded-[3rem] text-center border border-slate-100 shadow-xl">
-                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 text-3xl"><i class="fas fa-calendar-times"></i></div>
-                        <h3 class="text-2xl font-black text-slate-800 mb-2">Aún no tienes aventuras</h3>
-                        <p class="text-slate-400 font-medium italic">Explora nuestros destinos y comienza tu historia en el Caquetá.</p>
-                        <button onclick="showView('explorar')" class="mt-8 px-10 py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-lg uppercase text-xs tracking-widest">Explorar Ahora</button>
-                    </div>`;
-            } else {
-                grid.innerHTML = data.map(r => `
-                    <div class="bg-white rounded-[3rem] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.1)] border border-slate-50 overflow-hidden flex flex-col md:flex-row animate-fade-in">
-                        <!-- Lado Izquierdo: Info Principal -->
-                        <div class="flex-1 p-10 md:p-12 space-y-8 border-b md:border-b-0 md:border-r border-slate-50">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <span class="text-emerald-500 font-black text-[9px] tracking-[0.3em] uppercase mb-2 block">Destino Reservado</span>
-                                    <h3 class="text-4xl font-black text-slate-900 tracking-tighter italic">${r.lugar}</h3>
-                                </div>
-                                <div class="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[8px] font-black uppercase border border-emerald-100 shadow-sm">Confirmada</div>
-                            </div>
-
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <div class="space-y-1">
-                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Periodo</p>
-                                    <p class="text-xs font-bold text-slate-600 flex items-center gap-2"><i class="far fa-calendar-alt text-emerald-500"></i> ${r.fecha}</p>
-                                </div>
-                                <div class="space-y-1">
-                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Personas</p>
-                                    <p class="text-xs font-bold text-slate-600 flex items-center gap-2"><i class="fas fa-users text-emerald-500"></i> ${r.personas} Viajeros</p>
-                                </div>
-                                <div class="space-y-1">
-                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Estancia</p>
-                                    <p class="text-xs font-bold text-slate-600 flex items-center gap-2"><i class="fas fa-moon text-emerald-500"></i> ${r.dias} Noches</p>
-                                </div>
-                                <div class="space-y-1">
-                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">ID Ticket</p>
-                                    <p class="text-[10px] font-mono font-bold text-slate-400">#${r.id.split('_')[1] || r.id}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Lado Derecho: Costo y Acciones -->
-                        <div class="w-full md:w-72 p-10 md:p-12 bg-slate-50/50 flex flex-col justify-center items-center text-center space-y-6">
-                            <div>
-                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Total Pagado</p>
-                                <p class="text-4xl font-black text-emerald-900 tracking-tighter italic">$${new Intl.NumberFormat().format(r.precio_total)}</p>
-                            </div>
-                            <button onclick="cancelReserva('${r.id}')" class="group flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-red-500 transition-colors">
-                                <i class="fas fa-trash-alt text-[8px] transition-transform group-hover:scale-125"></i> Cancelar Reserva
-                            </button>
-                        </div>
-                    </div>`).join('');
-            }
+            c.innerHTML=`<div class="px-6 py-20 max-w-5xl mx-auto"><h2 class="text-6xl font-black mb-12 italic tracking-tighter">Mis <span class="text-emerald-600">Reservas</span></h2><div id="reservasGrid" class="grid gap-8"></div></div>`;
+            const d=await fetchData(`mis-reservas?email=${user.email}`);
+            document.getElementById('reservasGrid').innerHTML=d.length===0?'<p class="text-slate-400 italic">No hay reservas aún.</p>':d.map(r=>`<div class="bg-white p-10 rounded-[3rem] shadow-xl flex flex-col md:flex-row justify-between items-center"><div class="space-y-2"><div><span class="text-emerald-500 font-black text-[9px] uppercase">${r.fecha}</span><h3 class="text-3xl font-black">${r.lugar}</h3></div><p class="text-xs font-bold text-slate-500">${r.personas} Viajeros • ${r.dias} Días</p></div><div class="text-right mt-6 md:mt-0"><p class="text-[9px] font-black uppercase text-slate-400">Total Pagado</p><p class="text-4xl font-black text-emerald-900 italic">$${new Intl.NumberFormat().format(r.precio_total)}</p><button onclick="cancelReserva('${r.id}')" class="text-[9px] font-black text-red-400 uppercase mt-4">Cancelar</button></div></div>`).join('');
         }
-        else if(view==='gestion') {
-            if(!user || user.role!=='admin') return showView('inicio');
-            container.innerHTML = `
-                <div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in">
-                    <div class="mb-16">
-                        <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Control de Mando</span>
-                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Panel Admin</h2>
-                    </div>
-                    <div id="adminDashboard" class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
-                        <div class="md:col-span-4 flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div>
-                    </div>
-                    <div class="mb-16">
-                        <h3 class="text-3xl font-black text-emerald-900 mb-8 italic">Gestión de Atractivos</h3>
-                        <div class="bg-white rounded-[3rem] shadow-xl border border-slate-50 overflow-hidden">
-                            <table class="w-full text-left">
-                                <thead class="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    <tr>
-                                        <th class="p-8">Atractivo</th>
-                                        <th class="p-8">Ubicación</th>
-                                        <th class="p-8">Precio</th>
-                                        <th class="p-8">Estado</th>
-                                        <th class="p-8 text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminAtractivosList" class="divide-y divide-slate-50">
-                                    <!-- Dinámico -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        <div class="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-50">
-                            <h3 id="formTitle" class="text-3xl font-black text-emerald-900 mb-8 italic">Nueva Entrada RDF</h3>
-                            <div class="space-y-6">
-                                <input type="hidden" id="lRealId">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <input id="lId" placeholder="ID (Ej: Cascada_Azul)" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                                    <input id="lName" placeholder="Nombre Público" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <select id="lMun" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500 outline-none focus:ring-2 focus:ring-emerald-500">
-                                        <option value="Florencia">Florencia</option>
-                                        <option value="Morelia">Morelia</option>
-                                        <option value="San_Jose_del_Fragua">San José del Fragua</option>
-                                        <option value="Belen_de_los_Andaquies">Belén de los Andaquíes</option>
-                                        <option value="El_Doncello">El Doncello</option>
-                                        <option value="San_Vicente_del_Caguan">San Vicente del Caguán</option>
-                                        <option value="Puerto_Rico">Puerto Rico</option>
-                                    </select>
-                                    <select id="lCat" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500 outline-none focus:ring-2 focus:ring-emerald-500">
-                                        <option value="Acuática">Acuática</option>
-                                        <option value="Senderismo">Senderismo</option>
-                                        <option value="Ecoturismo">Ecoturismo</option>
-                                        <option value="Espeleología">Espeleología</option>
-                                        <option value="Aventura y Deportes Acuáticos">Aventura</option>
-                                    </select>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <input id="lPrice" type="number" placeholder="Precio" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                                    <input id="lImg" placeholder="Imagen URL" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                                <button id="saveBtn" onclick="saveLugar()" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl shadow-xl uppercase text-[10px] hover:bg-emerald-800 transition-all">Publicar en Ontología</button>
-                                <button id="cancelEditBtn" onclick="resetForm()" class="w-full py-2 text-slate-300 text-[8px] font-black uppercase hidden">Cancelar Edición</button>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900 p-12 rounded-[4rem] text-white shadow-2xl relative overflow-hidden">
-                            <h3 class="text-3xl font-black mb-8 italic relative z-10">Últimas Reservas</h3>
-                            <div id="adminLog" class="space-y-4 relative z-10"></div>
-                        </div>
-                    </div>
-                </div>`;
-            const stats = await fetchData('admin/full-stats');
-            const atractivos = await fetchData('actividades');
-            
-            document.getElementById('adminAtractivosList').innerHTML = atractivos.map(a => `
-                <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="p-8">
-                        <div class="flex items-center gap-4">
-                            <img src="${a.imagen}" class="w-12 h-12 rounded-xl object-cover">
-                            <div>
-                                <p class="text-sm font-black text-slate-800">${a.id}</p>
-                                <p class="text-[9px] font-bold text-emerald-500 uppercase">${a.categoria}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="p-8 text-xs font-bold text-slate-500">${a.municipio}</td>
-                    <td class="p-8 text-xs font-black text-slate-800">$${new Intl.NumberFormat().format(a.precio)}</td>
-                    <td class="p-8">
-                        <button onclick="toggleLugarStatus('${a.real_id}', '${a.disponibilidad}')" 
-                                class="px-4 py-1.5 rounded-full text-[8px] font-black uppercase border transition-all 
-                                ${a.disponibilidad === 'Disponible' ? 'bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100' : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'}">
-                            ${a.disponibilidad}
-                        </button>
-                    </td>
-                    <td class="p-8">
-                        <div class="flex justify-center gap-4">
-                            <button onclick="prepareEdit('${a.real_id}')" class="text-slate-300 hover:text-emerald-600 transition-colors"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteLugar('${a.real_id}')" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </td>
-                </tr>`).join('');
-
-            document.getElementById('adminDashboard').innerHTML = `
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Ingresos</p><h4 class="text-2xl font-black text-emerald-600">$${new Intl.NumberFormat().format(stats.kpis.ingresos_proyectados)}</h4></div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Reservas</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.total_reservas}</h4></div>
-                <div onclick="openCommunity()" class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center cursor-pointer hover:bg-emerald-50 transition-all"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Comunidad</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.usuarios_activos}</h4><p class="text-[6px] font-bold text-emerald-500 uppercase mt-2">Ver Usuarios</p></div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Atractivos</p><h4 class="text-2xl font-black text-slate-800">${atractivos.length}</h4></div>`;
-            document.getElementById('adminLog').innerHTML = stats.ultimas_reservas.map(r => `<div class="p-4 bg-white/5 rounded-2xl flex justify-between"><span class="text-xs font-bold">${r.user}</span><span class="text-xs text-emerald-400">${r.fecha}</span></div>`).join('');
+        else if(v==='municipios'){
+            c.innerHTML=`<div class="px-6 py-20 max-w-7xl mx-auto"><h2 class="text-5xl font-black mb-12 italic tracking-tighter">Inteligencia <span class="text-emerald-600">Semántica</span></h2><div id="statsBox" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div></div>`;
+            const s=await fetchData('stats');
+            document.getElementById('statsBox').innerHTML=`<div class="bg-emerald-950 p-10 rounded-[3rem] text-white shadow-2xl"><p class="text-xs font-black uppercase tracking-widest text-emerald-400">Total Atractivos</p><h4 class="text-7xl font-black my-4 tracking-tighter">${s.total_atractivos}</h4></div><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50 md:col-span-2"><h5 class="text-xs font-black uppercase text-slate-400 mb-8">Por Municipio</h5><div class="space-y-2">${Object.entries(s.por_municipio||{}).map(([m,c])=>`<div class="flex justify-between text-xs font-bold border-b border-slate-50 pb-2"><span class="text-slate-500">${m}</span><span class="text-emerald-600">${c} sitios</span></div>`).join('')}</div></div>`;
         }
-                </div>`;
-            const stats = await fetchData('admin/full-stats');
-            document.getElementById('adminDashboard').innerHTML = `
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Ingresos</p><h4 class="text-2xl font-black text-emerald-600">$${new Intl.NumberFormat().format(stats.kpis.ingresos_proyectados)}</h4></div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Reservas</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.total_reservas}</h4></div>
-                <div onclick="openCommunity()" class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center cursor-pointer hover:bg-emerald-50 transition-all"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Comunidad</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.usuarios_activos}</h4><p class="text-[6px] font-bold text-emerald-500 uppercase mt-2">Ver Usuarios</p></div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Atractivos</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.puntos_interes}</h4></div>`;
-            document.getElementById('adminLog').innerHTML = stats.ultimas_reservas.map(r => `<div class="p-4 bg-white/5 rounded-2xl flex justify-between"><span class="text-xs font-bold">${r.user}</span><span class="text-xs text-emerald-400">${r.fecha}</span></div>`).join('');
+        else if(v==='gestion'){
+            if(!user||user.role!=='admin') return showView('inicio');
+            c.innerHTML=`<div class="px-6 py-20 max-w-7xl mx-auto"><h2 class="text-6xl font-black mb-12 italic tracking-tighter">Gestión de <span class="text-emerald-600">Ontología</span></h2><div id="adminList" class="space-y-4 mb-16"></div><div class="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-100 max-w-xl mx-auto"><h3 id="formTitle" class="text-3xl font-black mb-8 text-emerald-900">Nuevo Destino</h3><div class="space-y-4"><input type="hidden" id="lRealId"><input id="lId" placeholder="ID (Ej: Cascada_Verde)" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-xs"><input id="lName" placeholder="Nombre" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-xs"><input id="lPrice" type="number" placeholder="Precio p/p día" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-xs"><input id="lImg" placeholder="Imagen URL" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-xs"><button onclick="saveLugar()" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl uppercase text-[10px] shadow-2xl hover:bg-emerald-800 transition-all">Guardar Cambios</button><button id="cancelEditBtn" onclick="resetForm()" class="w-full py-2 text-slate-300 font-bold uppercase text-[8px] hidden">Cancelar Edición</button></div></div></div>`;
+            const acts=await fetchData('actividades');
+            document.getElementById('adminList').innerHTML=acts.map(a=>`<div class="bg-white p-6 rounded-3xl border border-slate-50 flex justify-between items-center shadow-sm hover:shadow-lg transition-all"><div class="flex items-center gap-6"><img src="${a.imagen}" class="w-16 h-16 rounded-2xl object-cover shadow-md"><div><p class="font-black text-slate-800">${a.id}</p><p class="text-[9px] font-bold text-slate-400 uppercase">${a.municipio} • ${a.disponibilidad}</p></div></div><div class="flex gap-4"><button onclick="prepareEdit('${a.real_id}')" class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center"><i class="fas fa-edit"></i></button><button onclick="deleteLugar('${a.real_id}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl flex items-center justify-center"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
         }
     }
 
-    async function openCommunity() {
-        const users = await fetchData('admin/users');
-        const list = document.getElementById('usersList');
-        list.innerHTML = users.map(u => `
-            <div onclick="showUserActivity('${u.email}', '${u.name}')" class="bg-slate-50 p-6 rounded-3xl flex justify-between items-center cursor-pointer hover:bg-emerald-50 transition-all border border-slate-100">
-                <div>
-                    <p class="text-sm font-black text-emerald-950">${u.name}</p>
-                    <p class="text-[10px] text-slate-400 font-bold">${u.email}</p>
-                </div>
-                <span class="px-4 py-2 bg-white rounded-xl text-[8px] font-black uppercase tracking-widest text-slate-400 border border-slate-100">${u.role}</span>
-            </div>
-        `).join('');
-        document.getElementById('communityModal').classList.remove('hidden');
+    function renderDestinos(d){
+        const g=document.getElementById('destinosGrid');
+        if(!g) return;
+        g.innerHTML=d.map(x=>`<div class="destino-card bg-white rounded-[4rem] overflow-hidden shadow-xl hover:-translate-y-2 transition-all border border-slate-50 animate-fade-in"><div class="h-64 bg-cover bg-center" style="background-image:url('${x.imagen}')"></div><div class="p-10"><p class="text-[9px] font-black text-emerald-600 uppercase mb-2 tracking-widest">${x.categoria}</p><h3 class="text-3xl font-black text-slate-800 mb-6 tracking-tighter leading-none">${x.id}</h3><button onclick="openDetail('${x.real_id}')" class="w-full py-4 bg-emerald-950 text-white font-black rounded-2xl uppercase text-[9px] tracking-widest">Detalles</button></div></div>`).join('');
     }
 
-    async function showUserActivity(email, name) {
-        const activities = await fetchData(`admin/user-activities/${email}`);
-        document.getElementById('uaTitle').innerText = `Actividad de ${name}`;
-        const content = document.getElementById('uaContent');
-        content.innerHTML = activities.length === 0 ? '<p class="text-slate-400 italic">Sin reservas registradas.</p>' : activities.map(a => `
-            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                <p class="text-xs font-black text-emerald-900">${a.lugar}</p>
-                <div class="flex justify-between mt-2">
-                    <span class="text-[10px] font-bold text-slate-400">${a.fecha}</span>
-                    <span class="text-[10px] font-black text-emerald-600">$${new Intl.NumberFormat().format(a.precio_total)}</span>
-                </div>
-            </div>
-        `).join('');
-        document.getElementById('userActivityModal').classList.remove('hidden');
-    }
-
-    async function saveLugar() {
-        const realId = document.getElementById('lRealId').value;
-        const body = { 
-            id: document.getElementById('lId').value, 
-            nombre: document.getElementById('lName').value, 
-            categoria: document.getElementById('lCat').value, 
-            municipio: document.getElementById('lMun').value, 
-            precio: parseInt(document.getElementById('lPrice').value), 
-            imagen: document.getElementById('lImg').value 
-        };
-
-        const method = realId ? 'PUT' : 'POST';
-        const url = realId ? `${API}/actividades/${realId}` : `${API}/actividades`;
-
-        try {
-            const res = await fetch(url, { 
-                method: method, 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify(body) 
-            });
-            if(res.ok) { 
-                alert(realId ? "¡Actualizado!" : "¡Publicado!"); 
-                showView('gestion'); 
-            }
-        } catch(e) { alert("Error al guardar"); }
-    }
-
-    async function prepareEdit(id) {
-        const atractivos = await fetchData('actividades');
-        const a = atractivos.find(x => x.real_id === id);
-        if(!a) return;
-
-        document.getElementById('lRealId').value = a.real_id;
-        document.getElementById('lId').value = a.real_id;
-        document.getElementById('lId').disabled = true; // El ID en la ontología no debe cambiarse
-        document.getElementById('lName').value = a.id;
-        document.getElementById('lMun').value = a.municipio.replace(' ', '_');
-        document.getElementById('lCat').value = a.categoria;
-        document.getElementById('lPrice').value = a.precio;
-        document.getElementById('lImg').value = a.imagen;
-
-        document.getElementById('formTitle').innerText = "Editar Atractivo";
-        document.getElementById('saveBtn').innerText = "GUARDAR CAMBIOS";
-        document.getElementById('cancelEditBtn').classList.remove('hidden');
-        window.scrollTo({ top: document.getElementById('formTitle').offsetTop - 100, behavior: 'smooth' });
-    }
-
-    function resetForm() {
-        document.getElementById('lRealId').value = "";
-        document.getElementById('lId').value = "";
-        document.getElementById('lId').disabled = false;
-        document.getElementById('lName').value = "";
-        document.getElementById('lPrice').value = "";
-        document.getElementById('lImg').value = "";
-        document.getElementById('formTitle').innerText = "Nueva Entrada RDF";
-        document.getElementById('saveBtn').innerText = "Publicar en Ontología";
-        document.getElementById('cancelEditBtn').classList.add('hidden');
-    }
-
-    async function deleteLugar(id) {
-        if(!confirm("¿Estás seguro de eliminar permanentemente este atractivo de la ontología?")) return;
-        try {
-            const res = await fetch(`${API}/actividades/${id}`, { method: 'DELETE' });
-            if(res.ok) showView('gestion');
-        } catch(e) { alert("Error al eliminar"); }
-    }
-
-    async function toggleLugarStatus(id, current) {
-        const newStatus = current === 'Disponible' ? 'Inactivo' : 'Disponible';
-        try {
-            const res = await fetch(`${API}/actividades/${id}/status`, { 
-                method: 'PATCH',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ status: newStatus })
-            });
-            if(res.ok) showView('gestion');
-        } catch(e) { alert("Error al cambiar estado"); }
-    }
-
-    function openDetail(id) {
-        const d = actividadesCache.find(a => a.real_id === id);
-        if(!d) return;
-        currentActivity = d; // Asignar destino actual globalmente
-        toggleBookingForm(false);
-        document.getElementById('detailImg').style.backgroundImage = `url('${d.imagen}')`;
-        document.getElementById('detailCat').innerText = d.categoria;
-        document.getElementById('detailTitle').innerText = d.id;
-        document.getElementById('detailDesc').innerText = d.descripcion;
-        document.getElementById('detailPrecio').innerText = d.precio === 0 ? 'Gratis' : `$${new Intl.NumberFormat().format(d.precio)}`;
-        document.getElementById('detailDif').innerText = d.dificultad;
+    function openDetail(id){
+        const d=actividadesCache.find(a=>a.real_id===id); if(!d) return;
+        currentActivity=d;
+        document.getElementById('detailImg').style.backgroundImage=`url('${d.imagen}')`;
+        document.getElementById('detailCat').innerText=d.categoria;
+        document.getElementById('detailTitle').innerText=d.id;
+        document.getElementById('detailDesc').innerText=d.descripcion || "Explora este increíble destino amazónico.";
+        document.getElementById('detailPrecio').innerText=`$${new Intl.NumberFormat().format(d.precio)}`;
+        document.getElementById('detailDif').innerText=d.dificultad;
         document.getElementById('detailModal').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow='hidden';
     }
 
-    function closeDetail() { 
-        document.getElementById('detailModal').classList.add('hidden'); 
-        document.body.style.overflow = 'auto'; 
-        currentActivity = null; 
-    }
-    
-    function toggleBookingForm(show) { 
-        if(show && !user) return toggleLogin(true);
-        document.getElementById('bookingSection').classList.toggle('hidden', !show); 
-        document.getElementById('initialActions').classList.toggle('hidden', show); 
-    }
+    function closeDetail(){document.getElementById('detailModal').classList.add('hidden');document.body.style.overflow='auto';currentActivity=null;toggleBookingForm(false);}
+    function toggleBookingForm(s){if(s && !user) return toggleLogin(true); document.getElementById('bookingSection').classList.toggle('hidden',!s); document.getElementById('initialActions').classList.toggle('hidden',s);}
 
-    function updateBookingSummary() {
-        if(!currentActivity) return;
-        const fIni = document.getElementById('bookFechaIni').value;
-        const fFin = document.getElementById('bookFechaFin').value;
-        const pers = parseInt(document.getElementById('bookPers').value) || 1;
-        const totalEl = document.getElementById('bookingTotal');
-
-        if(fIni && fFin) {
-            const d1 = new Date(fIni);
-            const d2 = new Date(fFin);
-            const diffTime = Math.max(0, d2 - d1);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-            const total = currentActivity.precio * pers * diffDays;
-            totalEl.innerText = `$${new Intl.NumberFormat().format(total)}`;
-            return { diffDays, total };
+    function updateBookingSummary(){
+        const f1=document.getElementById('bookFechaIni').value, f2=document.getElementById('bookFechaFin').value, p=parseInt(document.getElementById('bookPers').value)||1;
+        if(f1 && f2 && currentActivity){
+            const d=Math.ceil(Math.max(1,(new Date(f2)-new Date(f1))/86400000));
+            const t=currentActivity.precio*p*d;
+            document.getElementById('bookingTotal').innerText=`$${new Intl.NumberFormat().format(t)}`;
+            return {d,t};
         }
-        totalEl.innerText = '$0';
-        return { diffDays: 0, total: 0 };
+        return {d:0,t:0};
     }
 
-    async function confirmBooking() {
-        if(!currentActivity || !user) {
-            alert("Error: Debes iniciar sesión.");
-            return;
-        }
-
-        const fIni = document.getElementById('bookFechaIni').value;
-        const fFin = document.getElementById('bookFechaFin').value;
-        if(!fIni || !fFin) { alert("Por favor selecciona el rango de fechas."); return; }
-        
-        const summary = updateBookingSummary();
-        if(summary.diffDays <= 0 && fIni !== fFin) { alert("La fecha de fin debe ser posterior a la de inicio."); return; }
-
-        const body = { 
-            lugar_id: currentActivity.real_id, 
-            fecha_inicio: fIni, 
-            fecha_fin: fFin,
-            personas: parseInt(document.getElementById('bookPers').value) || 1, 
-            dias: summary.diffDays || 1, 
-            total_pago: summary.total,
-            user_email: user.email, 
-            user_name: user.name 
-        };
-
-        try {
-            const res = await fetch(`${API}/reservas`, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify(body) 
-            });
-            
-            if(res.ok) { 
-                alert("¡Reserva confirmada con éxito! Te esperamos."); 
-                closeDetail(); 
-                showView('perfil'); 
-            } else {
-                const err = await res.json();
-                alert("Error: " + (err.detail || "No se pudo procesar"));
-            }
-        } catch(e) { alert("Error de conexión"); }
+    async function confirmBooking(){
+        const f1=document.getElementById('bookFechaIni').value, f2=document.getElementById('bookFechaFin').value;
+        if(!f1||!f2||!user) return alert("Completa las fechas de tu aventura.");
+        const s=updateBookingSummary();
+        const b={lugar_id:currentActivity.real_id,fecha_inicio:f1,fecha_fin:f2,personas:parseInt(document.getElementById('bookPers').value),dias:s.d,total_pago:s.t,user_email:user.email,user_name:user.name};
+        const r=await fetch(`${API}/reservas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+        if(r.ok){alert("¡Aventura Reservada!");closeDetail();showView('perfil');}
     }
 
-    async function cancelReserva(id) {
-        if(!confirm("¿Cancelar?")) return;
-        await fetch(`${API}/reservas/${id}`, { method: 'DELETE' });
-        showView('perfil');
+    async function saveLugar(){
+        const rid=document.getElementById('lRealId').value;
+        const b={id:document.getElementById('lId').value,nombre:document.getElementById('lName').value,categoria:'Acuática',municipio:'Florencia',precio:parseInt(document.getElementById('lPrice').value),imagen:document.getElementById('lImg').value};
+        await fetch(`${API}/actividades${rid?'/'+rid:''}`,{method:rid?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+        showView('gestion');
+    }
+
+    async function prepareEdit(id){
+        const acts=await fetchData('actividades'); const a=acts.find(x=>x.real_id===id); if(!a) return;
+        document.getElementById('lRealId').value=a.real_id; document.getElementById('lId').value=a.real_id; document.getElementById('lId').disabled=true; document.getElementById('lName').value=a.id; document.getElementById('lPrice').value=a.precio; document.getElementById('lImg').value=a.imagen;
+        document.getElementById('formTitle').innerText="Editar Destino"; document.getElementById('cancelEditBtn').classList.remove('hidden');
+        window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+    }
+
+    function resetForm(){
+        document.getElementById('lRealId').value=""; document.getElementById('lId').value=""; document.getElementById('lId').disabled=false; document.getElementById('lName').value=""; document.getElementById('lPrice').value=""; document.getElementById('lImg').value="";
+        document.getElementById('formTitle').innerText="Nuevo Destino"; document.getElementById('cancelEditBtn').classList.add('hidden');
+    }
+
+    async function deleteLugar(id){if(confirm("¿Borrar destino?")){await fetch(`${API}/actividades/${id}`,{method:'DELETE'});showView('gestion');}}
+    function toggleChat(){document.getElementById('chatWindow').classList.toggle('hidden');}
+    async function sendChatMessage(){
+        const i=document.getElementById('chatInput'), m=document.getElementById('chatMessages'); if(!i.value.trim()) return;
+        m.innerHTML+=`<div class="flex justify-end"><p class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none shadow-sm">${i.value}</p></div>`;
+        const text=i.value; i.value=''; m.scrollTop=m.scrollHeight;
+        const r=await fetch(`${API}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
+        const d=await r.json();
+        m.innerHTML+=`<div class="flex justify-start"><p class="bg-white border p-3 rounded-2xl rounded-tl-none text-slate-700 shadow-sm">${d.reply}</p></div>`;
+        m.scrollTop=m.scrollHeight;
     }
 </script>
 </body>
