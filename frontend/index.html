@@ -232,15 +232,13 @@
         activeFilters[attr] = value;
         const buttons = document.querySelectorAll(`.${attr.substring(0,3)}-btn`);
         
-        // Estilo inactivo para todos los botones del grupo
+        // Estilo inactivo estricto
         buttons.forEach(b => {
-            b.classList.remove('bg-emerald-700', 'text-white', 'border-transparent');
-            b.classList.add('bg-white', 'text-slate-900', 'border-slate-200');
+            b.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase`;
         });
         
-        // Estilo activo para el seleccionado
-        event.target.classList.add('bg-emerald-700', 'text-white', 'border-transparent');
-        event.target.classList.remove('bg-white', 'text-slate-900', 'border-slate-200');
+        // Estilo activo estricto
+        event.target.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase border border-emerald-700 shadow-sm transition-all`;
 
         const filtered = actividadesCache.filter(d => {
             const mMun = activeFilters.municipio === 'Todos' || d.municipio === activeFilters.municipio;
@@ -350,31 +348,31 @@
                         <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Ecosistema Turístico</h2>
                     </div>
                     
-                    <!-- Componente de Filtros Rediseñado -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+                    <!-- Componente de Filtros Rediseñado (Estricto) -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start w-full mb-20">
                         <!-- Columna MUNICIPIO -->
-                        <div class="space-y-6">
-                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Municipio</h3>
-                            <div id="munFilters" class="flex flex-wrap gap-3">
+                        <div>
+                            <h3 class="text-gray-400 font-bold text-sm mb-4 uppercase tracking-wider">Municipio</h3>
+                            <div id="munFilters" class="flex flex-wrap gap-2.5">
                                 <!-- Renderizado dinámico -->
                             </div>
                         </div>
 
                         <!-- Columna DIFICULTAD -->
-                        <div class="space-y-6">
-                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Dificultad</h3>
-                            <div id="difFilters" class="flex flex-wrap gap-3">
-                                <button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-4 py-2 bg-emerald-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-all">Todos</button>
-                                <button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all">Baja</button>
-                                <button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all">Media</button>
-                                <button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all">Alta</button>
+                        <div>
+                            <h3 class="text-gray-400 font-bold text-sm mb-4 uppercase tracking-wider">Dificultad</h3>
+                            <div id="difFilters" class="flex flex-wrap gap-2.5">
+                                <button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase border border-emerald-700 shadow-sm transition-all">Todos</button>
+                                <button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase">Baja</button>
+                                <button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase">Media</button>
+                                <button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase">Alta</button>
                             </div>
                         </div>
 
                         <!-- Columna ACTIVIDAD -->
-                        <div class="space-y-6">
-                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Actividad</h3>
-                            <div id="catFilters" class="flex flex-wrap gap-3">
+                        <div>
+                            <h3 class="text-gray-400 font-bold text-sm mb-4 uppercase tracking-wider">Actividad</h3>
+                            <div id="catFilters" class="flex flex-wrap gap-2.5">
                                 <!-- Renderizado dinámico -->
                             </div>
                         </div>
@@ -395,15 +393,15 @@
             
             document.getElementById('munFilters').innerHTML = municipios.map(m => `
                 <button onclick="filterByAttr('municipio', '${m}')" 
-                        class="mun-btn px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all 
-                        ${m==='Todos' ? 'bg-emerald-700 text-white' : 'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50'}">
+                        class="mun-btn px-4 py-2 rounded-full text-xs font-bold uppercase transition-all 
+                        ${m==='Todos' ? 'bg-emerald-700 text-white border border-emerald-700 shadow-sm' : 'border border-gray-200 text-slate-700 hover:bg-slate-50'}">
                     ${m}
                 </button>`).join('');
             
             document.getElementById('catFilters').innerHTML = categorias.map(c => `
                 <button onclick="filterByAttr('categoria', '${c}')" 
-                        class="cat-btn px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all 
-                        ${c==='Todos' ? 'bg-emerald-700 text-white' : 'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50'}">
+                        class="cat-btn px-4 py-2 rounded-full text-xs font-bold uppercase transition-all 
+                        ${c==='Todos' ? 'bg-emerald-700 text-white border border-emerald-700 shadow-sm' : 'border border-gray-200 text-slate-700 hover:bg-slate-50'}">
                     ${c}
                 </button>`).join('');
             
