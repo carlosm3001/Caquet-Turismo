@@ -19,6 +19,7 @@
 </head>
 <body class="bg-[#fafafa] text-slate-900 overflow-x-hidden">
 
+<!-- AUTH OVERLAY -->
 <div id="loginOverlay" class="fixed inset-0 z-[7000] bg-emerald-950/90 backdrop-blur-xl flex items-center justify-center p-6 hidden">
     <div class="bg-white rounded-[3rem] p-12 w-full max-w-md shadow-2xl text-center">
         <h2 id="authTitle" class="text-4xl font-black text-emerald-900 mb-2">Bienvenido</h2>
@@ -27,7 +28,7 @@
             <input type="text" id="regName" placeholder="Nombre Completo" class="w-full p-4 bg-slate-50 rounded-2xl hidden outline-none focus:ring-2 focus:ring-emerald-500">
             <input type="email" id="email" placeholder="Email" value="admin@gmail.com" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500">
             <input type="password" id="pass" placeholder="Password" value="admin" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500">
-            <button onclick="authAction()" class="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl uppercase tracking-widest text-xs">Ingresar</button>
+            <button onclick="authAction()" class="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase tracking-widest text-xs">Ingresar</button>
             <div class="pt-6 border-t border-slate-50 flex flex-col gap-4">
                 <button onclick="toggleAuthMode()" id="toggleAuthMode" class="text-emerald-600 text-[10px] font-black uppercase">¿No tienes cuenta? Regístrate</button>
                 <button onclick="toggleLogin(false)" class="text-slate-300 text-[10px] font-bold uppercase">Cerrar</button>
@@ -36,6 +37,7 @@
     </div>
 </div>
 
+<!-- NAVBAR -->
 <nav class="fixed top-0 left-0 right-0 h-24 glass-nav z-[1000] px-10 flex items-center justify-between">
     <div class="flex items-center gap-3 cursor-pointer" onclick="showView('inicio')">
         <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-leaf text-xl"></i></div>
@@ -60,6 +62,7 @@
 
 <main id="mainContainer" class="pt-24 min-h-screen"></main>
 
+<!-- MODAL DETALLES -->
 <div id="detailModal" class="fixed inset-0 z-[6000] bg-emerald-950/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-[4rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto p-12 relative animate-fade-in">
         <button onclick="closeDetail()" class="absolute top-8 right-8 text-slate-300 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
@@ -89,6 +92,7 @@
     </div>
 </div>
 
+<!-- CHAT BIOBOT -->
 <div id="chatWidget" class="fixed bottom-8 right-8 z-[5000]">
     <button onclick="toggleChat()" class="w-16 h-16 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all"><i class="fas fa-comment-dots text-2xl"></i></button>
     <div id="chatWindow" class="absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-[2.5rem] shadow-3xl border border-slate-100 flex flex-col hidden overflow-hidden animate-fade-in">
@@ -117,7 +121,7 @@
         if(user.role==='admin') document.getElementById('adminLink').classList.remove('hidden');
     }
 
-    async function fetchData(e){const r=await fetch(`${API}/${e}`);return await r.json();}
+    async function fetchData(e){try{const r=await fetch(`${API}/${e}`);return await r.json();}catch(err){return [];}}
     function toggleLogin(s){document.getElementById('loginOverlay').classList.toggle('hidden',!s);}
     function logout(){localStorage.removeItem('access_token');location.href="/";}
     function toggleAuthMode(){
@@ -136,26 +140,70 @@
         if(r.ok){localStorage.setItem('access_token',d.token);location.reload();}else alert(d.detail);
     }
 
+    function toggleDropdown(id) {
+        ['munDropdown', 'difDropdown', 'catDropdown'].forEach(dId => {
+            if(dId !== id) document.getElementById(dId)?.classList.add('hidden');
+        });
+        document.getElementById(id)?.classList.toggle('hidden');
+    }
+
+    function selectOption(attr, value, label, dropdownId) {
+        const labelEl = document.getElementById(attr.substring(0,3) + 'Selected');
+        if(labelEl) labelEl.innerText = label;
+        activeFilters[attr] = value;
+        const filtered = actividadesCache.filter(d => {
+            const mMun = activeFilters.municipio === 'Todos' || d.municipio === activeFilters.municipio;
+            const mDif = activeFilters.dificultad === 'Todos' || d.dificultad === activeFilters.dificultad;
+            const mCat = activeFilters.categoria === 'Todos' || d.categoria === activeFilters.categoria;
+            return mMun && mDif && mCat;
+        });
+        renderDestinos(filtered);
+        toggleDropdown(dropdownId);
+    }
+
+    window.onclick = (event) => {
+        if (!event.target.closest('.relative')) {
+            ['munDropdown', 'difDropdown', 'catDropdown'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
+        }
+    };
+
     async function showView(v){
         const c=document.getElementById('mainContainer');
         if(v==='inicio'){
             c.innerHTML=`<section class="hero-gradient h-[75vh] flex items-center justify-center text-center px-6"><div class="animate-fade-in max-w-5xl"><h1 class="text-white text-7xl md:text-9xl font-black mb-8 tracking-tighter">CAQUETÁ <br/><span class="text-emerald-500 italic">ES VIDA</span></h1><button onclick="showView('explorar')" class="bg-emerald-500 text-white px-12 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-2xl">Explorar Destinos</button></div></section>`;
         }
         else if(v==='explorar'){
-            c.innerHTML=`<div class="px-6 md:px-10 py-20 max-w-7xl mx-auto animate-fade-in"><h2 class="text-6xl font-black mb-12 italic tracking-tighter text-center md:text-left">Descubrir <span class="text-emerald-600">Caquetá</span></h2><div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div></div>`;
-            actividadesCache = await fetchData('actividades');
-            renderDestinos(actividadesCache);
+            c.innerHTML=`
+                <div class="px-6 md:px-10 py-20 max-w-7xl mx-auto animate-fade-in">
+                    <h1 class="text-5xl md:text-7xl font-black text-slate-900 mb-12 italic tracking-tighter text-center md:text-left">Descubrir <span class="text-emerald-600">Caquetá</span></h1>
+                    <!-- FILTROS PREMIUM RE-ORGANIZADOS -->
+                    <div class="bg-white rounded-[3rem] shadow-xl border border-slate-100 mb-16 p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="relative"><button onclick="toggleDropdown('munDropdown')" class="w-full bg-slate-50 p-6 rounded-[2rem] text-left flex justify-between items-center"><div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Municipio</p><p id="munSelected" class="text-sm font-bold text-slate-700">Cualquier Municipio</p></div><i class="fas fa-chevron-down text-slate-300"></i></button><div id="munDropdown" class="absolute left-0 right-0 mt-3 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-slate-100 z-[2000] hidden max-h-60 overflow-y-auto custom-scrollbar"><div id="munOptions" class="p-2"></div></div></div>
+                            <div class="relative"><button onclick="toggleDropdown('difDropdown')" class="w-full bg-slate-50 p-6 rounded-[2rem] text-left flex justify-between items-center"><div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Intensidad</p><p id="difSelected" class="text-sm font-bold text-slate-700">Todos los niveles</p></div><i class="fas fa-chevron-down text-slate-300"></i></button><div id="difDropdown" class="absolute left-0 right-0 mt-3 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-slate-100 z-[2000] hidden p-2 space-y-1"><button onclick="selectOption('dificultad','Todos','Todos los niveles','difDropdown')" class="w-full p-4 text-left text-xs font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-xl">Todos</button><button onclick="selectOption('dificultad','Baja','Nivel: Baja','difDropdown')" class="w-full p-4 text-left text-xs font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-xl">Baja</button><button onclick="selectOption('dificultad','Media','Nivel: Media','difDropdown')" class="w-full p-4 text-left text-xs font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-xl">Media</button><button onclick="selectOption('dificultad','Alta','Nivel: Alta','difDropdown')" class="w-full p-4 text-left text-xs font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-xl">Alta</button></div></div>
+                            <div class="relative"><button onclick="toggleDropdown('catDropdown')" class="w-full bg-slate-50 p-6 rounded-[2rem] text-left flex justify-between items-center"><div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Experiencia</p><p id="catSelected" class="text-sm font-bold text-slate-700">Cualquier Experiencia</p></div><i class="fas fa-chevron-down text-slate-300"></i></button><div id="catDropdown" class="absolute left-0 right-0 mt-3 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-slate-100 z-[2000] hidden max-h-60 overflow-y-auto custom-scrollbar"><div id="catOptions" class="p-2"></div></div></div>
+                        </div>
+                    </div>
+                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
+                </div>`;
+            const data = await fetchData('actividades');
+            actividadesCache = data;
+            const muns = ['Todos', ...new Set(data.map(d => d.municipio))];
+            const cats = ['Todos', ...new Set(data.map(d => d.categoria))];
+            document.getElementById('munOptions').innerHTML = muns.map(m => `<button onclick="selectOption('municipio','${m}','${m==='Todos'?'Cualquier Municipio':m}','munDropdown')" class="w-full p-4 text-left text-xs font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-xl">${m}</button>`).join('');
+            document.getElementById('catOptions').innerHTML = cats.map(c => `<button onclick="selectOption('categoria','${c}','${c==='Todos'?'Cualquier Experiencia':c}','catDropdown')" class="w-full p-4 text-left text-xs font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-xl">${c}</button>`).join('');
+            renderDestinos(data);
+        }
+        else if(v==='municipios'){
+            c.innerHTML=`<div class="px-6 py-20 max-w-7xl mx-auto animate-fade-in"><h2 class="text-5xl font-black mb-12 italic tracking-tighter">Inteligencia <span class="text-emerald-600">Semántica</span></h2><div id="statsBox" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div></div>`;
+            const s = await fetchData('stats');
+            document.getElementById('statsBox').innerHTML=`<div class="bg-emerald-950 p-10 rounded-[3rem] text-white shadow-2xl"><p class="text-xs font-black uppercase tracking-widest text-emerald-400">Total Atractivos</p><h4 class="text-7xl font-black my-4 tracking-tighter">${s.total_atractivos||0}</h4></div><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50 md:col-span-2"><h5 class="text-xs font-black uppercase text-slate-400 mb-8">Por Municipio</h5><div class="space-y-2">${Object.entries(s.por_municipio||{}).map(([m,c])=>`<div class="flex justify-between text-xs font-bold border-b border-slate-50 pb-2"><span>${m}</span><span class="text-emerald-600">${c} sitios</span></div>`).join('')}</div></div>`;
         }
         else if(v==='perfil'){
             if(!user) return toggleLogin(true);
             c.innerHTML=`<div class="px-6 py-20 max-w-5xl mx-auto animate-fade-in"><h2 class="text-6xl font-black mb-12 italic tracking-tighter">Mis <span class="text-emerald-600">Reservas</span></h2><div id="reservasGrid" class="grid gap-8"></div></div>`;
-            const d=await fetchData(`mis-reservas?email=${user.email}`);
-            document.getElementById('reservasGrid').innerHTML=d.length===0?'<p class="text-slate-400 italic">No hay reservas aún.</p>':d.map(r=>`<div class="bg-white p-10 rounded-[3rem] shadow-xl flex flex-col md:flex-row justify-between items-center"><div class="space-y-2"><div><span class="text-emerald-500 font-black text-[9px] uppercase">${r.fecha}</span><h3 class="text-3xl font-black">${r.lugar}</h3></div><p class="text-xs font-bold text-slate-500">${r.personas} Viajeros • ${r.dias} Días</p></div><div class="text-right mt-6 md:mt-0"><p class="text-[9px] font-black uppercase text-slate-400">Total Pagado</p><p class="text-4xl font-black text-emerald-900 italic">$${new Intl.NumberFormat().format(r.precio_total)}</p><button onclick="cancelReserva('${r.id}')" class="text-[9px] font-black text-red-400 uppercase mt-4">Cancelar</button></div></div>`).join('');
-        }
-        else if(v==='municipios'){
-            c.innerHTML=`<div class="px-6 py-20 max-w-7xl mx-auto animate-fade-in"><h2 class="text-5xl font-black mb-12 italic tracking-tighter">Inteligencia <span class="text-emerald-600">Semántica</span></h2><div id="statsBox" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div></div>`;
-            const s=await fetchData('stats');
-            document.getElementById('statsBox').innerHTML=`<div class="bg-emerald-950 p-10 rounded-[3rem] text-white shadow-2xl"><p class="text-xs font-black uppercase tracking-widest text-emerald-400">Total Atractivos</p><h4 class="text-7xl font-black my-4 tracking-tighter">${s.total_atractivos}</h4></div><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50 md:col-span-2"><h5 class="text-xs font-black uppercase text-slate-400 mb-8">Por Municipio</h5><div class="space-y-2">${Object.entries(s.por_municipio||{}).map(([m,c])=>`<div class="flex justify-between text-xs font-bold border-b border-slate-50 pb-2"><span class="text-slate-500">${m}</span><span class="text-emerald-600">${c} sitios</span></div>`).join('')}</div></div>`;
+            const d = await fetchData(`mis-reservas?email=${user.email}`);
+            document.getElementById('reservasGrid').innerHTML=d.length===0?'<p class="text-slate-400 italic">No hay reservas aún.</p>':d.map(r=>`<div class="bg-white p-10 rounded-[3rem] shadow-xl flex flex-col md:flex-row justify-between items-center border border-slate-50"><div class="space-y-2"><div><span class="text-emerald-500 font-black text-[9px] uppercase">${r.fecha}</span><h3 class="text-3xl font-black">${r.lugar}</h3></div><p class="text-xs font-bold text-slate-500">${r.personas} Viajeros • ${r.dias} Días</p></div><div class="text-right mt-6 md:mt-0"><p class="text-[9px] font-black uppercase text-slate-400">Total Pagado</p><p class="text-4xl font-black text-emerald-900 italic">$${new Intl.NumberFormat().format(r.precio_total)}</p><button onclick="cancelReserva('${r.id}')" class="text-[9px] font-black text-red-400 uppercase mt-4">Cancelar</button></div></div>`).join('');
         }
         else if(v==='gestion') {
             if(!user || user.role!=='admin') return showView('inicio');
@@ -183,7 +231,7 @@
             const stats = await fetchData('admin/full-stats'); const acts = await fetchData('actividades');
             document.getElementById('adminKpis').innerHTML = `<div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Ingresos</p><h4 class="text-2xl font-black text-emerald-600">$${new Intl.NumberFormat().format(stats.kpis.ingresos_proyectados)}</h4></div><div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Reservas</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.total_reservas}</h4></div><div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Usuarios</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.usuarios_activos}</h4></div><div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Destinos</p><h4 class="text-2xl font-black text-slate-800">${acts.length}</h4></div>`;
             document.getElementById('adminLog').innerHTML = stats.ultimas_reservas.map(r => `<div class="p-4 bg-white/5 rounded-2xl flex justify-between"><span class="text-xs font-bold">${r.user}</span><span class="text-[10px] font-black text-emerald-500">${r.fecha}</span></div>`).join('');
-            document.getElementById('adminAtractivosList').innerHTML = acts.map(a => `<div class="bg-white p-6 rounded-3xl border border-slate-50 flex justify-between items-center shadow-sm hover:shadow-lg transition-all animate-fade-in"><div class="flex items-center gap-6"><img src="${a.imagen}" class="w-16 h-16 rounded-2xl object-cover shadow-md"><div><p class="font-black text-slate-800">${a.id}</p><p class="text-[9px] font-bold text-slate-400 uppercase">${a.municipio} • ${a.disponibilidad}</p></div></div><div class="flex gap-3"><button onclick="toggleVisibility('${a.real_id}','${a.disponibilidad}')" class="w-10 h-10 ${a.disponibilidad==='Disponible'?'bg-emerald-50 text-emerald-600 hover:bg-emerald-600':'bg-amber-50 text-amber-600 hover:bg-amber-600'} rounded-xl flex items-center justify-center hover:text-white transition-all"><i class="fas ${a.disponibilidad==='Disponible'?'fa-eye':'fa-eye-slash'} text-xs"></i></button><button onclick="prepareEdit('${a.real_id}')" class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all"><i class="fas fa-edit text-xs"></i></button><button onclick="deleteLugar('${a.real_id}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-xs"></i></button></div></div>`).join('');
+            document.getElementById('adminAtractivosList').innerHTML = acts.map(a => `<div class="bg-white p-6 rounded-3xl border border-slate-50 flex justify-between items-center shadow-sm hover:shadow-lg transition-all animate-fade-in group"><div class="flex items-center gap-6"><img src="${a.imagen}" class="w-16 h-16 rounded-2xl object-cover shadow-md grayscale group-hover:grayscale-0 transition-all"><div><p class="font-black text-slate-800">${a.id}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${a.municipio} • ${a.disponibilidad}</p></div></div><div class="flex gap-3"><button onclick="toggleVisibility('${a.real_id}','${a.disponibilidad}')" class="w-10 h-10 ${a.disponibilidad==='Disponible'?'bg-emerald-50 text-emerald-600 hover:bg-emerald-600':'bg-amber-50 text-amber-600 hover:bg-amber-600'} rounded-xl flex items-center justify-center hover:text-white transition-all"><i class="fas ${a.disponibilidad==='Disponible'?'fa-eye':'fa-eye-slash'} text-xs"></i></button><button onclick="prepareEdit('${a.real_id}')" class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all"><i class="fas fa-edit text-xs"></i></button><button onclick="deleteLugar('${a.real_id}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-xs"></i></button></div></div>`).join('');
         }
     }
 
@@ -196,22 +244,28 @@
 
     async function toggleVisibility(id, current) {
         const newS = current === 'Disponible' ? 'Oculto' : 'Disponible';
-        const res = await fetch(`${API}/actividades/${id}/visibility`, { method: 'PATCH', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ status: newS }) });
-        if(res.ok) showView('gestion');
+        try {
+            const res = await fetch(`${API}/actividades/${id}/visibility`, { 
+                method: 'PATCH', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({ status: newS }) 
+            });
+            if(res.ok) showView('gestion');
+        } catch(e) { alert("Error al cambiar visibilidad"); }
     }
 
     function renderDestinos(d){
         const g=document.getElementById('destinosGrid'); if(!g) return;
         const v = d.filter(x => x.disponibilidad === 'Disponible');
-        if(v.length===0) { g.innerHTML = '<p class="col-span-full py-20 text-center font-bold text-slate-400">Sin destinos públicos.</p>'; return; }
-        g.innerHTML=v.map(x=>`<div class="destino-card bg-white rounded-[4rem] overflow-hidden shadow-xl hover:-translate-y-2 transition-all border border-slate-50 animate-fade-in"><div class="h-64 bg-cover bg-center" style="background-image:url('${x.imagen}')"></div><div class="p-10"><p class="text-[9px] font-black text-emerald-600 uppercase mb-2">${x.categoria}</p><h3 class="text-3xl font-black text-slate-800 mb-6 tracking-tighter leading-none">${x.id}</h3><button onclick="openDetail('${x.real_id}')" class="w-full py-4 bg-emerald-950 text-white font-black rounded-2xl uppercase text-[9px]">Detalles</button></div></div>`).join('');
+        if(v.length===0) { g.innerHTML = '<p class="col-span-full py-20 text-center font-bold text-slate-400">Sin destinos públicos disponibles en este momento.</p>'; return; }
+        g.innerHTML=v.map(x=>`<div class="destino-card bg-white rounded-[4rem] overflow-hidden shadow-xl hover:-translate-y-2 transition-all border border-slate-50 animate-fade-in"><div class="h-64 bg-cover bg-center" style="background-image:url('${x.imagen}')"></div><div class="p-10"><p class="text-[9px] font-black text-emerald-600 uppercase mb-2 tracking-widest">${x.categoria}</p><h3 class="text-3xl font-black text-slate-800 mb-6 tracking-tighter leading-none">${x.id}</h3><button onclick="openDetail('${x.real_id}')" class="w-full py-4 bg-emerald-950 text-white font-black rounded-2xl uppercase text-[9px] tracking-widest">Detalles</button></div></div>`).join('');
     }
 
     function openDetail(id){
         const d=actividadesCache.find(a=>a.real_id===id); if(!d) return;
         currentActivity=d; document.getElementById('detailImg').style.backgroundImage=`url('${d.imagen}')`;
         document.getElementById('detailCat').innerText=d.categoria; document.getElementById('detailTitle').innerText=d.id;
-        document.getElementById('detailDesc').innerText=d.descripcion || "Explora este destino amazónico.";
+        document.getElementById('detailDesc').innerText=d.descripcion || "Explora este increíble destino amazónico.";
         document.getElementById('detailPrecio').innerText=`$${new Intl.NumberFormat().format(d.precio)}`;
         document.getElementById('detailDif').innerText=d.dificultad;
         document.getElementById('detailModal').classList.remove('hidden'); document.body.style.overflow='hidden';
@@ -231,11 +285,11 @@
 
     async function confirmBooking(){
         const f1=document.getElementById('bookFechaIni').value, f2=document.getElementById('bookFechaFin').value;
-        if(!f1||!f2||!user) return alert("Completa las fechas.");
+        if(!f1||!f2||!user) return alert("Completa las fechas de tu viaje.");
         const s=updateBookingSummary();
         const b={lugar_id:currentActivity.real_id,fecha_inicio:f1,fecha_fin:f2,personas:parseInt(document.getElementById('bookPers').value),dias:s.d,total_pago:s.t,user_email:user.email,user_name:user.name};
         const r=await fetch(`${API}/reservas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
-        if(r.ok){alert("¡Reservado!");closeDetail();showView('perfil');}
+        if(r.ok){alert("¡Aventura Reservada! Revisa tu itinerario.");closeDetail();showView('perfil');}
     }
 
     async function saveLugar(){
@@ -251,11 +305,11 @@
     }
 
     function resetForm(){ document.getElementById('lRealId').value=""; document.getElementById('lId').value=""; document.getElementById('lId').disabled=false; document.getElementById('lName').value=""; document.getElementById('lPrice').value=""; document.getElementById('lImg').value=""; document.getElementById('formTitle').innerText="Nuevo Destino"; document.getElementById('cancelEditBtn').classList.add('hidden'); }
-    async function deleteLugar(id){if(confirm("¿Borrar?")){await fetch(`${API}/actividades/${id}`,{method:'DELETE'});showView('gestion');}}
+    async function deleteLugar(id){if(confirm("¿Estás seguro de borrar este destino?")){await fetch(`${API}/actividades/${id}`,{method:'DELETE'});showView('gestion');}}
     function toggleChat(){document.getElementById('chatWindow').classList.toggle('hidden');}
     async function sendChatMessage(){
         const i=document.getElementById('chatInput'), m=document.getElementById('chatMessages'); if(!i.value.trim()) return;
-        m.innerHTML+=`<div class="flex justify-end"><p class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none text-[10px]">${i.value}</p></div>`;
+        m.innerHTML+=`<div class="flex justify-end"><p class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none text-[10px] font-bold max-w-[80%]">${i.value}</p></div>`;
         const text=i.value; i.value=''; m.scrollTop=m.scrollHeight;
         const r=await fetch(`${API}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
         const d=await r.json();
