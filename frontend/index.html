@@ -7,14 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        body { font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
-        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .hero-gradient { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        /* Estilos para Markdown en el Chat */
+        .markdown-content h3 { font-size: 1.1rem; font-weight: 900; color: #064e3b; margin-top: 1rem; margin-bottom: 0.5rem; }
+        .markdown-content ul { list-style: none; padding-left: 0; margin-bottom: 1rem; }
+        .markdown-content li { font-size: 0.85rem; color: #475569; margin-bottom: 0.25rem; }
+        .markdown-content hr { border: none; border-top: 1px solid #e2e8f0; margin: 1.5rem 0; }
+        .markdown-content strong { color: #0f172a; }
     </style>
 </head>
 <body class="bg-[#fafafa] text-slate-900 overflow-x-hidden">
