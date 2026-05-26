@@ -388,11 +388,12 @@ async def chat_ai(payload: dict = Body(...)):
     """
 
     try:
-        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+        model = genai.GenerativeModel(model_name="gemini-pro")
         response = model.generate_content(prompt)
         return {"reply": response.text if response and response.text else "¡Hola! BioBot está procesando los datos. ¿Me repites la pregunta? 🦜"}
     except Exception as e:
-        return {"reply": f"BioBot está sincronizando tripletas... (Error: {str(e)[:50]}) 🌴"}
+        print(f"CHAT ERROR: {str(e)}")
+        return {"reply": f"BioBot está sincronizando tripletas... (Error: {str(e)[:100]}) 🌴"}
 
 
 @app.post("/api/v1/reservas")
