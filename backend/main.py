@@ -340,52 +340,59 @@ async def get_admin_full_stats():
 @app.post("/api/v1/chat")
 async def chat_ai(payload: dict = Body(...)):
     if not GEMINI_KEY:
-        return {
-            "reply": "¡Hola! Soy BioBot. Configura mi API Key para que pueda guiarte por el Caquetá."
-        }
-    message = payload.get("message", "")
-    query_context = f"PREFIX : <{BASE_PREFIX}> SELECT DISTINCT ?nombre ?mun WHERE {{ ?s rdf:type :Actividad . ?s :nombreActividad ?nombre . ?s :ubicadaEn ?m . ?m :nombreMunicipio ?mun }} LIMIT 8"
-    raw_data = await query_semantic_engine(query_context)
-    context_str = "Destinos: " + ", ".join(
-        [f"{item.get('nombre')} en {item.get('mun')}" for item in raw_data]
-    )
-    prompt = f"""
-    Eres BioBot, el guía local más apasionado del Caquetá, Colombia. 🌿✨
-    Tu misión es enamorar a los viajeros de nuestra tierra. Responde de forma cálida, humana y muy servicial.
+        return {"reply": "¡Hola! Configura mi API Key para guiarte."}
     
-    CONTEXTO REAL DE LA WEB:
+    message = payload.get("message", "")
+    
+    # 1. Extracción de CONOCIMIENTO TOTAL de la Ontología
+    query_context = f"""
+    PREFIX : <{BASE_PREFIX}> 
+    SELECT DISTINCT ?nombre ?mun_uri ?precio ?dif ?tipo ?desc WHERE {{ 
+        ?s rdf:type :Actividad . 
+        ?s :nombreActividad ?nombre . 
+        ?s :ubicadaEn ?mun_uri . 
+        OPTIONAL {{ ?s :precio ?precio }} 
+        OPTIONAL {{ ?s :nivelDificultad ?dif }} 
+        OPTIONAL {{ ?s :tipoActividad ?tipo }} 
+        OPTIONAL {{ ?s :descripcion ?desc }}
+    }}
+    """
+    raw_data = await query_semantic_engine(query_context)
+    
+    # 2. Formateo de Base de Conocimiento para la IA
+    knowledge_base = []
+    for item in raw_data:
+        mun = item.get("mun_uri", "").split("#")[-1].replace("_", " ")
+        info = f"- {item.get('nombre')} en {mun}: Tipo {item.get('tipo', 'N/A')}, Dificultad {item.get('dif', 'N/A')}, Precio ${item.get('precio', 0)}. Descripción: {item.get('desc', 'Sin descripción')}"
+        knowledge_base.append(info)
+    
+    context_str = "\\n".join(knowledge_base)
+
+    # 3. Prompt de Misión Crítica (Basado estrictamente en datos)
+    prompt = f"""
+    Eres BioBot, el cerebro de IA de la plataforma 'Caquetá Bio'. 🌿🧠
+    Tu conocimiento proviene EXCLUSIVAMENTE de una base de datos semántica (Ontología RDF).
+    
+    BASE DE DATOS REAL (Lo único que existe):
     {context_str}
+    
+    REGLAS DE ORO:
+    1. Si el viajero pregunta por un destino que NO está en la lista anterior, responde amablemente que por ahora no lo tenemos en el catálogo semántico.
+    2. Usa los PRECIOS y DETALLES exactos que aparecen en la lista.
+    3. Si preguntan por recomendaciones (ej: "algo barato" o "de aventura"), busca en la lista anterior los que coincidan con precio bajo o tipo aventura.
+    4. Responde con calidez amazónica, pero con precisión técnica. Usa emojis (🌴, 💦, 🦜).
+    5. No menciones que eres una IA ni que tienes una "lista". Eres un guía experto.
     
     PREGUNTA DEL VIAJERO:
     {message}
-    
-    INSTRUCCIONES:
-    - Responde como un guía humano, no mencIONES que eres una IA.
-    - Usa emojis como 🌴, 💦, 🦜 para darle vida a la charla.
-    - Mantén la respuesta concisa pero llena de energía amazónica.
     """
 
     try:
-        # Auto-descubrimiento de modelos disponibles para evitar errores 404
-        available_models = [
-            m.name
-            for m in genai.list_models()
-            if "generateContent" in m.supported_generation_methods
-        ]
-        best_model = next(
-            (m for m in available_models if "flash" in m),
-            available_models[0] if available_models else "models/gemini-pro",
-        )
-
-        model = genai.GenerativeModel(model_name=best_model)
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
         response = model.generate_content(prompt)
-        if response and response.text:
-            return {"reply": response.text}
-        return {"reply": "¡Hola! BioBot se quedó sin palabras. ¡Prueba de nuevo! 🦜"}
+        return {"reply": response.text if response and response.text else "¡Hola! BioBot está procesando los datos. ¿Me repites la pregunta? 🦜"}
     except Exception as e:
-        return {
-            "reply": f"¡Hola! BioBot tuvo un tropiezo técnico: {str(e)[:100]}. ¡Pero el Caquetá te espera! 🌴"
-        }
+        return {"reply": f"BioBot está sincronizando tripletas... (Error: {str(e)[:50]}) 🌴"}
 
 
 @app.post("/api/v1/reservas")
