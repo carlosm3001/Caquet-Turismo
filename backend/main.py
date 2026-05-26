@@ -385,11 +385,29 @@ async def delete_reserva(reserva_id: str):
 
 @app.get("/api/v1/stats")
 async def get_stats():
+    # 1. Total Atractivos
+    q_total = f"PREFIX : <{BASE_PREFIX}> SELECT (COUNT(?s) as ?total) WHERE {{ ?s rdf:type :Actividad }}"
+    total_res = await query_semantic_engine(q_total)
+    total = int(total_res[0]["total"]) if total_res else 0
+
+    # 2. Por Municipio
+    q_mun = f"PREFIX : <{BASE_PREFIX}> SELECT ?mun_uri (COUNT(?s) as ?count) WHERE {{ ?s rdf:type :Actividad . ?s :ubicadaEn ?mun_uri }} GROUP BY ?mun_uri"
+    mun_res = await query_semantic_engine(q_mun)
+    por_municipio = {
+        row["mun_uri"].split("#")[-1].replace("_", " "): int(row["count"])
+        for row in mun_res
+    }
+
+    # 3. Por Dificultad
+    q_dif = f"PREFIX : <{BASE_PREFIX}> SELECT ?dif (COUNT(?s) as ?count) WHERE {{ ?s rdf:type :Actividad . ?s :nivelDificultad ?dif }} GROUP BY ?dif"
+    dif_res = await query_semantic_engine(q_dif)
+    por_dificultad = {row["dif"]: int(row["count"]) for row in dif_res}
+
     return {
-        "total_atractivos": 0,
-        "por_municipio": {},
-        "por_dificultad": {},
-        "grafo_status": "Vívido",
+        "total_atractivos": total,
+        "por_municipio": por_municipio,
+        "por_dificultad": por_dificultad,
+        "grafo_status": "Sincronizado",
     }
 
 
