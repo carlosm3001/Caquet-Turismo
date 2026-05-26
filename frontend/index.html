@@ -515,9 +515,75 @@
         }
         else if(view==='perfil') {
             if(!user) return toggleLogin(true);
-            container.innerHTML = `<div class="px-10 py-20 max-w-5xl mx-auto animate-fade-in"><div class="mb-16"><h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Mis Reservas</h2></div><div id="reservasGrid" class="grid gap-8"></div></div>`;
+            container.innerHTML = `
+                <div class="px-6 md:px-10 py-20 max-w-5xl mx-auto animate-fade-in">
+                    <div class="mb-16">
+                        <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-3">Tu Itinerario</h2>
+                        <h1 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter italic">Mis <span class="text-emerald-600">Reservas</span></h1>
+                    </div>
+                    <div id="reservasGrid" class="grid gap-10">
+                        <div class="flex justify-center py-20">
+                            <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-600"></div>
+                        </div>
+                    </div>
+                </div>`;
+            
             const data = await fetchData(`mis-reservas?email=${user.email}`);
-            document.getElementById('reservasGrid').innerHTML = data.length === 0 ? '<p>No hay reservas.</p>' : data.map(r => `<div class="bg-white p-10 rounded-[3rem] shadow-xl flex justify-between items-center"><div><h3 class="text-2xl font-black">${r.lugar}</h3><p class="text-xs text-slate-400">${r.fecha}</p></div><div class="text-emerald-600 font-black">$${new Intl.NumberFormat().format(r.precio_total)}</div><button onclick="cancelReserva('${r.id}')" class="text-red-400 font-bold uppercase text-[9px]">Cancelar</button></div>`).join('');
+            const grid = document.getElementById('reservasGrid');
+            
+            if(data.length === 0) {
+                grid.innerHTML = `
+                    <div class="bg-white p-20 rounded-[3rem] text-center border border-slate-100 shadow-xl">
+                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 text-3xl"><i class="fas fa-calendar-times"></i></div>
+                        <h3 class="text-2xl font-black text-slate-800 mb-2">Aún no tienes aventuras</h3>
+                        <p class="text-slate-400 font-medium italic">Explora nuestros destinos y comienza tu historia en el Caquetá.</p>
+                        <button onclick="showView('explorar')" class="mt-8 px-10 py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-lg uppercase text-xs tracking-widest">Explorar Ahora</button>
+                    </div>`;
+            } else {
+                grid.innerHTML = data.map(r => `
+                    <div class="bg-white rounded-[3rem] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.1)] border border-slate-50 overflow-hidden flex flex-col md:flex-row animate-fade-in">
+                        <!-- Lado Izquierdo: Info Principal -->
+                        <div class="flex-1 p-10 md:p-12 space-y-8 border-b md:border-b-0 md:border-r border-slate-50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-emerald-500 font-black text-[9px] tracking-[0.3em] uppercase mb-2 block">Destino Reservado</span>
+                                    <h3 class="text-4xl font-black text-slate-900 tracking-tighter italic">${r.lugar}</h3>
+                                </div>
+                                <div class="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[8px] font-black uppercase border border-emerald-100 shadow-sm">Confirmada</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div class="space-y-1">
+                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Periodo</p>
+                                    <p class="text-xs font-bold text-slate-600 flex items-center gap-2"><i class="far fa-calendar-alt text-emerald-500"></i> ${r.fecha}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Personas</p>
+                                    <p class="text-xs font-bold text-slate-600 flex items-center gap-2"><i class="fas fa-users text-emerald-500"></i> ${r.personas} Viajeros</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Estancia</p>
+                                    <p class="text-xs font-bold text-slate-600 flex items-center gap-2"><i class="fas fa-moon text-emerald-500"></i> ${r.dias} Noches</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">ID Ticket</p>
+                                    <p class="text-[10px] font-mono font-bold text-slate-400">#${r.id.split('_')[1] || r.id}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lado Derecho: Costo y Acciones -->
+                        <div class="w-full md:w-72 p-10 md:p-12 bg-slate-50/50 flex flex-col justify-center items-center text-center space-y-6">
+                            <div>
+                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Total Pagado</p>
+                                <p class="text-4xl font-black text-emerald-900 tracking-tighter italic">$${new Intl.NumberFormat().format(r.precio_total)}</p>
+                            </div>
+                            <button onclick="cancelReserva('${r.id}')" class="group flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-red-500 transition-colors">
+                                <i class="fas fa-trash-alt text-[8px] transition-transform group-hover:scale-125"></i> Cancelar Reserva
+                            </button>
+                        </div>
+                    </div>`).join('');
+            }
         }
         else if(view==='gestion') {
             if(!user || user.role!=='admin') return showView('inicio');
