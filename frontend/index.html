@@ -234,11 +234,11 @@
         
         // Estilo inactivo estricto
         buttons.forEach(b => {
-            b.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase`;
+            b.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase m-0 leading-none`;
         });
         
         // Estilo activo estricto
-        event.target.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase border border-emerald-700 shadow-sm transition-all`;
+        event.target.className = `${attr.substring(0,3)}-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase border border-emerald-700 shadow-sm transition-all m-0 leading-none`;
 
         const filtered = actividadesCache.filter(d => {
             const mMun = activeFilters.municipio === 'Todos' || d.municipio === activeFilters.municipio;
@@ -343,42 +343,45 @@
         else if(view==='explorar') {
             container.innerHTML = `
                 <div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in">
-                    <div class="mb-16">
-                        <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Catálogo Semántico</span>
-                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Ecosistema Turístico</h2>
+                    <div class="w-full">
+                        <!-- Título de la sección -->
+                        <div class="mb-8">
+                            <h2 class="text-emerald-500 font-bold text-xs tracking-widest uppercase mb-1">Catálogo Semántico</h2>
+                            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 italic tracking-tight">Ecosistema Turístico</h1>
+                        </div>
+
+                        <!-- Contenedor Principal Grid -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start w-full mb-20">
+                            <!-- COLUMNA 1: MUNICIPIO -->
+                            <div class="flex flex-col gap-4">
+                                <h3 class="text-gray-400 font-bold text-sm uppercase tracking-wider">Municipio</h3>
+                                <div id="munFilters" class="flex flex-wrap gap-2.5 items-start content-start">
+                                    <!-- Renderizado dinámico -->
+                                </div>
+                            </div>
+
+                            <!-- COLUMNA 2: DIFICULTAD -->
+                            <div class="flex flex-col gap-4">
+                                <h3 class="text-gray-400 font-bold text-sm uppercase tracking-wider">Dificultad</h3>
+                                <div id="difFilters" class="flex flex-wrap gap-2.5 items-start content-start">
+                                    <button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase border border-emerald-700 shadow-sm m-0 leading-none transition-all">Todos</button>
+                                    <button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 uppercase transition-colors m-0 leading-none">Baja</button>
+                                    <button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 uppercase transition-colors m-0 leading-none">Media</button>
+                                    <button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 uppercase transition-colors m-0 leading-none">Alta</button>
+                                </div>
+                            </div>
+
+                            <!-- COLUMNA 3: ACTIVIDAD -->
+                            <div class="flex flex-col gap-4">
+                                <h3 class="text-gray-400 font-bold text-sm uppercase tracking-wider">Actividad</h3>
+                                <div id="catFilters" class="flex flex-wrap gap-2.5 items-start content-start">
+                                    <!-- Renderizado dinámico -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <!-- Componente de Filtros Rediseñado (Estricto) -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start w-full mb-20">
-                        <!-- Columna MUNICIPIO -->
-                        <div>
-                            <h3 class="text-gray-400 font-bold text-sm mb-4 uppercase tracking-wider">Municipio</h3>
-                            <div id="munFilters" class="flex flex-wrap gap-2.5">
-                                <!-- Renderizado dinámico -->
-                            </div>
-                        </div>
 
-                        <!-- Columna DIFICULTAD -->
-                        <div>
-                            <h3 class="text-gray-400 font-bold text-sm mb-4 uppercase tracking-wider">Dificultad</h3>
-                            <div id="difFilters" class="flex flex-wrap gap-2.5">
-                                <button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-4 py-2 rounded-full bg-emerald-700 text-white text-xs font-bold uppercase border border-emerald-700 shadow-sm transition-all">Todos</button>
-                                <button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase">Baja</button>
-                                <button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase">Media</button>
-                                <button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-4 py-2 rounded-full border border-gray-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors uppercase">Alta</button>
-                            </div>
-                        </div>
-
-                        <!-- Columna ACTIVIDAD -->
-                        <div>
-                            <h3 class="text-gray-400 font-bold text-sm mb-4 uppercase tracking-wider">Actividad</h3>
-                            <div id="catFilters" class="flex flex-wrap gap-2.5">
-                                <!-- Renderizado dinámico -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
                         <div class="col-span-3 flex justify-center py-20">
                             <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-emerald-600"></div>
                         </div>
@@ -393,14 +396,14 @@
             
             document.getElementById('munFilters').innerHTML = municipios.map(m => `
                 <button onclick="filterByAttr('municipio', '${m}')" 
-                        class="mun-btn px-4 py-2 rounded-full text-xs font-bold uppercase transition-all 
+                        class="mun-btn px-4 py-2 rounded-full text-xs font-bold uppercase transition-all m-0 leading-none 
                         ${m==='Todos' ? 'bg-emerald-700 text-white border border-emerald-700 shadow-sm' : 'border border-gray-200 text-slate-700 hover:bg-slate-50'}">
                     ${m}
                 </button>`).join('');
             
             document.getElementById('catFilters').innerHTML = categorias.map(c => `
                 <button onclick="filterByAttr('categoria', '${c}')" 
-                        class="cat-btn px-4 py-2 rounded-full text-xs font-bold uppercase transition-all 
+                        class="cat-btn px-4 py-2 rounded-full text-xs font-bold uppercase transition-all m-0 leading-none 
                         ${c==='Todos' ? 'bg-emerald-700 text-white border border-emerald-700 shadow-sm' : 'border border-gray-200 text-slate-700 hover:bg-slate-50'}">
                     ${c}
                 </button>`).join('');
