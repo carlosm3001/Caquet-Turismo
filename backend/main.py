@@ -292,12 +292,17 @@ async def toggle_visibility(act_id: str, payload: dict = Body(...)):
     new_status = payload.get("status", "Disponible")
     query = f"""
     PREFIX : <{BASE_PREFIX}>
-    DELETE {{ :{act_id} :disponibilidad ?o }}
-    WHERE {{ :{act_id} :disponibilidad ?o }} ;
+    DELETE {{ :{act_id} :disponibilidad ?old_status }}
+    WHERE {{ OPTIONAL {{ :{act_id} :disponibilidad ?old_status }} }} ;
     INSERT DATA {{ :{act_id} :disponibilidad '{new_status}' }}
     """
-    await query_semantic_engine(query)
-    return {"status": "success", "new_status": new_status}
+    try:
+        result = await query_semantic_engine(query)
+        print(f"DEBUG VISIBILITY - act_id: {act_id}, status: {new_status}")
+        return {"status": "success", "new_status": new_status, "result": result}
+    except Exception as e:
+        print(f"ERROR VISIBILITY: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/v1/admin/users")

@@ -267,8 +267,13 @@
         const newS = current === 'Disponible' ? 'Oculto' : 'Disponible';
         try {
             const res = await fetch(`${API}/actividades/${id}/visibility`, { method: 'PATCH', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ status: newS }) });
-            if(res.ok) { alert(`Destino ${newS==='Oculto'?'Ocultado':'Mostrado'} con éxito.`); showView('gestion'); showAdminTab('list'); }
-        } catch(e) { alert("Error de red"); }
+            if(res.ok) { 
+                actividadesCache = await fetchData('actividades'); // REFRESCAR CACHÉ
+                alert(`Destino ${newS==='Oculto'?'Ocultado':'Mostrado'} con éxito.`); 
+                showView('gestion'); 
+                showAdminTab('list'); 
+            }
+        } catch(e) { alert("Error de red al intentar cambiar la visibilidad"); }
     }
 
     function renderDestinos(d){
