@@ -343,53 +343,55 @@
         else if(view==='explorar') {
             container.innerHTML = `
                 <div class="px-6 md:px-10 py-20 max-w-7xl mx-auto animate-fade-in">
-                    <!-- Cabecera de Sección -->
-                    <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <!-- Cabecera de Sección Minimalista -->
+                    <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-3">Catálogo Inteligente</h2>
                             <h1 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter italic">Explorar <span class="text-emerald-600">Destinos</span></h1>
                         </div>
-                        <p class="text-slate-400 font-medium max-w-xs text-sm leading-relaxed">Filtra la biodiversidad del Caquetá mediante nuestro motor semántico en tiempo real.</p>
                     </div>
 
-                    <!-- Panel de Control de Filtros Premium -->
-                    <div class="bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(6,78,59,0.12)] border border-slate-100 overflow-hidden mb-20">
-                        <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+                    <!-- Panel de Despliegue (Dropdowns) Premium -->
+                    <div class="bg-white rounded-[2.5rem] shadow-[0_30px_80px_-20px_rgba(6,78,59,0.08)] border border-slate-100 overflow-hidden mb-16 p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             
-                            <!-- MUNICIPIO -->
-                            <div class="p-10 md:p-12 space-y-8 bg-slate-50/30">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600"><i class="fas fa-map-marked-alt text-xs"></i></div>
+                            <!-- MUNICIPIO DROPDOWN -->
+                            <div class="group relative bg-slate-50/50 rounded-[2rem] p-6 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-50 border border-transparent hover:border-emerald-100">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 transition-transform group-hover:scale-110"><i class="fas fa-map-marked-alt text-sm"></i></div>
                                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em]">Municipio</h3>
                                 </div>
-                                <div id="munFilters" class="flex flex-wrap gap-2">
-                                    <!-- Renderizado dinámico -->
-                                </div>
+                                <select id="munSelect" onchange="filterByAttr('municipio', this.value)" class="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer appearance-none">
+                                    <!-- Opciones dinámicas -->
+                                </select>
+                                <div class="absolute right-8 bottom-8 pointer-events-none text-slate-300"><i class="fas fa-chevron-down text-[10px]"></i></div>
                             </div>
 
-                            <!-- DIFICULTAD -->
-                            <div class="p-10 md:p-12 space-y-8">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600"><i class="fas fa-mountain text-xs"></i></div>
+                            <!-- DIFICULTAD DROPDOWN -->
+                            <div class="group relative bg-slate-50/50 rounded-[2rem] p-6 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-50 border border-transparent hover:border-emerald-100">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 transition-transform group-hover:scale-110"><i class="fas fa-mountain text-sm"></i></div>
                                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em]">Intensidad</h3>
                                 </div>
-                                <div id="difFilters" class="flex flex-wrap gap-2">
-                                    <button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-5 py-2.5 rounded-2xl bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-emerald-200 transition-all">Todos</button>
-                                    <button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-wider hover:border-emerald-200 hover:text-emerald-600 transition-all">Baja</button>
-                                    <button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-wider hover:border-emerald-200 hover:text-emerald-600 transition-all">Media</button>
-                                    <button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-wider hover:border-emerald-200 hover:text-emerald-600 transition-all">Alta</button>
-                                </div>
+                                <select id="difSelect" onchange="filterByAttr('dificultad', this.value)" class="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer appearance-none">
+                                    <option value="Todos">Todos los niveles</option>
+                                    <option value="Baja">Nivel: Baja</option>
+                                    <option value="Media">Nivel: Media</option>
+                                    <option value="Alta">Nivel: Alta</option>
+                                </select>
+                                <div class="absolute right-8 bottom-8 pointer-events-none text-slate-300"><i class="fas fa-chevron-down text-[10px]"></i></div>
                             </div>
 
-                            <!-- ACTIVIDAD -->
-                            <div class="p-10 md:p-12 space-y-8 bg-slate-50/30">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600"><i class="fas fa-swimmer text-xs"></i></div>
+                            <!-- ACTIVIDAD DROPDOWN -->
+                            <div class="group relative bg-slate-50/50 rounded-[2rem] p-6 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-50 border border-transparent hover:border-emerald-100">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 transition-transform group-hover:scale-110"><i class="fas fa-swimmer text-sm"></i></div>
                                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em]">Experiencia</h3>
                                 </div>
-                                <div id="catFilters" class="flex flex-wrap gap-2">
-                                    <!-- Renderizado dinámico -->
-                                </div>
+                                <select id="catSelect" onchange="filterByAttr('categoria', this.value)" class="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer appearance-none">
+                                    <!-- Opciones dinámicas -->
+                                </select>
+                                <div class="absolute right-8 bottom-8 pointer-events-none text-slate-300"><i class="fas fa-chevron-down text-[10px]"></i></div>
                             </div>
                         </div>
                     </div>
@@ -409,19 +411,11 @@
             const municipios = ['Todos', ...new Set(data.map(d => d.municipio))];
             const categorias = ['Todos', ...new Set(data.map(d => d.categoria))];
             
-            document.getElementById('munFilters').innerHTML = municipios.map(m => `
-                <button onclick="filterByAttr('municipio', '${m}')" 
-                        class="mun-btn px-5 py-2.5 rounded-2xl text-[10px] font-bold uppercase tracking-wider transition-all 
-                        ${m==='Todos' ? 'bg-emerald-700 text-white shadow-lg shadow-emerald-200' : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-200 hover:text-emerald-600'}">
-                    ${m}
-                </button>`).join('');
+            document.getElementById('munSelect').innerHTML = municipios.map(m => `
+                <option value="${m}">${m === 'Todos' ? 'Cualquier Municipio' : m}</option>`).join('');
             
-            document.getElementById('catFilters').innerHTML = categorias.map(c => `
-                <button onclick="filterByAttr('categoria', '${c}')" 
-                        class="cat-btn px-5 py-2.5 rounded-2xl text-[10px] font-bold uppercase tracking-wider transition-all 
-                        ${c==='Todos' ? 'bg-emerald-700 text-white shadow-lg shadow-emerald-200' : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-200 hover:text-emerald-600'}">
-                    ${c}
-                </button>`).join('');
+            document.getElementById('catSelect').innerHTML = categorias.map(c => `
+                <option value="${c}">${c === 'Todos' ? 'Cualquier Experiencia' : c}</option>`).join('');
             
             renderDestinos(data);
         }
