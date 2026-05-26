@@ -12,8 +12,14 @@
         .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .hero-gradient { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; }
         .card-hover:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(6, 78, 59, 0.15); }
-        .animate-fade-in { animation: fadeIn 0.8s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
     </style>
 </head>
 <body class="bg-[#fafafa] text-slate-900 overflow-x-hidden">
@@ -159,6 +165,44 @@
     let actividadesCache = [];
     let currentActivity = null;
     let activeFilters = { municipio: 'Todos', dificultad: 'Todos', categoria: 'Todos' };
+
+    // --- LÓGICA DE DROPDOWNS PERSONALIZADOS ---
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        const allDropdowns = ['munDropdown', 'difDropdown', 'catDropdown'];
+        
+        // Cerrar otros dropdowns
+        allDropdowns.forEach(dId => {
+            if(dId !== id) document.getElementById(dId)?.classList.add('hidden');
+        });
+
+        if (dropdown) {
+            dropdown.classList.toggle('hidden');
+        }
+    }
+
+    function selectOption(attr, value, label, dropdownId) {
+        // Actualizar etiqueta visual
+        const labelId = attr.substring(0,3) + 'Selected';
+        const labelEl = document.getElementById(labelId);
+        if(labelEl) labelEl.innerText = label;
+
+        // Ejecutar filtro
+        filterByAttr(attr, value);
+
+        // Cerrar menú
+        toggleDropdown(dropdownId);
+    }
+
+    // Cerrar al hacer clic fuera
+    window.onclick = (event) => {
+        if (!event.target.closest('.relative')) {
+            ['munDropdown', 'difDropdown', 'catDropdown'].forEach(id => {
+                document.getElementById(id)?.classList.add('hidden');
+            });
+        }
+    };
+    // ------------------------------------------
 
     window.onload = () => {
         const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('access_token');
@@ -343,64 +387,84 @@
         else if(view==='explorar') {
             container.innerHTML = `
                 <div class="px-6 md:px-10 py-20 max-w-7xl mx-auto animate-fade-in">
-                    <!-- Cabecera de Sección Minimalista -->
-                    <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-3">Catálogo Inteligente</h2>
-                            <h1 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter italic">Explorar <span class="text-emerald-600">Destinos</span></h1>
-                        </div>
+                    <div class="mb-12">
+                        <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-3 text-center md:text-left">Catálogo Inteligente</h2>
+                        <h1 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter italic text-center md:text-left">Explorar <span class="text-emerald-600">Destinos</span></h1>
                     </div>
 
-                    <!-- Panel de Despliegue (Dropdowns) Premium -->
-                    <div class="bg-white rounded-[2.5rem] shadow-[0_30px_80px_-20px_rgba(6,78,59,0.08)] border border-slate-100 overflow-hidden mb-16 p-4">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Panel de Custom Dropdowns Premium -->
+                    <div class="bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(6,78,59,0.08)] border border-slate-100 mb-16 p-4 md:p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             
-                            <!-- MUNICIPIO DROPDOWN -->
-                            <div class="group relative bg-slate-50/50 rounded-[2rem] p-6 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-50 border border-transparent hover:border-emerald-100">
-                                <div class="flex items-center gap-4 mb-4">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 transition-transform group-hover:scale-110"><i class="fas fa-map-marked-alt text-sm"></i></div>
-                                    <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em]">Municipio</h3>
+                            <!-- CUSTOM MUNICIPIO -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('munDropdown')" class="w-full group bg-slate-50/50 rounded-[2.5rem] p-6 text-left transition-all hover:bg-white hover:shadow-xl border border-transparent hover:border-emerald-100 flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform"><i class="fas fa-map-marked-alt"></i></div>
+                                        <div>
+                                            <p class="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Municipio</p>
+                                            <p id="munSelected" class="text-sm font-bold text-slate-800">Cualquier Municipio</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-down text-[10px] text-slate-300"></i>
+                                </button>
+                                <div id="munDropdown" class="absolute left-0 right-0 mt-3 bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-3xl border border-slate-100 z-[2000] overflow-hidden hidden animate-fade-in max-h-80 overflow-y-auto custom-scrollbar">
+                                    <div id="munOptions" class="p-3 space-y-1"></div>
                                 </div>
-                                <select id="munSelect" onchange="filterByAttr('municipio', this.value)" class="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer appearance-none">
-                                    <!-- Opciones dinámicas -->
-                                </select>
-                                <div class="absolute right-8 bottom-8 pointer-events-none text-slate-300"><i class="fas fa-chevron-down text-[10px]"></i></div>
                             </div>
 
-                            <!-- DIFICULTAD DROPDOWN -->
-                            <div class="group relative bg-slate-50/50 rounded-[2rem] p-6 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-50 border border-transparent hover:border-emerald-100">
-                                <div class="flex items-center gap-4 mb-4">
-                                    <div class="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 transition-transform group-hover:scale-110"><i class="fas fa-mountain text-sm"></i></div>
-                                    <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em]">Intensidad</h3>
+                            <!-- CUSTOM INTENSIDAD -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('difDropdown')" class="w-full group bg-slate-50/50 rounded-[2.5rem] p-6 text-left transition-all hover:bg-white hover:shadow-xl border border-transparent hover:border-emerald-100 flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform"><i class="fas fa-mountain"></i></div>
+                                        <div>
+                                            <p class="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Intensidad</p>
+                                            <p id="difSelected" class="text-sm font-bold text-slate-800">Todos los niveles</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-down text-[10px] text-slate-300"></i>
+                                </button>
+                                <div id="difDropdown" class="absolute left-0 right-0 mt-3 bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-3xl border border-slate-100 z-[2000] overflow-hidden hidden animate-fade-in">
+                                    <div class="p-3 space-y-1">
+                                        <button onclick="selectOption('dificultad', 'Todos', 'Todos los niveles', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Todos los niveles</button>
+                                        <button onclick="selectOption('dificultad', 'Baja', 'Nivel: Baja', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Nivel: Baja</button>
+                                        <button onclick="selectOption('dificultad', 'Media', 'Nivel: Media', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Nivel: Media</button>
+                                        <button onclick="selectOption('dificultad', 'Alta', 'Nivel: Alta', 'difDropdown')" class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">Nivel: Alta</button>
+                                    </div>
                                 </div>
-                                <select id="difSelect" onchange="filterByAttr('dificultad', this.value)" class="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer appearance-none">
-                                    <option value="Todos">Todos los niveles</option>
-                                    <option value="Baja">Nivel: Baja</option>
-                                    <option value="Media">Nivel: Media</option>
-                                    <option value="Alta">Nivel: Alta</option>
-                                </select>
-                                <div class="absolute right-8 bottom-8 pointer-events-none text-slate-300"><i class="fas fa-chevron-down text-[10px]"></i></div>
                             </div>
 
-                            <!-- ACTIVIDAD DROPDOWN -->
-                            <div class="group relative bg-slate-50/50 rounded-[2rem] p-6 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-50 border border-transparent hover:border-emerald-100">
-                                <div class="flex items-center gap-4 mb-4">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 transition-transform group-hover:scale-110"><i class="fas fa-swimmer text-sm"></i></div>
-                                    <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em]">Experiencia</h3>
+                            <!-- CUSTOM EXPERIENCIA -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('catDropdown')" class="w-full group bg-slate-50/50 rounded-[2.5rem] p-6 text-left transition-all hover:bg-white hover:shadow-xl border border-transparent hover:border-emerald-100 flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><i class="fas fa-swimmer"></i></div>
+                                        <div>
+                                            <p class="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Experiencia</p>
+                                            <p id="catSelected" class="text-sm font-bold text-slate-800">Cualquier Experiencia</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-down text-[10px] text-slate-300"></i>
+                                </button>
+                                <div id="catDropdown" class="absolute left-0 right-0 mt-3 bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-3xl border border-slate-100 z-[2000] overflow-hidden hidden animate-fade-in max-h-80 overflow-y-auto custom-scrollbar">
+                                    <div id="catOptions" class="p-3 space-y-1"></div>
                                 </div>
-                                <select id="catSelect" onchange="filterByAttr('categoria', this.value)" class="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer appearance-none">
-                                    <!-- Opciones dinámicas -->
-                                </select>
-                                <div class="absolute right-8 bottom-8 pointer-events-none text-slate-300"><i class="fas fa-chevron-down text-[10px]"></i></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Grid de Resultados -->
-                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        <div class="col-span-full flex flex-col items-center justify-center py-32 space-y-6">
-                            <div class="w-20 h-20 border-4 border-slate-100 border-t-emerald-600 rounded-full animate-spin"></div>
-                            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] animate-pulse">Sincronizando con la Ontología...</p>
+                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                        <div class="col-span-full flex flex-col items-center justify-center py-40 space-y-8 text-center">
+                            <div class="relative">
+                                <div class="w-24 h-24 border-8 border-slate-100 border-t-emerald-600 rounded-full animate-spin"></div>
+                                <div class="absolute inset-0 flex items-center justify-center"><i class="fas fa-brain text-emerald-600 animate-pulse"></i></div>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 font-black text-xs uppercase tracking-[0.4em] mb-2">Razonamiento Semántico</p>
+                                <p class="text-slate-300 text-[10px] font-bold">Consultando ontología RDFLib en puerto 3030...</p>
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -411,11 +475,17 @@
             const municipios = ['Todos', ...new Set(data.map(d => d.municipio))];
             const categorias = ['Todos', ...new Set(data.map(d => d.categoria))];
             
-            document.getElementById('munSelect').innerHTML = municipios.map(m => `
-                <option value="${m}">${m === 'Todos' ? 'Cualquier Municipio' : m}</option>`).join('');
+            document.getElementById('munOptions').innerHTML = municipios.map(m => `
+                <button onclick="selectOption('municipio', '${m}', '${m === 'Todos' ? 'Cualquier Municipio' : m}', 'munDropdown')" 
+                        class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">
+                    ${m === 'Todos' ? 'Cualquier Municipio' : m}
+                </button>`).join('');
             
-            document.getElementById('catSelect').innerHTML = categorias.map(c => `
-                <option value="${c}">${c === 'Todos' ? 'Cualquier Experiencia' : c}</option>`).join('');
+            document.getElementById('catOptions').innerHTML = categorias.map(c => `
+                <button onclick="selectOption('categoria', '${c}', '${c === 'Todos' ? 'Cualquier Experiencia' : c}', 'catDropdown')" 
+                        class="w-full p-4 text-left text-sm font-bold text-slate-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors">
+                    ${c === 'Todos' ? 'Cualquier Experiencia' : c}
+                </button>`).join('');
             
             renderDestinos(data);
         }
