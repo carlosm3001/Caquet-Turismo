@@ -96,15 +96,28 @@
                         <p id="detailDif" class="text-xl font-black text-emerald-900"></p>
                     </div>
                 </div>
-                <div id="bookingSection" class="pt-8 border-t border-slate-50 space-y-6 hidden">
-                    <h3 class="text-xl font-black text-emerald-950 tracking-tighter uppercase">Formulario de Reserva</h3>
+                <div id="bookingSection" class="pt-8 border-t border-slate-50 space-y-6 hidden animate-fade-in">
+                    <h3 class="text-xl font-black text-emerald-950 tracking-tighter uppercase">Planifica tu Estancia</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-2"><label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Fecha</label><input type="date" id="bookFecha" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold"></div>
-                        <div class="space-y-2"><label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Personas</label><input type="number" id="bookPers" value="1" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold"></div>
-                        <div class="space-y-2"><label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Días</label><input type="number" id="bookDias" value="1" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold"></div>
+                        <div class="space-y-2">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Fecha Inicio</label>
+                            <input type="date" id="bookFechaIni" onchange="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Fecha Fin</label>
+                            <input type="date" id="bookFechaFin" onchange="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Personas</label>
+                            <input type="number" id="bookPers" value="1" min="1" oninput="updateBookingSummary()" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-2xl flex flex-col justify-center border border-emerald-100">
+                            <p class="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-1 text-center">Total Proyectado</p>
+                            <p id="bookingTotal" class="text-2xl font-black text-emerald-900 text-center">$0</p>
+                        </div>
                     </div>
-                    <button onclick="confirmBooking()" class="w-full py-6 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl shadow-xl">CONFIRMAR RESERVA DIRECTA</button>
-                    <button onclick="toggleBookingForm(false)" class="w-full py-2 text-slate-300 text-[8px] font-black uppercase">Cancelar</button>
+                    <button onclick="confirmBooking()" class="w-full py-6 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl shadow-xl hover:bg-emerald-700 transition-all">CONFIRMAR RESERVA</button>
+                    <button onclick="toggleBookingForm(false)" class="w-full py-2 text-slate-300 text-[8px] font-black uppercase hover:text-red-400 transition-colors">Cancelar</button>
                 </div>
                 <div id="initialActions" class="pt-8 border-t border-slate-50 flex gap-4">
                     <button onclick="toggleBookingForm(true)" class="flex-1 py-6 bg-emerald-950 text-white text-[10px] font-black uppercase tracking-widest rounded-3xl shadow-2xl">Reservar Ahora</button>
@@ -616,21 +629,46 @@
         document.getElementById('initialActions').classList.toggle('hidden', show); 
     }
 
+    function updateBookingSummary() {
+        if(!currentActivity) return;
+        const fIni = document.getElementById('bookFechaIni').value;
+        const fFin = document.getElementById('bookFechaFin').value;
+        const pers = parseInt(document.getElementById('bookPers').value) || 1;
+        const totalEl = document.getElementById('bookingTotal');
+
+        if(fIni && fFin) {
+            const d1 = new Date(fIni);
+            const d2 = new Date(fFin);
+            const diffTime = Math.max(0, d2 - d1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+            const total = currentActivity.precio * pers * diffDays;
+            totalEl.innerText = `$${new Intl.NumberFormat().format(total)}`;
+            return { diffDays, total };
+        }
+        totalEl.innerText = '$0';
+        return { diffDays: 0, total: 0 };
+    }
+
     async function confirmBooking() {
         if(!currentActivity || !user) {
-            console.error("Falta contexto: Activity:", currentActivity, "User:", user);
-            alert("Error: Debes iniciar sesión y seleccionar un destino.");
+            alert("Error: Debes iniciar sesión.");
             return;
         }
 
-        const fecha = document.getElementById('bookFecha').value;
-        if(!fecha) { alert("Por favor selecciona una fecha."); return; }
+        const fIni = document.getElementById('bookFechaIni').value;
+        const fFin = document.getElementById('bookFechaFin').value;
+        if(!fIni || !fFin) { alert("Por favor selecciona el rango de fechas."); return; }
+        
+        const summary = updateBookingSummary();
+        if(summary.diffDays <= 0 && fIni !== fFin) { alert("La fecha de fin debe ser posterior a la de inicio."); return; }
 
         const body = { 
             lugar_id: currentActivity.real_id, 
-            fecha_inicio: fecha, 
+            fecha_inicio: fIni, 
+            fecha_fin: fFin,
             personas: parseInt(document.getElementById('bookPers').value) || 1, 
-            dias: parseInt(document.getElementById('bookDias').value) || 1, 
+            dias: summary.diffDays || 1, 
+            total_pago: summary.total,
             user_email: user.email, 
             user_name: user.name 
         };
@@ -648,12 +686,9 @@
                 showView('perfil'); 
             } else {
                 const err = await res.json();
-                alert("Error del servidor: " + (err.detail || "No se pudo procesar la reserva"));
+                alert("Error: " + (err.detail || "No se pudo procesar"));
             }
-        } catch(e) { 
-            console.error("Error confirmando reserva:", e);
-            alert("Error de conexión al confirmar reserva."); 
-        }
+        } catch(e) { alert("Error de conexión"); }
     }
 
     async function cancelReserva(id) {

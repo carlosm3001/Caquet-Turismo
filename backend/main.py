@@ -86,10 +86,12 @@ class RegisterRequest(BaseModel):
 class ReservaRequest(BaseModel):
     lugar_id: str
     fecha_inicio: str
+    fecha_fin: str
     personas: int
     dias: int
     user_email: str
     user_name: str
+    total_pago: int
 
 
 class ActivityCreate(BaseModel):
@@ -326,23 +328,48 @@ async def chat_ai(payload: dict = Body(...)):
 @app.post("/api/v1/reservas")
 async def post_reserva(res: ReservaRequest):
     res_id = f"Reserva_{int(datetime.utcnow().timestamp())}"
-    query = f"PREFIX : <{BASE_PREFIX}> INSERT DATA {{ :{res_id} rdf:type :Reserva ; :fechaInicio '{res.fecha_inicio}' ; :cantidadPersonas {res.personas} ; :cantidadDias {res.dias} ; :usuarioReserva '{res.user_email}' ; :lugarReservado :{res.lugar_id} . }}"
+    query = f"""
+    PREFIX : <{BASE_PREFIX}> 
+    INSERT DATA {{ 
+        :{res_id} rdf:type :Reserva ; 
+            :fechaInicio '{res.fecha_inicio}' ; 
+            :fechaFin '{res.fecha_fin}' ; 
+            :cantidadPersonas {res.personas} ; 
+            :cantidadDias {res.dias} ; 
+            :totalPago {res.total_pago} ;
+            :usuarioReserva '{res.user_email}' ; 
+            :lugarReservado :{res.lugar_id} . 
+    }}
+    """
     await query_semantic_engine(query)
     return {"status": "success", "id": res_id}
 
 
 @app.get("/api/v1/mis-reservas")
 async def get_mis_reservas(email: str):
-    query = f"PREFIX : <{BASE_PREFIX}> SELECT ?reserva ?fecha ?personas ?dias ?nombre_lugar ?precio_base WHERE {{ ?reserva rdf:type :Reserva . ?reserva :usuarioReserva '{email}' . ?reserva :fechaInicio ?fecha . ?reserva :cantidadPersonas ?personas . ?reserva :cantidadDias ?dias . ?reserva :lugarReservado ?lugar_uri . ?lugar_uri :nombreActividad ?nombre_lugar . ?lugar_uri :precio ?precio_base . }}"
+    query = f"""
+    PREFIX : <{BASE_PREFIX}> 
+    SELECT ?reserva ?f_ini ?f_fin ?personas ?dias ?nombre_lugar ?total WHERE {{ 
+        ?reserva rdf:type :Reserva . 
+        ?reserva :usuarioReserva '{email}' . 
+        ?reserva :fechaInicio ?f_ini . 
+        ?reserva :fechaFin ?f_fin . 
+        ?reserva :cantidadPersonas ?personas . 
+        ?reserva :cantidadDias ?dias . 
+        ?reserva :totalPago ?total .
+        ?reserva :lugarReservado ?lugar_uri . 
+        ?lugar_uri :nombreActividad ?nombre_lugar . 
+    }}
+    """
     results = await query_semantic_engine(query)
     return [
         {
             "id": r["reserva"].split("#")[-1],
-            "fecha": r["fecha"],
+            "fecha": f"{r['f_ini']} al {r['f_fin']}",
             "personas": r["personas"],
             "dias": r["dias"],
             "lugar": r["nombre_lugar"],
-            "precio_total": int(r["precio_base"]) * int(r["dias"]),
+            "precio_total": int(r["total"]),
         }
         for r in results
     ]
