@@ -4,6 +4,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:owl="http://www.w3.org/2002/07/owl#"
 >
+  <!-- MUNICIPIOS / DESTINOS -->
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
     <ns1:clima>Tropical Húmedo</ns1:clima>
@@ -29,6 +30,17 @@
     <ns1:clima>Tropical Húmedo</ns1:clima>
   </rdf:Description>
 
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Vicente_del_Caguan">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo de Sabana</ns1:clima>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Puerto_Rico">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+
+  <!-- ACTIVIDADES TURÍSTICAS -->
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_La_Novia">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -127,6 +139,63 @@
     <ns1:horario>8:00 AM - 3:00 PM</ns1:horario>
   </rdf:Description>
 
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_Las_Pailas">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Reserva Natural Las Pailas</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia"/>
+    <ns1:nivelDificultad>Baja</ns1:nivelDificultad>
+    <ns1:tipoActividad>Acuática y Ecoturismo</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000</ns1:precio>
+    <ns1:descripcion>Formaciones rocosas naturales que crean piscinas y toboganes de agua cristalina en medio del bosque.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 5:00 PM</ns1:horario>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rapidos_del_Caguan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Rafting en los Rápidos del Caguán</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Vicente_del_Caguan"/>
+    <ns1:nivelDificultad>Alta</ns1:nivelDificultad>
+    <ns1:tipoActividad>Aventura y Deportes Acuáticos</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120000</ns1:precio>
+    <ns1:descripcion>Descenso en balsa por los emocionantes rápidos del imponente Río Caguán, ideal para el turismo de aventura.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>7:00 AM - 2:00 PM</ns1:horario>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cueva_de_los_Colores">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Cueva de los Colores</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Puerto_Rico"/>
+    <ns1:nivelDificultad>Media</ns1:nivelDificultad>
+    <ns1:tipoActividad>Espeleología</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35000</ns1:precio>
+    <ns1:descripcion>Exploración de cavernas con impresionantes formaciones de estalactitas y estalagmitas que reflejan diversos colores.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1515524738708-327f6b0037a7?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 3:00 PM</ns1:horario>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Santuario_Indi_Wasi">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Santuario de Flora y Fauna Alto Fragua Indi Wasi</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua"/>
+    <ns1:nivelDificultad>Alta</ns1:nivelDificultad>
+    <ns1:tipoActividad>Senderismo y Conservación</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50000</ns1:precio>
+    <ns1:descripcion>Reserva sagrada con alta biodiversidad andino-amazónica, administrada en conjunto con comunidades indígenas.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>6:00 AM - 1:00 PM</ns1:horario>
+  </rdf:Description>
+
+  <!-- ESTRUCTURA DE CLASES Y PROPIEDADES -->
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
@@ -175,6 +244,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
 
+  <!-- INSTANCIAS DE USUARIOS -->
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Admin">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario"/>
@@ -193,6 +263,16 @@
     <ns1:userPassword>secreta123</ns1:userPassword>
   </rdf:Description>
 
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Cliente_02">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario"/>
+    <ns1:userEmail>vip_explorer@gmail.com</ns1:userEmail>
+    <ns1:userName>Explorador VIP</ns1:userName>
+    <ns1:userRole>cliente_premium</ns1:userRole>
+    <ns1:userPassword>amazonia2026</ns1:userPassword>
+  </rdf:Description>
+
+  <!-- INSTANCIAS DE RESERVAS -->
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_001">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva"/>
@@ -202,6 +282,17 @@
     <ns1:numeroPersonas rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ns1:numeroPersonas>
     <ns1:estadoReserva>Confirmada</ns1:estadoReserva>
     <ns1:totalPago rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80000</ns1:totalPago>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_002">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva"/>
+    <ns1:hechaPor rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Cliente_02"/>
+    <ns1:reservaActividad rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rapidos_del_Caguan"/>
+    <ns1:fechaReserva>2026-07-20</ns1:fechaReserva>
+    <ns1:numeroPersonas rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</ns1:numeroPersonas>
+    <ns1:estadoReserva>Pendiente</ns1:estadoReserva>
+    <ns1:totalPago rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">240000</ns1:totalPago>
   </rdf:Description>
 
 </rdf:RDF>
