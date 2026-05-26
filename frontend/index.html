@@ -596,23 +596,59 @@
                     <div id="adminDashboard" class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
                         <div class="md:col-span-4 flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div>
                     </div>
+                    <div class="mb-16">
+                        <h3 class="text-3xl font-black text-emerald-900 mb-8 italic">Gestión de Atractivos</h3>
+                        <div class="bg-white rounded-[3rem] shadow-xl border border-slate-50 overflow-hidden">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                    <tr>
+                                        <th class="p-8">Atractivo</th>
+                                        <th class="p-8">Ubicación</th>
+                                        <th class="p-8">Precio</th>
+                                        <th class="p-8">Estado</th>
+                                        <th class="p-8 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminAtractivosList" class="divide-y divide-slate-50">
+                                    <!-- Dinámico -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         <div class="bg-white p-12 rounded-[4rem] shadow-2xl border border-slate-50">
-                            <h3 class="text-3xl font-black text-emerald-900 mb-8 italic">Nueva Entrada RDF</h3>
+                            <h3 id="formTitle" class="text-3xl font-black text-emerald-900 mb-8 italic">Nueva Entrada RDF</h3>
                             <div class="space-y-6">
+                                <input type="hidden" id="lRealId">
                                 <div class="grid grid-cols-2 gap-4">
-                                    <input id="lId" placeholder="ID (Ej: Cascada_Azul)" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
-                                    <input id="lName" placeholder="Nombre Público" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
+                                    <input id="lId" placeholder="ID (Ej: Cascada_Azul)" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+                                    <input id="lName" placeholder="Nombre Público" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <select id="lMun" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500"><option value="Florencia">Florencia</option><option value="Morelia">Morelia</option><option value="San_Jose_del_Fragua">San José del Fragua</option></select>
-                                    <select id="lCat" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500"><option value="Acuática">Acuática</option><option value="Senderismo">Senderismo</option></select>
+                                    <select id="lMun" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500 outline-none focus:ring-2 focus:ring-emerald-500">
+                                        <option value="Florencia">Florencia</option>
+                                        <option value="Morelia">Morelia</option>
+                                        <option value="San_Jose_del_Fragua">San José del Fragua</option>
+                                        <option value="Belen_de_los_Andaquies">Belén de los Andaquíes</option>
+                                        <option value="El_Doncello">El Doncello</option>
+                                        <option value="San_Vicente_del_Caguan">San Vicente del Caguán</option>
+                                        <option value="Puerto_Rico">Puerto Rico</option>
+                                    </select>
+                                    <select id="lCat" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-500 outline-none focus:ring-2 focus:ring-emerald-500">
+                                        <option value="Acuática">Acuática</option>
+                                        <option value="Senderismo">Senderismo</option>
+                                        <option value="Ecoturismo">Ecoturismo</option>
+                                        <option value="Espeleología">Espeleología</option>
+                                        <option value="Aventura y Deportes Acuáticos">Aventura</option>
+                                    </select>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <input id="lPrice" type="number" placeholder="Precio" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
-                                    <input id="lImg" placeholder="Imagen URL" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold">
+                                    <input id="lPrice" type="number" placeholder="Precio" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+                                    <input id="lImg" placeholder="Imagen URL" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500">
                                 </div>
-                                <button onclick="saveLugar()" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl shadow-xl uppercase text-[10px]">Publicar en Ontología</button>
+                                <button id="saveBtn" onclick="saveLugar()" class="w-full py-6 bg-emerald-950 text-white font-black rounded-3xl shadow-xl uppercase text-[10px] hover:bg-emerald-800 transition-all">Publicar en Ontología</button>
+                                <button id="cancelEditBtn" onclick="resetForm()" class="w-full py-2 text-slate-300 text-[8px] font-black uppercase hidden">Cancelar Edición</button>
                             </div>
                         </div>
                         <div class="bg-slate-900 p-12 rounded-[4rem] text-white shadow-2xl relative overflow-hidden">
@@ -620,6 +656,45 @@
                             <div id="adminLog" class="space-y-4 relative z-10"></div>
                         </div>
                     </div>
+                </div>`;
+            const stats = await fetchData('admin/full-stats');
+            const atractivos = await fetchData('actividades');
+            
+            document.getElementById('adminAtractivosList').innerHTML = atractivos.map(a => `
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-8">
+                        <div class="flex items-center gap-4">
+                            <img src="${a.imagen}" class="w-12 h-12 rounded-xl object-cover">
+                            <div>
+                                <p class="text-sm font-black text-slate-800">${a.id}</p>
+                                <p class="text-[9px] font-bold text-emerald-500 uppercase">${a.categoria}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-8 text-xs font-bold text-slate-500">${a.municipio}</td>
+                    <td class="p-8 text-xs font-black text-slate-800">$${new Intl.NumberFormat().format(a.precio)}</td>
+                    <td class="p-8">
+                        <button onclick="toggleLugarStatus('${a.real_id}', '${a.disponibilidad}')" 
+                                class="px-4 py-1.5 rounded-full text-[8px] font-black uppercase border transition-all 
+                                ${a.disponibilidad === 'Disponible' ? 'bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100' : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'}">
+                            ${a.disponibilidad}
+                        </button>
+                    </td>
+                    <td class="p-8">
+                        <div class="flex justify-center gap-4">
+                            <button onclick="prepareEdit('${a.real_id}')" class="text-slate-300 hover:text-emerald-600 transition-colors"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteLugar('${a.real_id}')" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+
+            document.getElementById('adminDashboard').innerHTML = `
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Ingresos</p><h4 class="text-2xl font-black text-emerald-600">$${new Intl.NumberFormat().format(stats.kpis.ingresos_proyectados)}</h4></div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Reservas</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.total_reservas}</h4></div>
+                <div onclick="openCommunity()" class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center cursor-pointer hover:bg-emerald-50 transition-all"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Comunidad</p><h4 class="text-2xl font-black text-slate-800">${stats.kpis.usuarios_activos}</h4><p class="text-[6px] font-bold text-emerald-500 uppercase mt-2">Ver Usuarios</p></div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-50 text-center"><p class="text-[8px] font-black text-slate-300 uppercase mb-2">Atractivos</p><h4 class="text-2xl font-black text-slate-800">${atractivos.length}</h4></div>`;
+            document.getElementById('adminLog').innerHTML = stats.ultimas_reservas.map(r => `<div class="p-4 bg-white/5 rounded-2xl flex justify-between"><span class="text-xs font-bold">${r.user}</span><span class="text-xs text-emerald-400">${r.fecha}</span></div>`).join('');
+        }
                 </div>`;
             const stats = await fetchData('admin/full-stats');
             document.getElementById('adminDashboard').innerHTML = `
@@ -663,9 +738,82 @@
     }
 
     async function saveLugar() {
-        const body = { id: document.getElementById('lId').value, nombre: document.getElementById('lName').value, categoria: document.getElementById('lCat').value, municipio: document.getElementById('lMun').value, precio: parseInt(document.getElementById('lPrice').value), imagen: document.getElementById('lImg').value };
-        const res = await fetch(`${API}/actividades`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
-        if(res.ok) { alert("¡Publicado!"); showView('gestion'); }
+        const realId = document.getElementById('lRealId').value;
+        const body = { 
+            id: document.getElementById('lId').value, 
+            nombre: document.getElementById('lName').value, 
+            categoria: document.getElementById('lCat').value, 
+            municipio: document.getElementById('lMun').value, 
+            precio: parseInt(document.getElementById('lPrice').value), 
+            imagen: document.getElementById('lImg').value 
+        };
+
+        const method = realId ? 'PUT' : 'POST';
+        const url = realId ? `${API}/actividades/${realId}` : `${API}/actividades`;
+
+        try {
+            const res = await fetch(url, { 
+                method: method, 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(body) 
+            });
+            if(res.ok) { 
+                alert(realId ? "¡Actualizado!" : "¡Publicado!"); 
+                showView('gestion'); 
+            }
+        } catch(e) { alert("Error al guardar"); }
+    }
+
+    async function prepareEdit(id) {
+        const atractivos = await fetchData('actividades');
+        const a = atractivos.find(x => x.real_id === id);
+        if(!a) return;
+
+        document.getElementById('lRealId').value = a.real_id;
+        document.getElementById('lId').value = a.real_id;
+        document.getElementById('lId').disabled = true; // El ID en la ontología no debe cambiarse
+        document.getElementById('lName').value = a.id;
+        document.getElementById('lMun').value = a.municipio.replace(' ', '_');
+        document.getElementById('lCat').value = a.categoria;
+        document.getElementById('lPrice').value = a.precio;
+        document.getElementById('lImg').value = a.imagen;
+
+        document.getElementById('formTitle').innerText = "Editar Atractivo";
+        document.getElementById('saveBtn').innerText = "GUARDAR CAMBIOS";
+        document.getElementById('cancelEditBtn').classList.remove('hidden');
+        window.scrollTo({ top: document.getElementById('formTitle').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        document.getElementById('lRealId').value = "";
+        document.getElementById('lId').value = "";
+        document.getElementById('lId').disabled = false;
+        document.getElementById('lName').value = "";
+        document.getElementById('lPrice').value = "";
+        document.getElementById('lImg').value = "";
+        document.getElementById('formTitle').innerText = "Nueva Entrada RDF";
+        document.getElementById('saveBtn').innerText = "Publicar en Ontología";
+        document.getElementById('cancelEditBtn').classList.add('hidden');
+    }
+
+    async function deleteLugar(id) {
+        if(!confirm("¿Estás seguro de eliminar permanentemente este atractivo de la ontología?")) return;
+        try {
+            const res = await fetch(`${API}/actividades/${id}`, { method: 'DELETE' });
+            if(res.ok) showView('gestion');
+        } catch(e) { alert("Error al eliminar"); }
+    }
+
+    async function toggleLugarStatus(id, current) {
+        const newStatus = current === 'Disponible' ? 'Inactivo' : 'Disponible';
+        try {
+            const res = await fetch(`${API}/actividades/${id}/status`, { 
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ status: newStatus })
+            });
+            if(res.ok) showView('gestion');
+        } catch(e) { alert("Error al cambiar estado"); }
     }
 
     function openDetail(id) {

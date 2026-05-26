@@ -237,7 +237,59 @@ async def get_actividades(
 async def post_actividad(act: ActivityCreate):
     safe_id = act.id.replace(" ", "_")
     safe_mun = act.municipio.replace(" ", "_")
-    query = f"PREFIX : <{BASE_PREFIX}> INSERT DATA {{ :{safe_id} rdf:type :Actividad ; :nombreActividad '{act.nombre}' ; :tipoActividad '{act.categoria}' ; :ubicadaEn :{safe_mun} ; :precio {act.precio} ; :imagenURL '{act.imagen}' . }}"
+    query = f"""
+    PREFIX : <{BASE_PREFIX}> 
+    INSERT DATA {{ 
+        :{safe_id} rdf:type :Actividad ; 
+            :nombreActividad '{act.nombre}' ; 
+            :tipoActividad '{act.categoria}' ; 
+            :ubicadaEn :{safe_mun} ; 
+            :precio {act.precio} ; 
+            :disponibilidad 'Disponible' ;
+            :imagenURL '{act.imagen}' . 
+    }}
+    """
+    await query_semantic_engine(query)
+    return {"status": "success"}
+
+
+@app.put("/api/v1/actividades/{act_id}")
+async def update_actividad(act_id: str, act: ActivityCreate):
+    safe_mun = act.municipio.replace(" ", "_")
+    # Para simplificar el update en SPARQL, borramos las propiedades existentes y las re-insertamos
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    DELETE {{ :{act_id} ?p ?o }}
+    WHERE {{ :{act_id} ?p ?o }} ;
+    INSERT DATA {{
+        :{act_id} rdf:type :Actividad ;
+            :nombreActividad '{act.nombre}' ;
+            :tipoActividad '{act.categoria}' ;
+            :ubicadaEn :{safe_mun} ;
+            :precio {act.precio} ;
+            :imagenURL '{act.imagen}' .
+    }}
+    """
+    await query_semantic_engine(query)
+    return {"status": "success"}
+
+
+@app.patch("/api/v1/actividades/{act_id}/status")
+async def toggle_status(act_id: str, payload: dict = Body(...)):
+    new_status = payload.get("status", "Disponible")
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    DELETE {{ :{act_id} :disponibilidad ?o }}
+    WHERE {{ :{act_id} :disponibilidad ?o }} ;
+    INSERT DATA {{ :{act_id} :disponibilidad '{new_status}' }}
+    """
+    await query_semantic_engine(query)
+    return {"status": "success"}
+
+
+@app.delete("/api/v1/actividades/{act_id}")
+async def delete_actividad(act_id: str):
+    query = f"PREFIX : <{BASE_PREFIX}> DELETE WHERE {{ :{act_id} ?p ?o }}"
     await query_semantic_engine(query)
     return {"status": "success"}
 
