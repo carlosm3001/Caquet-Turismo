@@ -68,9 +68,12 @@
         <button onclick="closeDetail()" class="absolute top-8 right-8 text-slate-300 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
             <div id="detailImg" class="h-64 md:h-full bg-cover bg-center rounded-[3rem] shadow-xl"></div>
-            <div class="space-y-6 py-4">
-                <h2 id="detailTitle" class="text-5xl font-black text-slate-900 tracking-tighter italic"></h2>
-                <p id="detailDesc" class="text-slate-500 leading-relaxed italic"></p>
+            <div class="p-12 md:p-16 space-y-8">
+                <div>
+                    <span id="detailCat" class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-2 block"></span>
+                    <h2 id="detailTitle" class="text-5xl font-black text-emerald-950 tracking-tighter leading-none italic"></h2>
+                </div>
+                <p id="detailDesc" class="text-slate-500 leading-relaxed font-medium italic"></p>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-slate-50 p-6 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-2">Precio p/p día</p><p id="detailPrecio" class="text-xl font-black text-emerald-900"></p></div>
                     <div class="bg-slate-50 p-6 rounded-3xl"><p class="text-[8px] font-black text-slate-400 uppercase mb-2">Dificultad</p><p id="detailDif" class="text-xl font-black text-emerald-900"></p></div>
