@@ -388,12 +388,32 @@ async def chat_ai(payload: dict = Body(...)):
     """
 
     try:
-        model = genai.GenerativeModel(model_name="gemini-pro")
+        # 4. Selección Inteligente de Modelo (Anti-404)
+        available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+        
+        # Estrategia de selección: Flash > Pro > El primero que funcione
+        selected_model = None
+        for target in ["models/gemini-1.5-flash", "models/gemini-1.5-pro", "models/gemini-pro"]:
+            if target in available_models:
+                selected_model = target
+                break
+        
+        if not selected_model and available_models:
+            selected_model = available_models[0]
+        
+        if not selected_model:
+            return {"reply": "BioBot no encuentra modelos de IA disponibles para esta API Key. 🦜"}
+
+        model = genai.GenerativeModel(model_name=selected_model)
         response = model.generate_content(prompt)
-        return {"reply": response.text if response and response.text else "¡Hola! BioBot está procesando los datos. ¿Me repites la pregunta? 🦜"}
+        
+        if response and response.text:
+            return {"reply": response.text}
+        return {"reply": "BioBot está analizando las tripletas semánticas... 🦜 Intenta preguntarme de nuevo."}
+        
     except Exception as e:
         print(f"CHAT ERROR: {str(e)}")
-        return {"reply": f"BioBot está sincronizando tripletas... (Error: {str(e)[:100]}) 🌴"}
+        return {"reply": f"BioBot está sincronizando el conocimiento... (Error de modelo: {str(e)[:80]}). ¡El Caquetá te espera! 🌴"}
 
 
 @app.post("/api/v1/reservas")
