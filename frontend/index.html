@@ -202,7 +202,79 @@
     async function showView(v){
         const c=document.getElementById('mainContainer');
         if(v==='inicio'){
-            c.innerHTML=`<section class="hero-gradient h-[75vh] flex items-center justify-center text-center px-6"><div class="animate-fade-in max-w-5xl"><h1 class="text-white text-7xl md:text-9xl font-black mb-8 tracking-tighter drop-shadow-2xl">CAQUETÁ <br/><span class="text-emerald-500 italic">ES VIDA</span></h1><button onclick="showView('explorar')" class="bg-emerald-500 text-white px-12 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-2xl hover:scale-105 transition-all">Explorar Destinos</button></div></section>`;
+            c.innerHTML=`
+                <!-- HERO SECTION -->
+                <section class="hero-gradient min-h-[90vh] flex items-center justify-center text-center px-6 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-emerald-950/20 z-0"></div>
+                    <div class="animate-fade-in max-w-5xl z-10">
+                        <span class="text-emerald-400 font-black text-[10px] tracking-[0.5em] uppercase mb-6 block bg-emerald-950/40 w-fit mx-auto px-6 py-2 rounded-full backdrop-blur-md border border-white/10">Amazonía Colombiana</span>
+                        <h1 class="text-white text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-8 drop-shadow-2xl">CAQUETÁ <br/><span class="text-emerald-500 font-light italic">ES VIDA</span></h1>
+                        <p class="text-white/90 text-xl md:text-2xl font-light max-w-3xl mx-auto mb-12 leading-relaxed">Descubre el paraíso inexplorado donde la selva y el agua convergen en una danza milenaria.</p>
+                        <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                            <button onclick="showView('explorar')" class="bg-emerald-500 hover:bg-emerald-400 text-white px-12 py-5 rounded-2xl font-black transition-all shadow-2xl hover:scale-105 uppercase tracking-widest text-[10px]">Explorar Destinos</button>
+                            <button onclick="toggleChat()" class="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border border-white/20 px-12 py-5 rounded-2xl font-black transition-all uppercase tracking-widest text-[10px]">Consultar a BioBot</button>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-white/50"><i class="fas fa-chevron-down"></i></div>
+                </section>
+
+                <!-- CATEGORÍAS RÁPIDAS -->
+                <section class="py-32 px-6 max-w-7xl mx-auto">
+                    <div class="text-center mb-20">
+                        <h2 class="text-emerald-500 font-bold text-xs tracking-[0.3em] uppercase mb-4">Tu Próxima Aventura</h2>
+                        <h3 class="text-5xl font-black text-slate-900 tracking-tighter italic">Experiencias a tu Medida</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="group bg-white p-12 rounded-[3rem] shadow-xl border border-slate-50 hover:-translate-y-4 transition-all duration-500">
+                            <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-3xl flex items-center justify-center mb-8 text-2xl group-hover:scale-110 transition-transform"><i class="fas fa-water"></i></div>
+                            <h4 class="text-2xl font-black text-slate-800 mb-4">Turismo Acuático</h4>
+                            <p class="text-slate-400 font-medium leading-relaxed italic text-sm">Cascadas cristalinas y ríos de color esmeralda que invitan a la desconexión total.</p>
+                        </div>
+                        <div class="group bg-white p-12 rounded-[3rem] shadow-xl border border-slate-50 hover:-translate-y-4 transition-all duration-500">
+                            <div class="w-16 h-16 bg-orange-50 text-orange-500 rounded-3xl flex items-center justify-center mb-8 text-2xl group-hover:scale-110 transition-transform"><i class="fas fa-hiking"></i></div>
+                            <h4 class="text-2xl font-black text-slate-800 mb-4">Senderos de Selva</h4>
+                            <p class="text-slate-400 font-medium leading-relaxed italic text-sm">Caminatas por el corazón de la Amazonía descubriendo especies únicas y paisajes vírgenes.</p>
+                        </div>
+                        <div class="group bg-white p-12 rounded-[3rem] shadow-xl border border-slate-50 hover:-translate-y-4 transition-all duration-500">
+                            <div class="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-3xl flex items-center justify-center mb-8 text-2xl group-hover:scale-110 transition-transform"><i class="fas fa-seedling"></i></div>
+                            <h4 class="text-2xl font-black text-slate-800 mb-4">Ecoturismo Puro</h4>
+                            <p class="text-slate-400 font-medium leading-relaxed italic text-sm">Conecta con la naturaleza de forma sostenible, respetando el equilibrio del ecosistema.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECCIÓN BIOBOT PROMO -->
+                <section class="py-20 px-6 max-w-7xl mx-auto">
+                    <div class="bg-emerald-950 rounded-[4rem] p-12 md:p-24 flex flex-col md:flex-row items-center gap-16 relative overflow-hidden shadow-3xl">
+                        <div class="absolute -right-20 -top-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                        <div class="flex-1 space-y-8 z-10">
+                            <span class="text-emerald-400 font-black text-[10px] tracking-[0.4em] uppercase">Tecnología Semántica</span>
+                            <h3 class="text-5xl md:text-7xl font-black text-white tracking-tighter italic">BioBot es tu <span class="text-emerald-500">Guía IA</span></h3>
+                            <p class="text-emerald-100/60 text-lg leading-relaxed max-w-xl">Pregúntale a nuestra inteligencia artificial sobre cualquier destino, precios actualizados o recomendaciones personalizadas basadas en nuestra ontología.</p>
+                            <button onclick="toggleChat()" class="px-12 py-5 bg-emerald-500 text-white font-black rounded-2xl shadow-2xl uppercase tracking-widest text-[10px] hover:bg-emerald-400 transition-all">Iniciar Consulta</button>
+                        </div>
+                        <div class="w-72 h-72 bg-emerald-900/50 rounded-full flex items-center justify-center border border-emerald-500/20 relative z-10">
+                            <i class="fas fa-robot text-8xl text-emerald-500 animate-pulse"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FOOTER MINIMALISTA -->
+                <footer class="py-20 px-10 border-t border-slate-100 mt-20">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center"><i class="fas fa-leaf"></i></div>
+                            <span class="font-black tracking-tighter uppercase text-slate-900">Caquetá Bio</span>
+                        </div>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">© 2026 Inteligencia Amazónica • Gestión del Conocimiento</p>
+                        <div class="flex gap-6 text-slate-900">
+                            <i class="fab fa-instagram"></i>
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                    </div>
+                </footer>
+            `;
         }
         else if(v==='explorar'){
             c.innerHTML=`
