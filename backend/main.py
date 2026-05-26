@@ -287,11 +287,17 @@ async def toggle_status(act_id: str, payload: dict = Body(...)):
     return {"status": "success"}
 
 
-@app.delete("/api/v1/actividades/{act_id}")
-async def delete_actividad(act_id: str):
-    query = f"PREFIX : <{BASE_PREFIX}> DELETE WHERE {{ :{act_id} ?p ?o }}"
+@app.patch("/api/v1/actividades/{act_id}/visibility")
+async def toggle_visibility(act_id: str, payload: dict = Body(...)):
+    new_status = payload.get("status", "Disponible")
+    query = f"""
+    PREFIX : <{BASE_PREFIX}>
+    DELETE {{ :{act_id} :disponibilidad ?o }}
+    WHERE {{ :{act_id} :disponibilidad ?o }} ;
+    INSERT DATA {{ :{act_id} :disponibilidad '{new_status}' }}
+    """
     await query_semantic_engine(query)
-    return {"status": "success"}
+    return {"status": "success", "new_status": new_status}
 
 
 @app.get("/api/v1/admin/users")
