@@ -231,8 +231,16 @@
     function filterByAttr(attr, value) {
         activeFilters[attr] = value;
         const buttons = document.querySelectorAll(`.${attr.substring(0,3)}-btn`);
-        buttons.forEach(b => b.classList.remove('bg-emerald-600', 'text-white'));
-        event.target.classList.add('bg-emerald-600', 'text-white');
+        
+        // Estilo inactivo para todos los botones del grupo
+        buttons.forEach(b => {
+            b.classList.remove('bg-emerald-700', 'text-white', 'border-transparent');
+            b.classList.add('bg-white', 'text-slate-900', 'border-slate-200');
+        });
+        
+        // Estilo activo para el seleccionado
+        event.target.classList.add('bg-emerald-700', 'text-white', 'border-transparent');
+        event.target.classList.remove('bg-white', 'text-slate-900', 'border-slate-200');
 
         const filtered = actividadesCache.filter(d => {
             const mMun = activeFilters.municipio === 'Todos' || d.municipio === activeFilters.municipio;
@@ -335,13 +343,70 @@
             container.innerHTML = `<section class="hero-gradient h-[75vh] flex items-center justify-center text-center px-6 relative"><div class="animate-fade-in max-w-5xl z-10"><span class="text-emerald-400 font-black text-[10px] tracking-[0.5em] uppercase mb-6 block bg-emerald-950/40 w-fit mx-auto px-6 py-2 rounded-full backdrop-blur-md border border-white/10">Amazonía Colombiana</span><h1 class="text-white text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-8 drop-shadow-2xl">CAQUETÁ <br/><span class="text-emerald-500 font-light italic">ES VIDA</span></h1><p class="text-white/90 text-xl md:text-2xl font-light max-w-3xl mx-auto mb-12">El paraíso inexplorado donde las cascadas susurran historias.</p><button onclick="showView('explorar')" class="bg-emerald-500 hover:bg-emerald-400 text-white px-12 py-5 rounded-2xl font-black transition-all shadow-2xl hover:scale-105 uppercase tracking-widest text-[10px]">Explorar Destinos</button></div></section>`;
         }
         else if(view==='explorar') {
-            container.innerHTML = `<div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in"><div class="mb-16"><span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Catálogo Semántico</span><h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Ecosistema Turístico</h2></div><div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"><div class="space-y-4"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">Municipio</p><div id="munFilters" class="flex flex-wrap gap-2"></div></div><div class="space-y-4"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">Dificultad</p><div id="difFilters" class="flex flex-wrap gap-2"><button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-4 py-2 bg-emerald-600 text-white border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest">Todos</button><button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest">Baja</button><button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest">Media</button><button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest">Alta</button></div></div><div class="space-y-4"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">Actividad</p><div id="catFilters" class="flex flex-wrap gap-2"></div></div></div><div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-3 gap-12"><div class="col-span-3 flex justify-center py-20"><div class="animate-spin rounded-full h-16 w-16 border-t-4 border-emerald-600"></div></div></div></div>`;
+            container.innerHTML = `
+                <div class="px-10 py-20 max-w-7xl mx-auto animate-fade-in">
+                    <div class="mb-16">
+                        <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Catálogo Semántico</span>
+                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Ecosistema Turístico</h2>
+                    </div>
+                    
+                    <!-- Componente de Filtros Rediseñado -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+                        <!-- Columna MUNICIPIO -->
+                        <div class="space-y-6">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Municipio</h3>
+                            <div id="munFilters" class="flex flex-wrap gap-3">
+                                <!-- Renderizado dinámico -->
+                            </div>
+                        </div>
+
+                        <!-- Columna DIFICULTAD -->
+                        <div class="space-y-6">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Dificultad</h3>
+                            <div id="difFilters" class="flex flex-wrap gap-3">
+                                <button onclick="filterByAttr('dificultad', 'Todos')" class="dif-btn px-4 py-2 bg-emerald-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-all">Todos</button>
+                                <button onclick="filterByAttr('dificultad', 'Baja')" class="dif-btn px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all">Baja</button>
+                                <button onclick="filterByAttr('dificultad', 'Media')" class="dif-btn px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all">Media</button>
+                                <button onclick="filterByAttr('dificultad', 'Alta')" class="dif-btn px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all">Alta</button>
+                            </div>
+                        </div>
+
+                        <!-- Columna ACTIVIDAD -->
+                        <div class="space-y-6">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Actividad</h3>
+                            <div id="catFilters" class="flex flex-wrap gap-3">
+                                <!-- Renderizado dinámico -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="destinosGrid" class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <div class="col-span-3 flex justify-center py-20">
+                            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-emerald-600"></div>
+                        </div>
+                    </div>
+                </div>`;
+            
             const data = await fetchData('actividades');
             actividadesCache = data;
+            
             const municipios = ['Todos', ...new Set(data.map(d => d.municipio))];
             const categorias = ['Todos', ...new Set(data.map(d => d.categoria))];
-            document.getElementById('munFilters').innerHTML = municipios.map(m => `<button onclick="filterByAttr('municipio', '${m}')" class="mun-btn px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest ${m==='Todos'?'bg-emerald-600 text-white':''}">${m}</button>`).join('');
-            document.getElementById('catFilters').innerHTML = categorias.map(c => `<button onclick="filterByAttr('categoria', '${c}')" class="cat-btn px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest ${c==='Todos'?'bg-emerald-600 text-white':''}">${c}</button>`).join('');
+            
+            document.getElementById('munFilters').innerHTML = municipios.map(m => `
+                <button onclick="filterByAttr('municipio', '${m}')" 
+                        class="mun-btn px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all 
+                        ${m==='Todos' ? 'bg-emerald-700 text-white' : 'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50'}">
+                    ${m}
+                </button>`).join('');
+            
+            document.getElementById('catFilters').innerHTML = categorias.map(c => `
+                <button onclick="filterByAttr('categoria', '${c}')" 
+                        class="cat-btn px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all 
+                        ${c==='Todos' ? 'bg-emerald-700 text-white' : 'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50'}">
+                    ${c}
+                </button>`).join('');
+            
             renderDestinos(data);
         }
         else if(view==='municipios') {
