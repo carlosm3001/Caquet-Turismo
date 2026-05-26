@@ -2,7 +2,33 @@
 <rdf:RDF
    xmlns:ns1="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
 >
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Belen_de_los_Andaquies">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#El_Doncello">
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
+    <ns1:clima>Tropical Húmedo</ns1:clima>
+  </rdf:Description>
+
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_La_Novia">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -16,6 +42,7 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
+
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Rio_Bodoquero">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -29,6 +56,7 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
+
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Las_Dalias">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -42,6 +70,7 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
+
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Portal_del_Fragua">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -55,14 +84,7 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Florencia">
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Tropical Húmedo</ns1:clima>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Morelia">
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Tropical Húmedo</ns1:clima>
-  </rdf:Description>
+
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_El_Danubio">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
@@ -76,16 +98,53 @@
     <ns1:disponibilidad>Disponible</ns1:disponibilidad>
     <ns1:horario>8:00 AM - 4:00 PM</ns1:horario>
   </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#El_Paraiso_de_Pedro">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>El Paraíso de Pedro</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Belen_de_los_Andaquies"/>
+    <ns1:nivelDificultad>Baja</ns1:nivelDificultad>
+    <ns1:tipoActividad>Ecoturismo</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20000</ns1:precio>
+    <ns1:descripcion>Reserva natural ideal para el avistamiento de aves, descanso y conexión con el río Sarabando.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>7:00 AM - 5:00 PM</ns1:horario>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Cascada_Anayacito">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Actividad"/>
+    <ns1:nombreActividad>Cascada Anayacito</ns1:nombreActividad>
+    <ns1:ubicadaEn rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#El_Doncello"/>
+    <ns1:nivelDificultad>Media</ns1:nivelDificultad>
+    <ns1:tipoActividad>Acuática y Senderismo</ns1:tipoActividad>
+    <ns1:precio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30000</ns1:precio>
+    <ns1:descripcion>Espectacular caída de agua de más de 60 metros, rodeada de bosque nativo y biodiversidad andino-amazónica.</ns1:descripcion>
+    <ns1:imagenURL>https://images.unsplash.com/photo-1432405972618-fc027058b8d1?auto=format&amp;fit=crop&amp;q=80&amp;w=800</ns1:imagenURL>
+    <ns1:disponibilidad>Disponible</ns1:disponibilidad>
+    <ns1:horario>8:00 AM - 3:00 PM</ns1:horario>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#hechaPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#reservaActividad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#userEmail">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Admin">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario"/>
-    <ns1:userEmail>admin@gmail.com</ns1:userEmail>
-    <ns1:userName>Administrador Principal</ns1:userName>
-    <ns1:userRole>admin</ns1:userRole>
-    <ns1:userPassword>admin</ns1:userPassword>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#userName">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -99,14 +158,50 @@
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#tipoActividad">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#San_Jose_del_Fragua">
-    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Destino"/>
-    <ns1:clima>Tropical Húmedo</ns1:clima>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#nivelDificultad">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#fechaReserva">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#numeroPersonas">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#estadoReserva">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#totalPago">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Admin">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario"/>
+    <ns1:userEmail>admin@gmail.com</ns1:userEmail>
+    <ns1:userName>Administrador Principal</ns1:userName>
+    <ns1:userRole>admin</ns1:userRole>
+    <ns1:userPassword>admin</ns1:userPassword>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Cliente_01">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Usuario"/>
+    <ns1:userEmail>turista@gmail.com</ns1:userEmail>
+    <ns1:userName>Turista Aventura</ns1:userName>
+    <ns1:userRole>cliente</ns1:userRole>
+    <ns1:userPassword>secreta123</ns1:userPassword>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva_001">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#Reserva"/>
+    <ns1:hechaPor rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#User_Cliente_01"/>
+    <ns1:reservaActividad rdf:resource="http://www.semanticweb.org/user/ontologies/2026/2/untitled-ontology-3#El_Paraiso_de_Pedro"/>
+    <ns1:fechaReserva>2026-06-15</ns1:fechaReserva>
+    <ns1:numeroPersonas rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ns1:numeroPersonas>
+    <ns1:estadoReserva>Confirmada</ns1:estadoReserva>
+    <ns1:totalPago rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80000</ns1:totalPago>
+  </rdf:Description>
+
 </rdf:RDF>
