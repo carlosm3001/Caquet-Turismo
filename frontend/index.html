@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         /* Estilos para Markdown en el Chat */
         .markdown-content h3 { font-size: 1.1rem; font-weight: 900; color: #064e3b; margin-top: 1rem; margin-bottom: 0.5rem; }
@@ -69,6 +71,7 @@
     <div id="topNav" class="hidden md:flex gap-10 font-bold text-[10px] text-slate-400 uppercase tracking-[0.2em]">
         <button onclick="showView('inicio')" class="hover:text-emerald-600 transition-all">Inicio</button>
         <button onclick="showView('explorar')" class="hover:text-emerald-600 transition-all">Destinos</button>
+        <button onclick="showView('mapa')" class="hover:text-emerald-600 transition-all">Mapa</button>
         <button id="profileLink" onclick="showView('perfil')" class="hidden hover:text-emerald-600 transition-all">Mis Reservas</button>
         <button onclick="showView('municipios')" class="hover:text-emerald-600 transition-all">Estadísticas</button>
         <button id="adminLink" onclick="showView('gestion')" class="hidden hover:text-emerald-600 transition-all">Panel Admin</button>
@@ -349,6 +352,52 @@
             const d = await fetchData(`mis-reservas?email=${user.email}`);
             const grid = document.getElementById('reservasGrid');
             if(grid) grid.innerHTML=d.length===0?'<p class="text-slate-400 italic text-center py-20">No tienes itinerarios aún.</p>':d.map(r=>`<div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6"><div class="space-y-2 text-center md:text-left"><div><span class="text-emerald-500 font-black text-[9px] uppercase tracking-widest">${r.fecha}</span><h3 class="text-3xl font-black text-slate-800">${r.lugar}</h3></div><p class="text-xs font-bold text-slate-500">${r.personas} Viajeros • ${r.dias} Días de Estancia</p></div><div class="text-center md:text-right space-y-4"><p class="text-4xl font-black text-emerald-900 italic">$${new Intl.NumberFormat().format(r.precio_total)}</p><button onclick="cancelReserva('${r.id}')" class="text-[9px] font-black text-red-400 uppercase tracking-widest hover:text-red-600 transition-colors">Cancelar Itinerario</button></div></div>`).join('');
+        }
+        else if(v==='mapa'){
+            c.innerHTML=`
+                <div class="px-6 md:px-10 py-20 max-w-7xl mx-auto animate-fade-in">
+                    <div class="mb-12 text-center md:text-left">
+                        <span class="text-emerald-500 font-black text-[10px] tracking-[0.3em] uppercase mb-4 block">Exploración Geográfica</span>
+                        <h2 class="text-6xl font-black text-emerald-950 tracking-tighter italic">Mapa de <span class="text-emerald-500">Aventuras</span></h2>
+                    </div>
+                    <div id="mapContainer" class="w-full h-[600px] rounded-[4rem] shadow-3xl border-8 border-white overflow-hidden relative z-10"></div>
+                </div>`;
+            
+            // Coordenadas base de Municipios (Caquetá)
+            const coords = {
+                "Florencia": [1.614, -75.611],
+                "Morelia": [1.488, -75.726],
+                "San Jose del Fragua": [1.332, -75.973],
+                "Belen de los Andaquies": [1.415, -75.875],
+                "El Doncello": [1.683, -75.283],
+                "San Vicente del Caguan": [2.112, -74.767],
+                "Puerto Rico": [1.913, -75.145],
+                "Montanita": [1.483, -75.417],
+                "Paujil": [1.564, -75.331]
+            };
+
+            const map = L.map('mapContainer').setView([1.614, -75.611], 9);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            }).addTo(map);
+
+            const acts = actividadesCache.length > 0 ? actividadesCache : await fetchData('actividades');
+            acts.forEach(a => {
+                const base = coords[a.municipio] || [1.614, -75.611];
+                // Offset aleatorio pequeño para que no se solapen en el mismo municipio
+                const lat = base[0] + (Math.random() - 0.5) * 0.05;
+                const lng = base[1] + (Math.random() - 0.5) * 0.05;
+                
+                const marker = L.marker([lat, lng]).addTo(map);
+                marker.bindPopup(`
+                    <div class="p-4 space-y-3 font-outfit" style="min-width: 200px">
+                        <img src="${a.imagen}" class="w-full h-24 object-cover rounded-xl shadow-sm">
+                        <h4 class="font-black text-emerald-900 text-lg leading-tight">${a.id}</h4>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${a.municipio}</p>
+                        <button onclick="openDetail('${a.real_id}')" class="w-full py-2 bg-emerald-600 text-white font-black rounded-lg text-[9px] uppercase tracking-widest shadow-md hover:bg-emerald-700 transition-all">Ver Detalles</button>
+                    </div>
+                `);
+            });
         }
         else if(v==='gestion') {
             if(!user || user.role!=='admin') return showView('inicio');
