@@ -429,11 +429,31 @@
     function toggleChat(){document.getElementById('chatWindow').classList.toggle('hidden');}
     async function sendChatMessage(){
         const i=document.getElementById('chatInput'), m=document.getElementById('chatMessages'); if(!i.value.trim()) return;
-        m.innerHTML+=`<div class="flex justify-end"><p class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none text-[10px] font-bold shadow-sm animate-fade-in">${i.value}</p></div>`;
+        
+        // Mensaje del Usuario
+        m.innerHTML+=`<div class="flex justify-end animate-fade-in"><p class="bg-emerald-600 text-white p-4 rounded-3xl rounded-tr-none text-[10px] font-bold shadow-sm">${i.value}</p></div>`;
         const text=i.value; i.value=''; m.scrollTop=m.scrollHeight;
-        const r=await fetch(`${API}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
-        const d=await r.json();
-        m.innerHTML+=`<div class="flex justify-start"><p class="bg-white border p-3 rounded-2xl rounded-tl-none text-slate-700 text-[10px] shadow-sm animate-fade-in">${d.reply}</p></div>`;
+        
+        // Indicador de "Escribiendo..."
+        const loadingId = 'loading-' + Date.now();
+        m.innerHTML+=`<div id="${loadingId}" class="flex justify-start animate-pulse"><div class="bg-white border border-slate-100 p-4 rounded-3xl rounded-tl-none"><div class="flex gap-1"><div class="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:0.2s]"></div><div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.4s]"></div></div></div></div>`;
+        m.scrollTop=m.scrollHeight;
+
+        try {
+            const r=await fetch(`${API}/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
+            const d=await r.json();
+            
+            // Eliminar indicador de carga
+            document.getElementById(loadingId).remove();
+            
+            // Renderizar Markdown de Biobot
+            const htmlContent = marked.parse(d.reply);
+            m.innerHTML+=`<div class="flex justify-start animate-fade-in"><div class="bg-white border border-slate-100 p-6 rounded-[2rem] rounded-tl-none text-slate-700 text-[10px] shadow-sm markdown-content">${htmlContent}</div></div>`;
+        } catch(err) {
+            document.getElementById(loadingId).remove();
+            m.innerHTML+=`<div class="flex justify-start"><p class="bg-red-50 text-red-500 p-4 rounded-2xl text-[10px] font-bold">Error de conexión con Biobot.</p></div>`;
+        }
+        
         m.scrollTop=m.scrollHeight;
     }
 </script>

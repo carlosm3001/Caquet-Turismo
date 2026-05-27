@@ -344,10 +344,10 @@ async def chat_ai(payload: dict = Body(...)):
     
     message = payload.get("message", "")
     
-    # 1. Extracción de CONOCIMIENTO TOTAL de la Ontología
+    # 1. Extracción de CONOCIMIENTO TOTAL de la Ontología (Incluyendo URI para enlaces)
     query_context = f"""
     PREFIX : <{BASE_PREFIX}> 
-    SELECT DISTINCT ?nombre ?mun_uri ?precio ?dif ?tipo ?desc WHERE {{ 
+    SELECT DISTINCT ?s ?nombre ?mun_uri ?precio ?dif ?tipo ?desc WHERE {{ 
         ?s rdf:type :Actividad . 
         ?s :nombreActividad ?nombre . 
         ?s :ubicadaEn ?mun_uri . 
@@ -363,65 +363,55 @@ async def chat_ai(payload: dict = Body(...)):
     knowledge_base = []
     for item in raw_data:
         mun = item.get("mun_uri", "").split("#")[-1].replace("_", " ")
-        info = f"- {item.get('nombre')} en {mun}: Tipo {item.get('tipo', 'N/A')}, Dificultad {item.get('dif', 'N/A')}, Precio ${item.get('precio', 0)}. Descripción: {item.get('desc', 'Sin descripción')}"
+        uri = item.get("s", "").split("#")[-1]
+        info = f"- {item.get('nombre')} en {mun} (ID: {uri}): Tipo {item.get('tipo', 'N/A')}, Dificultad {item.get('dif', 'N/A')}, Precio ${item.get('precio', 0)}. Descripción: {item.get('desc', 'Sin descripción')}"
         knowledge_base.append(info)
     
     context_str = "\\n".join(knowledge_base)
 
-    # 3. Prompt de Misión Crítica (Basado estrictamente en datos)
+    # 3. Prompt de Biobot Experto (Identidad y Formato Estricto)
     prompt = f"""
-    Eres BioBot, el cerebro de IA de la plataforma 'Caquetá Bio'. 🌿🧠
-    Tu conocimiento proviene EXCLUSIVAMENTE de una base de datos semántica (Ontología RDF).
-    
-    BASE DE DATOS REAL (Lo único que existe):
+    Eres "Biobot Experto", el Consultor Semántico Online oficial de la plataforma de turismo sostenible Caquetá Bio. 
+    Tu objetivo es guiar a los usuarios para que descubran la riqueza turística, natural e hídrica de la región del Caquetá.
+
+    CONOCIMIENTO REAL (Ontología):
     {context_str}
-    
-    ESTILO DE RESPUESTA:
-    1. Usa Markdown para que la respuesta sea visualmente atractiva.
-    2. Para cada destino que menciones, usa este formato:
-       ### **Nombre del Destino** (Municipio)
-       - 💰 **Precio:** $valor
-       - ⛰️ **Dificultad:** nivel
-       - 🎭 **Tipo:** categoria
-       - 📝 **Descripción:** resumen breve
-    3. Si hay varios, sepáralos con una línea horizontal (---).
-    
-    REGLAS DE ORO:
-    1. Si el viajero pregunta por algo que NO está en la lista, di que aún no está en el catálogo.
-    2. Responde con calidez amazónica y precisión técnica. Usa emojis.
-    3. No menciones que eres una IA.
-    
+
+    REGLAS DE FORMATO Y ESTILO:
+    1. TONO: Saludo cálido, entusiasta y hospitalario (ej: "¡Claro que sí, viajero! 🌊").
+    2. ESTRUCTURA: Usa listas scannables. NUNCA agrupes múltiples destinos en un solo párrafo. Separa cada lugar por un salto de línea claro.
+    3. FORMATO DE DESTINO: Para cada sitio, usa EXACTAMENTE esta estructura:
+       * **[Nombre del Lugar]** ([Municipio])
+         - 💰 **Precio:** [Valor o "Gratuito"]
+         - ⛰️ **Dificultad:** [Baja/Media/Alta]
+         - 📑 **Tipo:** [Tipo de actividad]
+         - 📝 **Descripción:** [Una frase corta y atractiva]
+         - 🌐 **¿Cómo llegar o conocer más?:** [Ver detalles y ubicación del sitio](https://caquetabio.com/destino/[ID])
+    4. CIERRE: Concluye con una frase corta de invitación o una pregunta (ej: "¿Te llama la atención alguno de estos destinos para tu próxima aventura? 🌿").
+    5. Si algo no está en el catálogo, informa con amabilidad.
+
     PREGUNTA DEL VIAJERO:
     {message}
     """
 
     try:
-        # 4. Selección Inteligente de Modelo (Anti-404)
         available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        
-        # Estrategia de selección: Flash > Pro > El primero que funcione
-        selected_model = None
-        for target in ["models/gemini-1.5-flash", "models/gemini-1.5-pro", "models/gemini-pro"]:
-            if target in available_models:
-                selected_model = target
-                break
-        
-        if not selected_model and available_models:
-            selected_model = available_models[0]
+        selected_model = next((m for m in ["models/gemini-1.5-flash", "models/gemini-1.5-pro", "models/gemini-pro"] if m in available_models), available_models[0] if available_models else None)
         
         if not selected_model:
-            return {"reply": "BioBot no encuentra modelos de IA disponibles para esta API Key. 🦜"}
+            return {"reply": "Biobot Experto no encuentra modelos de IA disponibles. 🦜"}
 
         model = genai.GenerativeModel(model_name=selected_model)
         response = model.generate_content(prompt)
         
         if response and response.text:
             return {"reply": response.text}
-        return {"reply": "BioBot está analizando las tripletas semánticas... 🦜 Intenta preguntarme de nuevo."}
+        return {"reply": "¡Claro que sí, viajero! 🌊 Estoy analizando las rutas amazónicas... 🦜 Intenta preguntarme de nuevo."}
         
     except Exception as e:
         print(f"CHAT ERROR: {str(e)}")
-        return {"reply": f"BioBot está sincronizando el conocimiento... (Error de modelo: {str(e)[:80]}). ¡El Caquetá te espera! 🌴"}
+        return {"reply": f"¡Hola, viajero! 🌊 Estamos sincronizando el conocimiento del Caquetá. (Error: {str(e)[:50]})."}
+
 
 
 @app.post("/api/v1/reservas")
