@@ -54,6 +54,12 @@
             <input type="email" id="email" placeholder="Email" value="admin@gmail.com" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500">
             <input type="password" id="pass" placeholder="Password" value="admin" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500">
             <button onclick="authAction()" class="w-full py-4 bg-emerald-600 text-white font-black rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase text-xs tracking-widest">Entrar</button>
+            
+            <div class="py-2 text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">O acceso rápido</div>
+            <button onclick="loginWithGoogle()" class="w-full py-4 bg-white border border-slate-200 text-slate-600 font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-50 transition-all">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5"> Google
+            </button>
+
             <div class="pt-6 border-t border-slate-50 flex flex-col gap-4">
                 <button onclick="toggleAuthMode()" id="toggleAuthMode" class="text-emerald-600 text-[10px] font-black uppercase">¿Nuevo aquí? Crea una cuenta</button>
                 <button onclick="toggleLogin(false)" class="text-slate-300 text-[10px] font-bold uppercase hover:text-red-400 transition-colors">Cerrar</button>
@@ -168,12 +174,22 @@
     let user=null, actividadesCache=[], currentActivity=null, activeFilters={municipio:'Todos',dificultad:'Todos',categoria:'Todos'};
 
     window.onload=async ()=>{
+        // Capturar token de Google callback
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokenParam = urlParams.get('token');
+        if (tokenParam) {
+            localStorage.setItem('access_token', tokenParam);
+            window.history.replaceState({}, document.title, "/");
+        }
+
         const t=localStorage.getItem('access_token');
         if(t){try{user=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));updateUI();}catch(e){localStorage.removeItem('access_token');}}
         showView('inicio');
         // Precarga de actividades para uso global (Chat y Reservas)
         actividadesCache = await fetchData('actividades');
     };
+
+    function loginWithGoogle() { location.href = `${API}/auth/google`; }
 
     // --- INTEGRACIÓN DE RESERVA DIRECTA DESDE EL CHAT ---
     document.getElementById('chatMessages').addEventListener('click', (e) => {
