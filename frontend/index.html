@@ -15,6 +15,29 @@
         .markdown-content li { font-size: 0.85rem; color: #475569; margin-bottom: 0.25rem; }
         .markdown-content hr { border: none; border-top: 1px solid #e2e8f0; margin: 1.5rem 0; }
         .markdown-content strong { color: #0f172a; }
+        
+        /* Botón de Reserva en Chat */
+        .markdown-content a[href*="/booking/"] {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #059669, #065f46);
+            color: white !important;
+            border-radius: 1.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            box-shadow: 0 10px 20px -5px rgba(5, 150, 105, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .markdown-content a[href*="/booking/"]:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(5, 150, 105, 0.4);
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body class="bg-[#fafafa] text-slate-900 overflow-x-hidden">
@@ -141,11 +164,29 @@
     const API = (window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?"http://localhost:8001/api/v1":window.location.origin+"/api/v1";
     let user=null, actividadesCache=[], currentActivity=null, activeFilters={municipio:'Todos',dificultad:'Todos',categoria:'Todos'};
 
-    window.onload=()=>{
+    window.onload=async ()=>{
         const t=localStorage.getItem('access_token');
         if(t){try{user=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));updateUI();}catch(e){localStorage.removeItem('access_token');}}
         showView('inicio');
+        // Precarga de actividades para uso global (Chat y Reservas)
+        actividadesCache = await fetchData('actividades');
     };
+
+    // --- INTEGRACIÓN DE RESERVA DIRECTA DESDE EL CHAT ---
+    document.getElementById('chatMessages').addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && link.href.includes('/booking/')) {
+            e.preventDefault();
+            const id = link.href.split('/').pop();
+            openBooking(id);
+        }
+    });
+
+    function openBooking(id) {
+        openDetail(id);
+        // Pequeño retardo para asegurar que el modal esté listo antes de activar la reserva
+        setTimeout(() => toggleBookingForm(true), 100);
+    }
 
     function updateUI(){
         if(!user) return;

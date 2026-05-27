@@ -386,7 +386,8 @@ async def chat_ai(payload: dict = Body(...)):
          - ⛰️ **Dificultad:** [Baja/Media/Alta]
          - 📑 **Tipo:** [Tipo de actividad]
          - 📝 **Descripción:** [Una frase corta y atractiva]
-         - 🌐 **¿Cómo llegar o conocer más?:** [Ver detalles y ubicación del sitio](https://caquetabio.com/destino/[ID])
+         - 🌐 **Información:** [Ver detalles y ubicación del sitio](https://caquetabio.com/destino/[ID])
+         - 📅 **Reserva Directa:** [¡Reservar este destino ahora!](https://caquetabio.com/booking/[ID])
     4. CIERRE: Concluye con una frase corta de invitación o una pregunta (ej: "¿Te llama la atención alguno de estos destinos para tu próxima aventura? 🌿").
     5. Si algo no está en el catálogo, informa con amabilidad.
 
